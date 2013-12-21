@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
+gem 'rspec-core'
+gem 'rspec-mocks'
+gem 'rspec-expectations'
 gem 'puppet'
 gem 'puppet-lint'
+gem 'ipaddress'
