@@ -174,5 +174,33 @@ describe 'PuppetX::BSD::Hostname_if' do
       expect { PuppetX::BSD::Hostname_if.new(c).content }.to_not raise_error
     end
 
+    it "should support setting the interface to up" do
+      c = {
+        :values  => [
+          'up',
+        ]
+      }
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/^up/)
+    end
+
+    it "should support setting the interface to down" do
+      c = {
+        :values  => [
+          'down',
+        ]
+      }
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/^down/)
+    end
+
+    it "should support setting the interface to up and setting the description" do
+      c = {
+        :desc    => "I am an interface",
+        :values  => [
+          'up',
+        ]
+      }
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/^up.*I am an interface/)
+    end
+
   end
 end

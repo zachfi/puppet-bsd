@@ -113,6 +113,9 @@ module PuppetX
             # Return the dynamic address assignemnt if found
             if i =~ /^(rtsol|dhcp)$/
               yield i
+            # return up/down if found
+            elsif i  =~ /^(up|down)$/
+              yield i
             else
               begin
                 ip = IPAddress i
