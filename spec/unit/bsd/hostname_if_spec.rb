@@ -202,5 +202,32 @@ describe 'PuppetX::BSD::Hostname_if' do
       PuppetX::BSD::Hostname_if.new(c).content.should match(/^up.*I am an interface/)
     end
 
+    it "should support the !command syntax in the hostname.if(5) manpage" do
+      c = {
+        :desc   => "Uplink",
+        :values => [
+          '10.0.1.12/24',
+          '10.0.1.13/24',
+          '10.0.1.14/24',
+          '10.0.1.15/24',
+          '10.0.1.16/24',
+          '!route add 65.65.65.65 10.0.1.13',
+          'up',
+        ],
+        :options => [
+          'media 100baseTX'
+        ]
+      }
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.12 255.255.255.0/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.13 255.255.255.0/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.14 255.255.255.0/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.15 255.255.255.0/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.16 255.255.255.0/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/^!route add 65.65.65.65 10.0.1.13$/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/^up$/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/media 100baseTX/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/description "?Uplink"?/)
+    end
+
   end
 end

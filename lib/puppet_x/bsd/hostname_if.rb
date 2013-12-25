@@ -116,6 +116,8 @@ module PuppetX
             # return up/down if found
             elsif i  =~ /^(up|down)$/
               yield i
+            elsif i =~ /^!/
+              yield i
             else
               begin
                 ip = IPAddress i
