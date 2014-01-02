@@ -7,20 +7,24 @@ define bsd::network::interface (
   $description   = undef,
   $values        = undef,
   $options       = undef,
-  #$commands      = undef,
 ) {
 
-  $if_name = $name
+  $if_name        = $name
   $interface_file = "/etc/hostname.${if_name}"
+  $if_type        = split($if_name, '\d+')
 
   $config = {
-    description    => $description,
-    values         => $values,
-    options        => $options,
+    type        => $if_type[0],
+    description => $description,
+    values      => $values,
+    options     => $options,
   }
 
+  debug("config: ${config}")
+
   $content = get_openbsd_hostname_if_content($config)
-  notice($content)
+
+  debug("content: ${content}")
 
   file { "/etc/hostname.${if_name}":
     content => $content,

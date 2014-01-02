@@ -54,7 +54,7 @@ class bsd::network (
           owner   => 'root',
           group   => '0',
           mode    => '0644',
-          content => inline_template("<%= @mygate.join(\"\n\") %>"),
+          content => inline_template("<%= @mygate.join(\"\n\") + \"\n\" %>"),
         }
       }
     }

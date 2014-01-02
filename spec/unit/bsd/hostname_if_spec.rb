@@ -229,5 +229,28 @@ describe 'PuppetX::BSD::Hostname_if' do
       PuppetX::BSD::Hostname_if.new(c).content.should match(/description "?Uplink"?/)
     end
 
+    it "should fail when the type is not a string" do
+      c = {
+        :type    => ['gif'],
+        :desc    => "I am a tunnel interface",
+        :values  => [
+          'up',
+        ]
+      }
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+    end
+
+    it "should support the gre interface type" do
+      c = {
+        :type    => 'gre',
+        :values  => [
+          '192.168.100.1 192.168.100.2 netmask 0xffffffff link0 up',
+          'tunnel 10.0.1.30 10.0.1.31',
+        ]
+      }
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/192.168.100.1 192.168.100.2 netmask 0xffffffff link0 up/)
+      PuppetX::BSD::Hostname_if.new(c).content.should match(/tunnel 10.0.1.30 10.0.1.31/)
+    end
+
   end
 end

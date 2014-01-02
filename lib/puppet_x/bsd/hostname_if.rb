@@ -27,19 +27,29 @@ module PuppetX
 
       def validate_config
 
+        # compensate for puppet oddities
+        @config.reject!{ |k,v| k == :undef or v == :undef }
+
         config_items = [
+          :type,
           :desc,
           :values,
           :options
         ]
 
-        # compensate for puppet oddities
-        @config.reject!{ |k,v| k == :undef or v == :undef }
-
         @config.each do |k,v|
 
           unless config_items.include? k
             raise ArgumentError, "unknown configuration item found: #{k}"
+          end
+        end
+
+        if @config[:type]
+          if @config[:type].is_a? String
+            @iftype  = @config[:type].split(/\d+/).first
+          else
+            raise ArgumentError,
+              "interface type must be a String, is: #{@config[:type].class}"
           end
         end
 
@@ -154,17 +164,45 @@ module PuppetX
       def content
         lines = []
 
-        process_items(@items) {|line|
-          lines << line
-        }
+        if @iftype =~ /^bridge/
+        elsif @iftype =~ /^carp/
+          @items.each {|l|
+            lines << l
+          }
+        elsif @iftype =~ /^enc/
+        elsif @iftype =~ /^gif/
+        elsif @iftype =~ /^gre/
+          @items.each {|l|
+            lines << l
+          }
+        elsif @iftype =~ /^lo/
+        elsif @iftype =~ /^mpe/
+        elsif @iftype =~ /^pflog/
+        elsif @iftype =~ /^pflow/
+        elsif @iftype =~ /^pfsync/
+        elsif @iftype =~ /^ppp/
+        elsif @iftype =~ /^pppoe/
+        elsif @iftype =~ /^sl/
+        elsif @iftype =~ /^trunk/
+        elsif @iftype =~ /^tun/
+        elsif @iftype =~ /^vether/
+        elsif @iftype =~ /^vlan/
+        else
+          # Process the physical interface config
+          process_items(@items) {|line|
+            lines << line
+          }
+        end
 
-        # Appends the media options to the first line
+        # Appends the media options to the first line, regardless of the type
+        # of interface we are working with.
         if lines.length > 0
           lines[0] = ( lines[0].split() + options_string().split ).join(' ')
         else
           lines << options_string()
         end
 
+        # Return the lines as a string, joined by a newline
         lines.join("\n")
       end
     end
