@@ -1,9 +1,13 @@
+# Define: bsd::network::interface::carp
+#
+# Handles the creation and configuration of carp(4) interfaces.
+#
 define bsd::network::interface::carp (
-  $vhid,
+  $id,
   $address,
+  $device,
   $advbase     = undef,
   $advskew     = undef,
-  $carpdev     = undef,
   $description = undef,
   $pass        = undef,
 ) {
@@ -14,13 +18,13 @@ define bsd::network::interface::carp (
 
   $config = {
     address => $address,
-    vhid    => $vhid,
+    id      => $id,
+    device  => $device,
     advbase => $advbase,
     advskew => $advskew,
-    carpdev => $carpdev,
   }
 
-  $carp_ifconfig = get_carp_ifconfig($config)
+  $carp_ifconfig = get_hostname_if_carp($config)
 
   bsd::network::interface { $if_name:
     description => $description,
