@@ -108,7 +108,9 @@ module PuppetX
         @options.join(' ')
       end
 
-      # Yields complete, formatted lines taken from @items
+      # Receivs array of strings that match an inet or inet6 configuration
+      #
+      # Yields complete, formatted lines
       def process_items(items)
         if items
 
@@ -126,6 +128,7 @@ module PuppetX
             # return up/down if found
             elsif i  =~ /^(up|down)$/
               yield i
+            # Yield the command string in full
             elsif i =~ /^!/
               yield i
             else
@@ -164,17 +167,14 @@ module PuppetX
       def content
         lines = []
 
+        # Supported interfaces return the already processed lines.
         if @iftype =~ /^bridge/
         elsif @iftype =~ /^carp/
-          @items.each {|l|
-            lines << l
-          }
+          lines = @items
         elsif @iftype =~ /^enc/
         elsif @iftype =~ /^gif/
         elsif @iftype =~ /^gre/
-          @items.each {|l|
-            lines << l
-          }
+          lines = @items
         elsif @iftype =~ /^lo/
         elsif @iftype =~ /^mpe/
         elsif @iftype =~ /^pflog/
@@ -184,9 +184,11 @@ module PuppetX
         elsif @iftype =~ /^pppoe/
         elsif @iftype =~ /^sl/
         elsif @iftype =~ /^trunk/
+          lines = @items
         elsif @iftype =~ /^tun/
         elsif @iftype =~ /^vether/
         elsif @iftype =~ /^vlan/
+          lines = @items
         else
           # Process the physical interface config
           process_items(@items) {|line|
