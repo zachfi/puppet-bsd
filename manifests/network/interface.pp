@@ -27,7 +27,7 @@ define bsd::network::interface (
   debug("content: ${content}")
 
   file { "/etc/hostname.${if_name}":
-    content => $content,
+    content => inline_template('<%= content + "\n" %>'),
     notify  => Exec["netstart_${if_name}"],
   }
 
