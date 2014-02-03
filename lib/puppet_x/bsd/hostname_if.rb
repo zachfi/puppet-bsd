@@ -172,6 +172,7 @@ module PuppetX
         elsif @iftype =~ /^carp/
           lines = @items
         elsif @iftype =~ /^enc/
+          lines = @items
         elsif @iftype =~ /^gif/
         elsif @iftype =~ /^gre/
           lines = @items
@@ -180,6 +181,7 @@ module PuppetX
         elsif @iftype =~ /^pflog/
         elsif @iftype =~ /^pflow/
         elsif @iftype =~ /^pfsync/
+          lines = @items
         elsif @iftype =~ /^ppp/
         elsif @iftype =~ /^pppoe/
         elsif @iftype =~ /^sl/
