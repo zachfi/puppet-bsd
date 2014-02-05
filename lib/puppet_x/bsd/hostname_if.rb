@@ -164,7 +164,7 @@ module PuppetX
         end
       end
 
-      def content
+      def lines
         lines = []
 
         # Supported interfaces return the already processed lines.
@@ -206,8 +206,11 @@ module PuppetX
           lines << options_string()
         end
 
-        # Return the lines as a string, joined by a newline
-        lines.join("\n")
+        lines
+      end
+
+      def content
+        lines().join("\n")
       end
     end
   end
