@@ -1,4 +1,3 @@
-require 'pp'
 require 'puppet_x/bsd/hostname_if'
 
 describe 'PuppetX::BSD::Hostname_if' do
