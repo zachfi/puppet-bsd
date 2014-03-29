@@ -42,16 +42,21 @@ module PuppetX
           end
         end
 
-        def content
+        # Return an array of values to place on each line
+        def values
           inet  = []
           PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
             inet << i
           }
 
           data = []
-          data << inet
           data << vlan_string()
-          data.join(' ')
+          data << inet if inet
+          data.flatten
+        end
+
+        def content
+          values().join("\n")
         end
 
         def vlan_string

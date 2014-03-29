@@ -39,7 +39,11 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
         :device  => 'em0',
         :address => '10.0.0.1/24',
       }
-      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(/inet 10.0.0.1 255.255.255.0 NONE vlan 1 vlandev em0/)
+      wanted = [
+       'vlan 1 vlandev em0',
+       'inet 10.0.0.1 255.255.255.0 NONE',
+      ]
+      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(wanted.join('\n'))
     end
 
     it 'should support a partial example' do
@@ -48,7 +52,58 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
         :device  => 'em0',
         :address => '10.0.0.1/24',
       }
-      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(/inet 10.0.0.1 255.255.255.0 NONE vlan 1 vlandev em0/)
+
+      wanted = [
+       'vlan 1 vlandev em0',
+       'inet 10.0.0.1 255.255.255.0 NONE',
+      ]
+      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(wanted.join('\n'))
+    end
+
+    it 'should support a allow an array of addresses' do
+      c = {
+        :id      => '1',
+        :device  => 'em0',
+        :address => [
+          '10.0.0.1/24',
+          '10.1.0.1/24',
+          'fc00:1::/64',
+          'fc00:2::/64',
+        ]
+      }
+      wanted = [
+       'vlan 1 vlandev em0',
+       'inet 10.0.0.1 255.255.255.0 NONE',
+       'inet alias 10.1.0.1 255.255.255.0 NONE',
+       'inet6 fc00:1:: 64',
+       'inet6 alias fc00:2:: 64'
+      ]
+
+      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(wanted.join('\n'))
+    end
+  end
+
+  describe '#values' do
+    it 'should return a list of values for a full example' do
+      c = {
+        :id      => '1',
+        :device  => 'em0',
+        :address => [
+          '10.0.0.1/24',
+          '10.1.0.1/24',
+          'fc00:1::/64',
+          'fc00:2::/64',
+        ]
+      }
+      wanted = [
+       'vlan 1 vlandev em0',
+       'inet 10.0.0.1 255.255.255.0 NONE',
+       'inet alias 10.1.0.1 255.255.255.0 NONE',
+       'inet6 fc00:1:: 64',
+       'inet6 alias fc00:2:: 64'
+      ]
+
+      PuppetX::BSD::Hostname_if::Vlan.new(c).values.should match_array(wanted)
     end
   end
 end

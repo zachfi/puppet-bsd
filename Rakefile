@@ -13,10 +13,9 @@ namespace :ci do
 
   desc "Validate the manifests"
   task :validate do
-    FileList['**/*.pp'].each do |puppet_file|
-      puts "Validating code parsing for #{puppet_file}"
-      %x{puppet parser validate #{puppet_file}}
-    end
+    list = FileList['**/*.pp'].join(' ')
+    puts "Validating manifests"
+    %x{puppet parser validate #{list}}
   end
 
   desc "Run spec tests"

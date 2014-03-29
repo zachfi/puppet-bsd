@@ -6,10 +6,17 @@ define bsd::network::interface::vlan (
   $id,
   $device,
   $address,
+  $state       = 'up',
   $description = undef,
 ) {
 
   $if_name = $name
+
+  validate_re(
+    $state,
+    '(up|down)',
+    'The $state can only be \'up\' or \'down\'.'
+  )
 
   $config = {
     id      => $id,
@@ -17,10 +24,11 @@ define bsd::network::interface::vlan (
     address => $address,
   }
 
-  $vlan_ifconfig = get_hostname_if_vlan($config)
+  $vlan_values = get_hostname_if_vlan($config)
 
   bsd::network::interface { $if_name:
+    state       => $state,
     description => $description,
-    values      => [$vlan_ifconfig, 'up'],
+    values      => $vlan_values,
   }
 }
