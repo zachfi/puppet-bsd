@@ -4,6 +4,7 @@
 #
 define bsd::network::interface (
   $ensure        = 'present',
+  $state         = undef,
   $description   = undef,
   $values        = undef,
   $options       = undef,
@@ -12,6 +13,14 @@ define bsd::network::interface (
   $if_name        = $name
   $interface_file = "/etc/hostname.${if_name}"
   $if_type        = split($if_name, '\d+')
+
+  if $state != undef {
+    validate_re(
+      $state,
+      '(up|down)',
+      'The $state can only be \'up\' or \'down\'.'
+    )
+  }
 
   $config = {
     name        => $name,
@@ -27,8 +36,14 @@ define bsd::network::interface (
     'OpenBSD': {
       $content = get_openbsd_hostname_if_content($config)
 
+      if $state != undef {
+        $text = inline_template('<%= [content,state].join("\n") + "\n" %>')
+      } else {
+        $text = inline_template('<%= content + "\n" %>')
+      }
+
       file { "/etc/hostname.${if_name}":
-        content => inline_template('<%= content + "\n" %>'),
+        content => $text,
         notify  => Exec["netstart_${if_name}"],
       }
 
@@ -46,8 +61,14 @@ define bsd::network::interface (
 
       create_resources('shell_config', $rec_hash)
 
+      if $state == 'up' {
+        $action = 'start'
+      } elsif $state == 'down' {
+        $action = 'stop'
+      }
+
       exec { "netifstart_${if_name}":
-        command     => "/usr/sbin/service netif start ${if_name}",
+        command     => "/usr/sbin/service netif ${action} ${if_name}",
         refreshonly => true,
       }
     }
