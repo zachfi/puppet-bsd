@@ -101,9 +101,35 @@ bsd::network::interface::carp { "carp0":
 ```
 #### lagg(4) and trunk(4)
 ```Puppet
+bsd::network::interface::trunk { "trunk0":
+  interface => ['em0','em1],
+  address   => '10.0.0.1/24',
+}
 ```
 
+#### vlan trunks
 
+To configure a set of interfaces as a trunk passing multiple vlans, just leave
+the address off of the `trunk(4)` interface and use it as the device for the
+`vlan(4)` interface.
+
+```Puppet
+bsd::network::interface::trunk { "trunk0":
+  interface => ['em0','em1'],
+}
+
+bsd::network::interface::carp { "vlan10":
+  id      => '10',
+  address => '10.0.10.1/24',
+  device  => 'trunk0',
+}
+
+bsd::network::interface::carp { "vlan11":
+  id      => '11',
+  address => '10.0.11.1/24',
+  device  => 'trunk0',
+}
+```
 
 ## Contributing
 
