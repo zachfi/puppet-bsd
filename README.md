@@ -133,7 +133,7 @@ bsd::network::interface::carp { "vlan11":
 
 ## Contributing
 
-Please help make this module better, by sending pull requests and filing issues
+Please help make this module better by sending pull requests and filing issues
 for feature requests or bugs.  Please adhere to the style and be mindful of the
   tests.
 
