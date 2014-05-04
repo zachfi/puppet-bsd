@@ -6,6 +6,12 @@ A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD
 and OpenBSD.  In here will be various facts, functions and classes for tuning
 and configuring a system, both router and host configurations.
 
+FreeBSD support is lagging behind that of OpenBSD.  Orignaly the network
+configuration for FreeBSD was handled by puppetlabs-operations/puppet-freebsd.
+This module will attempt to move the functionalilty of the
+puppetlabs-operations/puppet-freebsd module into
+puppetlabs-operations/puppet-bsd.
+
 It is intended that Puppet users of this code use only the classes and facts in
 their manifests.  The rest of the code here is simply to support the interface
 supplied by the manifests.  Implementing the functions directly is not advised,
@@ -68,6 +74,36 @@ address and gateway.
 ```
 NOTE: This only sets the configuration, it does not currently set the running interfaces addresses.
 ```
+
+### Interfaces
+
+Interface configurations are handled per interface type.  Each supported type
+will have an implementation of the library through the user of functions and
+expose a manifest to the user for configuration.
+
+#### vlan(4)
+
+```Puppet
+bsd::network::interface::vlan { 'vlan100':
+  id      => '1',
+  device  => 'em0',
+  address => '10.0.0.1/24',
+}
+```
+
+#### carp(4)
+```Puppet
+bsd::network::interface::carp { "carp0":
+  vhid    => '1',
+  address => '10.0.0.1/24',
+  carpdev => 'em0',
+}
+```
+#### lagg(4) and trunk(4)
+```Puppet
+```
+
+
 
 ## Contributing
 
