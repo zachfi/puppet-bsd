@@ -2,7 +2,14 @@
 
 [![Build Status](https://travis-ci.org/puppetlabs-operations/puppet-bsd.png?branch=master)](https://travis-ci.org/puppetlabs-operations/puppet-bsd)
 
-A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD and OpenBSD.
+A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD
+and OpenBSD.  In here will be various facts, functions and classes for tuning
+and configuring a system, both router and host configurations.
+
+It is intended that Puppet users of this code use only the classes and facts in
+their manifests.  The rest of the code here is simply to support the interface
+supplied by the manifests.  Implementing the functions directly is not advised,
+as the implementation may shift over time as the module requires.
 
 ## Network
 
@@ -16,7 +23,7 @@ including things like wireless (AP and client) and static routes.
 
 ### Gateways
 
-The gateway can be configured for both router nodes that may be the gatewayand server nodes.
+The gateway can be configured for both router and hosts.
 
 #### host
 
@@ -37,8 +44,8 @@ forwarding, use the following configuration.
 
 ```Puppet
 class { 'bsd::network':
-  v4gateway => '1.1.1.1',
-  v6gateway => '2001:b:b::1',
+  v4gateway    => '1.1.1.1',
+  v6gateway    => '2001:b:b::1',
   v4forwarding => true,
   v6forwarding => true,
 }
@@ -62,6 +69,9 @@ address and gateway.
 NOTE: This only sets the configuration, it does not currently set the running interfaces addresses.
 ```
 
+## Contributing
 
-
+Please help make this module better, by sending pull requests and filing issues
+for feature requests or bugs.  Please adhere to the style and be mindful of the
+  tests.
 
