@@ -1,6 +1,9 @@
-script: rake ci:all
+script:
+  - bundle exec rake validate
+  - bundle exec rspec
+  - bundle exec puppet-lint --with-filename --no-autoloader_layout-check manifests
+
 language: ruby
 rvm:
-  - "1.8.7"
   - "1.9.3"
 

@@ -37,7 +37,7 @@ describe 'PuppetX::BSD::Hostname_if::Trunk' do
         :proto     => 'lacp',
         :interface => 'em0',
       }
-      PuppetX::BSD::Hostname_if::Trunk.new(c).content.should match(/trunkproto lacp trunkport em0/)
+      expect(PuppetX::BSD::Hostname_if::Trunk.new(c).content).to match(/trunkproto lacp trunkport em0/)
     end
 
     it 'should support a partial example' do
@@ -50,7 +50,7 @@ describe 'PuppetX::BSD::Hostname_if::Trunk' do
           'em3',
         ]
       }
-      PuppetX::BSD::Hostname_if::Trunk.new(c).content.should match(/trunkproto lacp trunkport em0 trunkport em1 trunkport em2 trunkport em3/)
+      expect(PuppetX::BSD::Hostname_if::Trunk.new(c).content).to match(/trunkproto lacp trunkport em0 trunkport em1 trunkport em2 trunkport em3/)
     end
   end
 end

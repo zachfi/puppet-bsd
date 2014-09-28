@@ -39,7 +39,7 @@ describe 'PuppetX::BSD::Hostname_if::Carp' do
         :advbase => '1',
         :advskew => '0',
       }
-      PuppetX::BSD::Hostname_if::Carp.new(c).content.should match(/inet 10.0.0.1 255.255.255.0 NONE vhid 1 carpdev em0 advbase 1 advskew 0/)
+      expect(PuppetX::BSD::Hostname_if::Carp.new(c).content).to match(/inet 10.0.0.1 255.255.255.0 NONE vhid 1 carpdev em0 advbase 1 advskew 0/)
     end
 
     it 'should support a partial example' do
@@ -50,7 +50,7 @@ describe 'PuppetX::BSD::Hostname_if::Carp' do
         :advbase => '1',
         :advskew => '0',
       }
-      PuppetX::BSD::Hostname_if::Carp.new(c).content.should match(/inet 10.0.0.1 255.255.255.0 NONE vhid 1 carpdev em0 advbase 1 advskew 0/)
+      expect(PuppetX::BSD::Hostname_if::Carp.new(c).content).to match(/inet 10.0.0.1 255.255.255.0 NONE vhid 1 carpdev em0 advbase 1 advskew 0/)
     end
   end
 end
