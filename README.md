@@ -4,13 +4,7 @@
 
 A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD
 and OpenBSD.  In here will be various facts, functions and classes for tuning
-and configuring a system, both router and host configurations.
-
-FreeBSD support is lagging behind that of OpenBSD.  Orignaly the network
-configuration for FreeBSD was handled by puppetlabs-operations/puppet-freebsd.
-This module will attempt to move the functionalilty of the
-puppetlabs-operations/puppet-freebsd module into
-puppetlabs-operations/puppet-bsd.
+and configuring a system.
 
 It is intended that Puppet users of this code use only the classes and facts in
 their manifests.  The rest of the code here is simply to support the interface
@@ -82,6 +76,21 @@ will have an implementation of the library through the user of functions and
 expose a manifest to the user for configuration.
 
 #### vlan(4)
+
+To create a `vlan(4)` interface and assign an address to it, use a manifest
+like the following.
+
+```Puppet
+bsd::network::interface::vlan { 'vlan100':
+  id      => '1',
+  device  => 'em0',
+  address => '10.0.0.1/24',
+}
+```
+
+It is sometimes desirable to create a VLAN interface without needing to set any
+interface addresses on it.  In such a case, simply leave off the address, and
+specify the VLAN ID and the device to attach the VLAN to.
 
 ```Puppet
 bsd::network::interface::vlan { 'vlan100':

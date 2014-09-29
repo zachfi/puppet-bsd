@@ -51,7 +51,7 @@ describe 'PuppetX::BSD::Hostname_if' do
       c = {
         :options => "mtu 1500"
       }
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/mtu 1500/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/mtu 1500/)
     end
 
     it "should append multiple options on the first line when multiple options are present" do
@@ -61,8 +61,8 @@ describe 'PuppetX::BSD::Hostname_if' do
           "media 100baseTX",
         ],
       }
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/mtu 1500/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/media 100baseTX/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/mtu 1500/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/media 100baseTX/)
     end
 
     it "should append multiple options on the first line with a description" do
@@ -73,16 +73,16 @@ describe 'PuppetX::BSD::Hostname_if' do
           "media 100baseTX",
         ],
       }
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/mtu 1500/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/media 100baseTX/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/Default interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/mtu 1500/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/media 100baseTX/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/Default interface/)
     end
 
     it "should set the the dynamic property of the interface is specified" do
       c = {
         :values => 'dhcp',
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^dhcp/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
     end
 
     it "should set the the dynamic property of the interface is specified for all AF" do
@@ -92,14 +92,14 @@ describe 'PuppetX::BSD::Hostname_if' do
           'rtsol',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^dhcp/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
     end
 
     it "should set the primary interface address and prefix" do
       c = {
         :values => 'fc01::/7',
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/fc01:: 7/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/fc01:: 7/)
     end
 
     it "should set multiple interface addresses" do
@@ -111,10 +111,10 @@ describe 'PuppetX::BSD::Hostname_if' do
           '2001:100:fed:beef::/64',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet 123.123.123.123 255.255.255.248 NONE/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet alias 172.16.0.1 255.255.255.224 NONE/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet6 fc01:: 7/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet6 alias 2001:100:fed:beef:: 64/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet 123.123.123.123 255.255.255.248 NONE/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet alias 172.16.0.1 255.255.255.224 NONE/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet6 fc01:: 7/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet6 alias 2001:100:fed:beef:: 64/)
     end
 
     it "should set everything when provided" do
@@ -131,13 +131,13 @@ describe 'PuppetX::BSD::Hostname_if' do
           '2001:100:fed:beef::/64',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet 123.123.123.123 255.255.255.248 NONE/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet alias 172.16.0.1 255.255.255.224 NONE/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet6 fc01:: 7/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/inet6 alias 2001:100:fed:beef:: 64/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/mtu 1500/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/media 100baseTX/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should match(/Default interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet 123.123.123.123 255.255.255.248 NONE/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet alias 172.16.0.1 255.255.255.224 NONE/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet6 fc01:: 7/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/inet6 alias 2001:100:fed:beef:: 64/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/mtu 1500/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/media 100baseTX/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to match(/Default interface/)
     end
 
     it "should clear the description string when called multiple times" do
@@ -154,9 +154,9 @@ describe 'PuppetX::BSD::Hostname_if' do
           '2001:100:fed:beef::/64',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should_not match(/Default interface.*Default interface/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should_not match(/Default interface.*Default interface/)
-      PuppetX::BSD::Hostname_if.new(c).content.split("\n").first.should_not match(/Default interface.*Default interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to_not match(/Default interface.*Default interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to_not match(/Default interface.*Default interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content.split("\n").first).to_not match(/Default interface.*Default interface/)
     end
 
     it "should not raise error when options are :udnef" do
@@ -179,7 +179,7 @@ describe 'PuppetX::BSD::Hostname_if' do
           'up',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^up/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^up/)
     end
 
     it "should support setting the interface to down" do
@@ -188,7 +188,7 @@ describe 'PuppetX::BSD::Hostname_if' do
           'down',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^down/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^down/)
     end
 
     it "should support setting the interface to up and setting the description" do
@@ -198,7 +198,7 @@ describe 'PuppetX::BSD::Hostname_if' do
           'up',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^up.*I am an interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^up.*I am an interface/)
     end
 
     it "should support the !command syntax in the hostname.if(5) manpage" do
@@ -217,15 +217,15 @@ describe 'PuppetX::BSD::Hostname_if' do
           'media 100baseTX'
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.12 255.255.255.0/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.13 255.255.255.0/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.14 255.255.255.0/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.15 255.255.255.0/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/10.0.1.16 255.255.255.0/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^!route add 65.65.65.65 10.0.1.13$/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/^up$/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/media 100baseTX/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/description "?Uplink"?/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/10.0.1.12 255.255.255.0/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/10.0.1.13 255.255.255.0/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/10.0.1.14 255.255.255.0/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/10.0.1.15 255.255.255.0/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/10.0.1.16 255.255.255.0/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^!route add 65.65.65.65 10.0.1.13$/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^up$/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/media 100baseTX/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/description "?Uplink"?/)
     end
 
     it "should fail when the type is not a string" do
@@ -247,8 +247,8 @@ describe 'PuppetX::BSD::Hostname_if' do
           'tunnel 10.0.1.30 10.0.1.31',
         ]
       }
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/192.168.100.1 192.168.100.2 netmask 0xffffffff link0 up/)
-      PuppetX::BSD::Hostname_if.new(c).content.should match(/tunnel 10.0.1.30 10.0.1.31/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/192.168.100.1 192.168.100.2 netmask 0xffffffff link0 up/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/tunnel 10.0.1.30 10.0.1.31/)
     end
 
   end

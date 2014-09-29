@@ -12,11 +12,31 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
     it "should raise an error if missing arguments" do
       c = {
         :id     => '1',
-        :device => 'em0',
       }
       expect {
         PuppetX::BSD::Hostname_if::Vlan.new(c).content
-      }.to raise_error(ArgumentError, /address.*required/)
+      }.to raise_error(ArgumentError, /device.*required/)
+    end
+
+    it "should not raise an error if address is present" do
+      c = {
+        :id      => '1',
+        :device  => 'em0',
+        :address => '10.0.0.0/24',
+      }
+      expect {
+        PuppetX::BSD::Hostname_if::Vlan.new(c).content
+      }.not_to raise_error
+    end
+
+    it "should not raise an error if address is absent" do
+      c = {
+        :id      => '1',
+        :device  => 'em0',
+      }
+      expect {
+        PuppetX::BSD::Hostname_if::Vlan.new(c).content
+      }.not_to raise_error
     end
 
     it "should raise an error if missing arguments" do
@@ -43,7 +63,7 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
        'vlan 1 vlandev em0',
        'inet 10.0.0.1 255.255.255.0 NONE',
       ]
-      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(wanted.join('\n'))
+      expect(PuppetX::BSD::Hostname_if::Vlan.new(c).content).to match(wanted.join('\n'))
     end
 
     it 'should support a partial example' do
@@ -57,7 +77,7 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
        'vlan 1 vlandev em0',
        'inet 10.0.0.1 255.255.255.0 NONE',
       ]
-      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(wanted.join('\n'))
+      expect(PuppetX::BSD::Hostname_if::Vlan.new(c).content).to match(wanted.join('\n'))
     end
 
     it 'should support a allow an array of addresses' do
@@ -79,7 +99,7 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
        'inet6 alias fc00:2:: 64'
       ]
 
-      PuppetX::BSD::Hostname_if::Vlan.new(c).content.should match(wanted.join('\n'))
+      expect(PuppetX::BSD::Hostname_if::Vlan.new(c).content).to match(wanted.join('\n'))
     end
   end
 
@@ -103,7 +123,7 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
        'inet6 alias fc00:2:: 64'
       ]
 
-      PuppetX::BSD::Hostname_if::Vlan.new(c).values.should match_array(wanted)
+      expect(PuppetX::BSD::Hostname_if::Vlan.new(c).values).to match_array(wanted)
     end
   end
 end

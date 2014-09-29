@@ -13,7 +13,7 @@ module PuppetX
         @config = config
         validate_config()
         normalize_config()
-        @data = load_hash
+        @data = load_hash()
       end
 
       def normalize_config
@@ -55,10 +55,7 @@ module PuppetX
       end
 
       def options_string
-        str = ""
-        @options.each{|opt|
-          str = [str,opt].join(' ')
-        }
+        @options.join(' ')
       end
 
       def get_hash
@@ -75,19 +72,31 @@ module PuppetX
           # The top level key is the interface name
           ifname = topkey.to_sym
 
-          @data[topkey][:addrs].each {|i|
-            if i =~ /inet6 /
-              key = "ifconfig_#{ifname}_ipv6"
-            elsif i =~ /inet /
+          if @data[topkey][:addrs]
+            if @data[topkey][:addrs].is_a? Array
+              @data[topkey][:addrs].each {|i|
+                if i =~ /inet6 /
+                  key = "ifconfig_#{ifname}_ipv6"
+                elsif i =~ /inet /
+                  key = "ifconfig_#{ifname}"
+                else
+                  key = "ifconfig_#{ifname}"
+                end
+                resources[key] = {
+                  "key"   => key,
+                  "value" => i,
+                }
+              }
+            else
               key = "ifconfig_#{ifname}"
+              resources[key] = {
+                "key"   => key,
+                "value" => @data[topkey][:addrs],
+              }
             end
-            resources[key] = {
-              "key"   => key,
-              "value" => i,
-            }
-          }
+          end
 
-          if @data[topkey][:aliases]
+          if @data[topkey][:aliases] and @data[topkey][:aliases].is_a? Array
             @data[topkey][:aliases].each_with_index {|a,i|
               key = "ifconfig_#{ifname}_alias#{i}"
               resources[key] = {
@@ -103,10 +112,15 @@ module PuppetX
 
       private
 
+      # Load the ifconfig has that will contain all addresses (v4 and v6), and
+      # alias addresses.
       def load_hash
         ifconfig = {}
         aliases  = []
         addrs    = []
+
+        # Initially, the IP and IP6 has not been set.  This helps track whether
+        # we are creating aliases or the first of the addresses.
         ip6set   = false
         ipset    = false
 
@@ -133,7 +147,7 @@ module PuppetX
         # append the options to the first address
         if addrs.size > 0
           ifconfig[:addrs] = addrs
-          ifconfig[:addrs][0] = ( ifconfig[:addrs][0].split() + options_string()).join(' ')
+          ifconfig[:addrs][0] = [ifconfig[:addrs][0],options_string()].join(' ')
         else
           ifconfig[:addrs] = options_string()
         end

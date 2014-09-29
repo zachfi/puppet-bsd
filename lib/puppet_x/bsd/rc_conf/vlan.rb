@@ -1,13 +1,13 @@
-# Module: PuppetX::Hostname_if::Vlan
+# Module: PuppetX::Rc_conf::Vlan
 #
-# Responsible for processing the vlan(4) interfaces for hostname_if(5)
+# Responsible for processing the vlan(4) interfaces for rc.conf(5)
 #
 
-require 'puppet_x/bsd/hostname_if/inet'
+#require 'puppet_x/bsd/hostname_if/inet'
 
 module PuppetX
   module BSD
-    class Hostname_if
+    class Rc_conf
       class Vlan
 
         attr_reader :content
@@ -48,30 +48,16 @@ module PuppetX
           end
         end
 
-        # Return an array of values to place on each line
+        # Return an array of parsed values
         def values
-          inet  = []
-          if @config[:address]
-            PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
-              inet << i
-            }
-          end
-
           data = []
-          data << vlan_string()
-          data << inet if inet
+          data << 'vlan ' + @config[:id]
+          data << 'vlandev ' + @config[:device]
           data.flatten
         end
 
         def content
-          values().join("\n")
-        end
-
-        def vlan_string
-          vlanstring = []
-          vlanstring << 'vlan' << @config[:id]
-          vlanstring << 'vlandev' << @config[:device]
-          vlanstring.join(' ')
+          values().join(" ")
         end
       end
     end
