@@ -1,3 +1,7 @@
+# Class: bsd::network::carp
+#
+# Enable CARP in the kernel
+#
 class bsd::network::carp (
   $allowed = true,
   $preempt = false,

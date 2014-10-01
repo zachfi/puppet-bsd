@@ -1,3 +1,7 @@
+# Class: bsd:::network::gre
+#
+# Enable or disable GRE
+#
 class bsd::network::gre (
   $allowed = true
 ) {

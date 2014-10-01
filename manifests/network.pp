@@ -117,5 +117,8 @@ class bsd::network (
         }
       }
     }
+    default: {
+      notify { 'Not supported': }
+    }
   }
 }
