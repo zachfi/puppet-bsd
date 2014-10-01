@@ -1,0 +1,51 @@
+{
+  "name": "zleslie-bsd",
+  "version": "0.0.1",
+  "author": "zleslie",
+  "summary": "BSD management with Puppet",
+  "license": "Apache License Version 2.0",
+  "source": "git://github.com/xaque208/puppet-bsd.git",
+  "project_page": "https://github.com/xaque208/puppet-bsd",
+  "issues_url": "https://github.com/xaque208/puppet-bsd/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "10",
+        "9.3",
+        "8.4"
+      ]
+    },
+    {
+      "operatingsystem": "OpenBSD",
+      "operatingsystemrelease": [
+        "5.5"
+      ]
+    },
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.2.0 < 3.4.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
+  "description": "A module to manage parts of BSD",
+  "dependencies": [
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.1.0"
+    },
+    {
+      "name": "csail/shell_config",
+      "version_requirement": ">= 0.0.1"
+    },
+    {
+      "name": "duritong/sysctl",
+      "version_requirement": ">= 0.0.5"
+    }
+  ]
+}
