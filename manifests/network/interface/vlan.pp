@@ -43,5 +43,8 @@ define bsd::network::interface::vlan (
         values      => $vlan_values,
       }
     }
+    default: {
+      notify { 'Not supported': }
+    }
   }
 }

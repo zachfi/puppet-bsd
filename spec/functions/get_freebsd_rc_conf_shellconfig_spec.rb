@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'get_freebsd_rc_conf_shellconfig' do
   hash = {
     'ifconfig_re0' => {
