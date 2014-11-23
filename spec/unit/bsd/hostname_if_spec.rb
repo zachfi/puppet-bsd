@@ -251,5 +251,18 @@ describe 'PuppetX::BSD::Hostname_if' do
       expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/tunnel 10.0.1.30 10.0.1.31/)
     end
 
+    it "should support the tun interface type" do
+      c = {
+        :type    => 'tun',
+        :values  => [
+          'up',
+          '!/usr/local/sbin/openvpn --daemon --config /etc/openvpn/vpn.ovpn --cd /etc/openvpn',
+        ]
+      }
+      content = PuppetX::BSD::Hostname_if.new(c).content
+      expect(content).to match(/^up$/)
+      expect(content).to match(/^!\/usr\/local\/sbin\/openvpn/)
+    end
+
   end
 end
