@@ -140,6 +140,20 @@ bsd::network::interface::carp { "vlan11":
 }
 ```
 
+#### tun devices
+
+The tun(4) device is supported directly though the `bsd::network::interface`
+defined type.
+
+```Puppet
+bsd::network::interface { 'tun0':
+  values => [
+    'up',
+    '!/usr/local/bin/openvpn --daemon'
+  ]
+}
+```
+
 ## Contributing
 
 Please help make this module better by sending pull requests and filing issues
