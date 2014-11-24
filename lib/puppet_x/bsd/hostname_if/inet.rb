@@ -1,10 +1,10 @@
 # Module: PuppetX::BSD::Hostname_if::Inet
 #
-# Responsible for processing interface inet a ddressing in the hostname_if(5)
-# format
+# Responsible for processing interface inet and inet6 addressing in the
+# hostname_if(5) format found on OpenBSD.
 #
-# Argument passed to #new must be a String or an Array of IP addresses, or
-# strings of dynamic addressing methods (rtsol or dhcp).
+# Argument passed to #new must be a String of an IP address or an Array of IP
+# addresses, or strings of dynamic addressing methods (rtsol or dhcp).
 #
 
 begin

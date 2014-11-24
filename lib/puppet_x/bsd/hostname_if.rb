@@ -164,6 +164,9 @@ module PuppetX
         end
       end
 
+
+      # Return an array, each element containing a line of text to match the
+      # hostname_if(5) configuration style.
       def lines
         lines = []
 
@@ -188,6 +191,7 @@ module PuppetX
         elsif @iftype =~ /^trunk/
           lines = @items
         elsif @iftype =~ /^tun/
+          lines = @items
         elsif @iftype =~ /^vether/
         elsif @iftype =~ /^vlan/
           lines = @items
@@ -209,6 +213,7 @@ module PuppetX
         lines
       end
 
+      # Return a string of content
       def content
         lines().join("\n")
       end
