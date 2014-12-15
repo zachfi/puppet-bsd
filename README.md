@@ -154,6 +154,21 @@ bsd::network::interface { 'tun0':
 }
 ```
 
+#### wireless interfaces
+
+There are many networking options for wifi.  See
+[http://www.openbsd.org/faq/faq6.html#Wireless](the openbsd documentation) for
+more information.
+
+Use the following to connect to a wireless network using WPA.
+
+```Puppet
+bsd::network::interface::wifi { 'athn0':
+  network_name => 'myssid',
+  network_key  => 'mysecretkey',
+}
+```
+
 ## Contributing
 
 Please help make this module better by sending pull requests and filing issues
