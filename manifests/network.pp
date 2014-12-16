@@ -24,15 +24,15 @@ class bsd::network (
 
   # Options common to both FreeBSD and OpenBSD
   if $v4forwarding {
-    sysctl::value { 'net.inet.ip.forwarding': value => 1 }
+    sysctl::value { 'net.inet.ip.forwarding': value => '1' }
   } else {
-    sysctl::value { 'net.inet.ip.forwarding': value => 0 }
+    sysctl::value { 'net.inet.ip.forwarding': value => '0' }
   }
 
   if $v6forwarding {
-    sysctl::value { 'net.inet6.ip6.forwarding': value => 1 }
+    sysctl::value { 'net.inet6.ip6.forwarding': value => '1' }
   } else {
-    sysctl::value { 'net.inet6.ip6.forwarding': value => 0 }
+    sysctl::value { 'net.inet6.ip6.forwarding': value => '0' }
   }
 
   case $::osfamily {
