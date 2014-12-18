@@ -11,6 +11,23 @@ their manifests.  The rest of the code here is simply to support the interface
 supplied by the manifests.  Implementing the functions directly is not advised,
 as the implementation may shift over time as the module requires.
 
+## Dependencies
+
+This module requires the 'ipaddress' ruby gem to be installed.
+
+```
+gem install ipaddress
+```
+
+or let Puppet take care:
+
+```Puppet
+package { 'ipaddress':
+  ensure   => 'present',
+  provider => 'gem',
+}
+```
+
 ## Network
 
 Network configuration is handled under the `bsd::network` name space.  Under

@@ -24,7 +24,7 @@ define bsd::network::interface (
 
   $config = {
     name        => $name,
-    type        => $if_type[0],
+    'type'      => $if_type[0],
     description => $description,
     values      => $values,
     options     => $options,
@@ -37,9 +37,9 @@ define bsd::network::interface (
       $content = get_openbsd_hostname_if_content($config)
 
       if $state != undef {
-        $text = inline_template('<%= [content,state].join("\n") + "\n" %>')
+        $text = inline_template('<%= [@content,@state].join("\n") + "\n" %>')
       } else {
-        $text = inline_template('<%= content + "\n" %>')
+        $text = inline_template('<%= @content + "\n" %>')
       }
 
       file { "/etc/hostname.${if_name}":
