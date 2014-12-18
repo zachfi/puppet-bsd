@@ -183,12 +183,14 @@ module PuppetX
         elsif @iftype =~ /^enc/
           lines = @items
         elsif @iftype =~ /^gif/
+          lines = @items
         elsif @iftype =~ /^gre/
           lines = @items
         elsif @iftype =~ /^lo/
         elsif @iftype =~ /^mpe/
         elsif @iftype =~ /^pflog/
         elsif @iftype =~ /^pflow/
+          lines = @items
         elsif @iftype =~ /^pfsync/
           lines = @items
         elsif @iftype =~ /^ppp/
