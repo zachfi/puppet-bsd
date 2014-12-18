@@ -1,6 +1,6 @@
 # Puppet BSD
 
-[![Build Status](https://travis-ci.org/xaque208/puppet-bsd.png?branch=master)](https://travis-ci.org/xaque208/puppet-bsd)
+[![Build Status](https://travis-ci.org/xaque208/puppet-bsd.png?branch=master)](https://travis-ci.org/xaque208/puppet-bsd.svg?branch=master)
 
 A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD
 and OpenBSD.  In here will be various facts, functions and classes for tuning
@@ -151,6 +151,21 @@ bsd::network::interface { 'tun0':
     'up',
     '!/usr/local/bin/openvpn --daemon'
   ]
+}
+```
+
+#### wireless interfaces
+
+There are many networking options for wifi.  See
+[http://www.openbsd.org/faq/faq6.html#Wireless](the openbsd documentation) for
+more information.
+
+Use the following to connect to a wireless network using WPA.
+
+```Puppet
+bsd::network::interface::wifi { 'athn0':
+  network_name => 'myssid',
+  network_key  => 'mysecretkey',
 }
 ```
 

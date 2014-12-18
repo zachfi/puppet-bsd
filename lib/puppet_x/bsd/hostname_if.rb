@@ -170,6 +170,12 @@ module PuppetX
       def lines
         lines = []
 
+        supported_wifi_devices = [
+          'iwn',
+          'ath',
+          'athn',
+        ]
+
         # Supported interfaces return the already processed lines.
         if @iftype =~ /^bridge/
         elsif @iftype =~ /^carp/
@@ -195,7 +201,11 @@ module PuppetX
         elsif @iftype =~ /^vether/
         elsif @iftype =~ /^vlan/
           lines = @items
+        elsif supported_wifi_devices.include?(@iftype)
+          lines = @items
         else
+          Puppet.info @iftype
+
           # Process the physical interface config
           process_items(@items) {|line|
             lines << line
