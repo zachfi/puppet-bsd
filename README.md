@@ -120,9 +120,10 @@ bsd::network::interface::vlan { 'vlan100':
 #### carp(4)
 ```Puppet
 bsd::network::interface::carp { "carp0":
-  vhid    => '1',
+  id      => '1',
   address => '10.0.0.1/24',
   carpdev => 'em0',
+  pass    => 'TopSecret',
 }
 ```
 #### lagg(4) and trunk(4)
@@ -148,12 +149,14 @@ bsd::network::interface::carp { "vlan10":
   id      => '10',
   address => '10.0.10.1/24',
   device  => 'trunk0',
+  pass    => 'TopSecret',
 }
 
 bsd::network::interface::carp { "vlan11":
   id      => '11',
   address => '10.0.11.1/24',
   device  => 'trunk0',
+  pass    => 'TopSecret',
 }
 ```
 

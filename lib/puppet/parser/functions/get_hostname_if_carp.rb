@@ -10,6 +10,7 @@ module Puppet::Parser::Functions
     c[:id]      = config["id"]
     c[:device]  = config["device"]
     c[:address] = config["address"]
+    c[:pass]    = config["pass"] if config["pass"]
     c[:advbase] = config["advbase"] if config["advbase"]
     c[:advskew] = config["advskew"] if config["advskew"]
 

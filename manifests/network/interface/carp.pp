@@ -22,6 +22,7 @@ define bsd::network::interface::carp (
     device  => $device,
     advbase => $advbase,
     advskew => $advskew,
+    pass    => $pass,
   }
 
   $carp_ifconfig = get_hostname_if_carp($config)
