@@ -120,9 +120,10 @@ bsd::network::interface::vlan { 'vlan100':
 #### carp(4)
 ```Puppet
 bsd::network::interface::carp { "carp0":
-  vhid    => '1',
+  id      => '1',
   address => '10.0.0.1/24',
   carpdev => 'em0',
+  pass    => 'TopSecret',
 }
 ```
 #### lagg(4) and trunk(4)
@@ -148,18 +149,20 @@ bsd::network::interface::carp { "vlan10":
   id      => '10',
   address => '10.0.10.1/24',
   device  => 'trunk0',
+  pass    => 'TopSecret',
 }
 
 bsd::network::interface::carp { "vlan11":
   id      => '11',
   address => '10.0.11.1/24',
   device  => 'trunk0',
+  pass    => 'TopSecret',
 }
 ```
 
-#### tun devices
+#### tun tunnel devices
 
-The tun(4) device is supported directly though the `bsd::network::interface`
+The tun(4) device is supported directly through the `bsd::network::interface`
 defined type.
 
 ```Puppet
@@ -168,6 +171,61 @@ bsd::network::interface { 'tun0':
     'up',
     '!/usr/local/bin/openvpn --daemon'
   ]
+}
+```
+
+#### gif tunnel devices
+
+The gif(4) device is supported directly through the `bsd::network::interface`
+defined type. I.e. an IPv6 via IPv4 tunnel could look like:
+
+```Puppet
+bsd::network::interface { 'gif0':
+  description => 'IPv6 in IPv4 tunnel',
+  values      => [
+    'tunnel 1.2.3.4 5.6.7.8',
+    'inet6 alias 2001:470:6c:bbb::2 2001:470:6c:bbb::1 prefixlen 128',
+    '!/sbin/route -n add -inet6 default 2001:470:6c:bbb::1',
+  ],
+}
+```
+Note: Ethernet-over-IP modes are not yet supported via this module.
+
+#### gre tunnel devices
+
+The gre(4) device is supported directly through the `bsd::network::interface`
+defined type. Prior to make GRE interfaces work, GRE needs to be allowed.
+Additionally WCCPv1-style GRE packets can be enabled as well as
+MobileIP packets. Example of the bsd::network::gre class below
+shows the default values.
+
+```Puppet
+class { 'bsd::network::gre':
+  allowed  => true,
+  wccp     => false,
+  mobileip => false,
+}
+
+bsd::network::interface { 'gre0':
+  description => 'Tunnel interface',
+  values      => [
+    '172.16.0.1 172.16.0.2 netmask 0xffffffff link0 up',
+    'tunnel 1.2.3.4 5.6.7.8',
+  ],
+}
+```
+
+#### pflow interfaces
+The pflow(4) device is supported directly through the `bsd::network::interface`
+defined type.
+
+```Puppet
+bsd::network::interface { 'pflow0':
+  description => 'Pflow to collector',
+  values      => [
+    'flowsrc 1.2.3.4 flowdst 5.6.7.8:1234',
+    'pflowproto 10',
+  ],
 }
 ```
 

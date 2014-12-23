@@ -38,6 +38,7 @@ module PuppetX
             :advbase,
             :advskew,
             :carpdev,
+            :pass,
           ]
 
           @config.each do |k,v|
@@ -62,6 +63,7 @@ module PuppetX
         def carp_string
           carpstring = []
           carpstring << 'vhid' << @config[:id]
+          carpstring << 'pass' << @config[:pass] if @config[:pass]
           carpstring << 'carpdev' << @config[:device]
           carpstring << 'advbase' << @config[:advbase] if @config[:advbase]
           carpstring << 'advskew' << @config[:advskew] if @config[:advskew]
