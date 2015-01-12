@@ -8,7 +8,7 @@ module Puppet::Parser::Functions
 
     c = {}
     c[:network_name] = config["network_name"]
-    c[:network_key]  = config["network_key"]
+    c[:network_key]  = config["network_key"] if config["network_key"]
     c[:address]      = config["address"] if config["address"]
 
     return PuppetX::BSD::Hostname_if::Wifi.new(c).content

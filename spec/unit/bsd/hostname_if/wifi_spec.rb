@@ -9,11 +9,11 @@ describe 'PuppetX::BSD::Hostname_if::Wifi' do
 
     it "should raise an error if missing arguments" do
       c = {
-        :network_name => 'myssid',
+        :network_key => 'topsecret',
       }
       expect {
         PuppetX::BSD::Hostname_if::Wifi.new(c).content
-      }.to raise_error(ArgumentError, /network_key.*required/)
+      }.to raise_error(ArgumentError, /network_name.*required/)
     end
 
     it "should raise an error if unknown arguments" do
@@ -29,7 +29,22 @@ describe 'PuppetX::BSD::Hostname_if::Wifi' do
   end
 
   describe 'content' do
-    it 'should support a full example' do
+    it 'should support a minimal example' do
+      c = {
+        :network_name => 'myssid',
+      }
+      expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/nwid myssid/)
+    end
+
+    it 'should support a minimal example with dhcp' do
+      c = {
+        :network_name => 'myssid',
+        :address      => ['dhcp'],
+      }
+      expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/dhcp nwid myssid/)
+    end
+
+    it 'should support a partial example' do
       c = {
         :network_name => 'myssid',
         :network_key => 'mykey',
@@ -37,7 +52,7 @@ describe 'PuppetX::BSD::Hostname_if::Wifi' do
       expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/nwid myssid wpakey mykey/)
     end
 
-    it 'should support a partial example' do
+    it 'should support a full example' do
       c = {
         :network_name => 'myssid',
         :network_key => 'mykey',
