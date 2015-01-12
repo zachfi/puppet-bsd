@@ -4,7 +4,7 @@
 #
 define bsd::network::interface::wifi (
   $network_name,
-  $network_key,
+  $network_key = undef,
   $address     = undef,
   $description = undef,
   $options     = undef,
