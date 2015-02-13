@@ -14,4 +14,3 @@ module Puppet::Parser::Functions
     return PuppetX::BSD::Hostname_if::Trunk.new(c).content
   end
 end
-

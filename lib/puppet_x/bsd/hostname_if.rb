@@ -163,6 +163,7 @@ module PuppetX
 
         # Supported interfaces return the already processed lines.
         if @iftype =~ /^bridge/
+          lines = @items
         elsif @iftype =~ /^carp/
           lines = @items
         elsif @iftype =~ /^enc/

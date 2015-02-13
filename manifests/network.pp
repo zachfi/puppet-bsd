@@ -20,7 +20,7 @@ class bsd::network (
   $v6gateway    = '',
   $v4forwarding = false,
   $v6forwarding = false,
-){
+) {
 
   # Options common to both FreeBSD and OpenBSD
   if $v4forwarding {
