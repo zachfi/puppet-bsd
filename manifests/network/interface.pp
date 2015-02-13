@@ -23,11 +23,11 @@ define bsd::network::interface (
   }
 
   $config = {
-    name        => $name,
-    'type'      => $if_type[0],
-    description => $description,
-    values      => $values,
-    options     => $options,
+    'name'        => $name,
+    'type'        => $if_type[0],
+    'description' => $description,
+    'values'      => $values,
+    'options'     => $options,
   }
 
   debug("config: ${config}")

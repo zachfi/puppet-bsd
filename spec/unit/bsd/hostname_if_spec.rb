@@ -198,7 +198,7 @@ describe 'PuppetX::BSD::Hostname_if' do
           'up',
         ]
       }
-      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^up.*I am an interface/)
+      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^description "I am an interface"\nup/)
     end
 
     it "should support the !command syntax in the hostname.if(5) manpage" do

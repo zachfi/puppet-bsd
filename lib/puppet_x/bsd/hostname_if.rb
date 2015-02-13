@@ -86,26 +86,12 @@ module PuppetX
       end
 
       # Check to see if we have a description
-      def has_desc?
+      def has_description?
         @desc and @desc.is_a? String and @desc.length > 0
       end
 
-      def description_string
-        if has_desc?
-          "description \"#{@desc}\""
-        else
-          ""
-        end
-      end
-
-      # Append the description string to the options
-      def build_options
-          @options << description_string() if has_desc?
-      end
-
-      def options_string
-        build_options
-        @options.join(' ')
+      def has_options?
+        @options and @options.is_a? Array and @options.size > 0
       end
 
       # Receivs array of strings that match an inet or inet6 configuration
@@ -164,7 +150,6 @@ module PuppetX
         end
       end
 
-
       # Return an array, each element containing a line of text to match the
       # hostname_if(5) configuration style.
       def lines
@@ -214,18 +199,42 @@ module PuppetX
           }
         end
 
-        # Appends the media options to the first line, regardless of the type
-        # of interface we are working with.
-        if lines.length > 0
-          lines[0] = ( lines[0].split() + options_string().split ).join(' ')
-        else
-          lines << options_string()
+        if has_options?
+          options_string = @options.join(' ')
+        end
+
+        if has_description?
+          description_string = "description \"#{@desc}\""
+        end
+
+        # Set the interface options
+        #
+        # If we have received interface options, append it to the content of
+        # the first line.
+        if has_options?
+          tmp = lines.shift
+          lines.unshift([tmp, options_string].join(' '))
+        end
+
+        # Include the description string
+        #
+        # If we have received a description string, include it as the first
+        # line in the absense of interface options.  In the presense of
+        # interface options, we append the description to the end of the first
+        # line.
+        if has_description?
+          if has_options?
+            tmp = lines.shift
+            lines.unshift([tmp, description_string].join(' '))
+          else
+            lines.unshift(description_string)
+          end
         end
 
         lines
       end
 
-      # Return a string of content
+      # Format the lines[] array as content for a file.
       def content
         lines().join("\n")
       end
