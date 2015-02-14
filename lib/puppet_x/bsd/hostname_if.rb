@@ -187,6 +187,7 @@ module PuppetX
         elsif @iftype =~ /^tun/
           lines = @items
         elsif @iftype =~ /^vether/
+          lines = @items
         elsif @iftype =~ /^vlan/
           lines = @items
         elsif supported_wifi_devices.include?(@iftype)

@@ -20,5 +20,14 @@ describe "bsd::network::interface" do
         should contain_file('/etc/hostname.tun0').with_content(/up\n!\/usr\/local\/bin\/openvpn/)
       end
     end
+
+    context "a vether device" do
+      let(:title) { 'vether0' }
+      let(:params) { {:values => ['123..123.123.123/29', 'up'] } }
+
+      it do
+        should contain_file('/etc/hostname.vether0').with_content(/123..123.123.123\/29\nup\n/)
+      end
+    end
   end
 end
