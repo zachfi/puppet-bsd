@@ -156,9 +156,13 @@ module PuppetX
         lines = []
 
         supported_wifi_devices = [
-          'iwn',
           'ath',
           'athn',
+          'iwn',
+          'ral',
+          'rum',
+          'wi',
+          'wpi',
         ]
 
         supported_virtual_devices = [

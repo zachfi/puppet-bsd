@@ -17,11 +17,11 @@ module PuppetX
           ::PuppetX::BSD::Util.normalize_config(@config)
           required_config_items = [
             :network_name,
-            :network_key,
           ]
 
           optional_config_items = [
             :address,
+            :network_key,
           ]
 
           ::PuppetX::BSD::Util.validate_config(
@@ -43,7 +43,9 @@ module PuppetX
           end
 
           data << ['nwid',@config[:network_name]].join(' ')
-          data << ['wpakey',@config[:network_key]].join(' ')
+          if @config[:network_key]
+            data << ['wpakey',@config[:network_key]].join(' ')
+          end
           data.join(' ')
         end
       end
