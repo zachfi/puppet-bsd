@@ -1,0 +1,7 @@
+fixtures:
+  forge_modules:
+    shell_config: 'csail/shell_config'
+    sysctl: 'duritong/sysctl'
+    stdlib: 'puppetlabs/stdlib'
+    concat: 'puppetlabs/concat'
+

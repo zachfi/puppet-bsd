@@ -15,6 +15,7 @@ define bsd::network::interface::carp (
   include bsd::network::carp
 
   $if_name = $name
+  validate_re($if_name, ['carp'])
 
   $config = {
     address => $address,

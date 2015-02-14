@@ -35,17 +35,9 @@
   ],
   "description": "A module to manage parts of BSD",
   "dependencies": [
-    {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.1.0"
-    },
-    {
-      "name": "csail/shell_config",
-      "version_requirement": ">= 0.0.1"
-    },
-    {
-      "name": "duritong/sysctl",
-      "version_requirement": ">= 0.0.5"
-    }
+    { "name": "puppetlabs/concat", "version_requirement": ">= 1.1.0" },
+    { "name": "csail/shell_config", "version_requirement": ">= 0.0.1" },
+    { "name": "duritong/sysctl", "version_requirement": ">= 0.0.5" },
+    { "name": "puppetlabs/stdlib","version_requirement":">=4.4.0"}
   ]
 }

@@ -8,6 +8,7 @@ define bsd::network::interface::bridge (
 ) {
 
   $if_name = $name
+  validate_re($if_name, ['bridge'])
 
   $config = {
     interface => $interface,

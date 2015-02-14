@@ -10,6 +10,7 @@ define bsd::network::interface::trunk (
 ) {
 
   $if_name = $name
+  validate_re($if_name, ['trunk'])
 
   $config = {
     interface => $interface,
