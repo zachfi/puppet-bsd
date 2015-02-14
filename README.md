@@ -247,7 +247,7 @@ bsd::network::interface::wifi { 'athn0':
 #### bridge(4) interfaces
 ```Puppet
 bsd::network::interface::bridge { "bridge0":
-  interface => ['em0','em1],
+  interface => ['em0','em1'],
 }
 ```
 
