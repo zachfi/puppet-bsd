@@ -171,7 +171,7 @@ module PuppetX
           'pfsync',
           'trunk',
           'tun',
-          'vether',
+          #'vether',
           'vlan',
         ]
 
