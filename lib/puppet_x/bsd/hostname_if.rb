@@ -161,34 +161,29 @@ module PuppetX
           'athn',
         ]
 
+        supported_virtual_devices = [
+          'bridge',
+          'carp',
+          'enc',
+          'gif',
+          'gre',
+          'pflow',
+          'pfsync',
+          'trunk',
+          'tun',
+          'vether',
+          'vlan',
+        ]
+
+        # please_help_add_support_for = [
+        #   'mpe',
+        #   'ppp',
+        #   'pppoe',
+        #   'sl',
+        # ]
+
         # Supported interfaces return the already processed lines.
-        if @iftype =~ /^bridge/
-          lines = @items
-        elsif @iftype =~ /^carp/
-          lines = @items
-        elsif @iftype =~ /^enc/
-          lines = @items
-        elsif @iftype =~ /^gif/
-          lines = @items
-        elsif @iftype =~ /^gre/
-          lines = @items
-        elsif @iftype =~ /^lo/
-        elsif @iftype =~ /^mpe/
-        elsif @iftype =~ /^pflog/
-        elsif @iftype =~ /^pflow/
-          lines = @items
-        elsif @iftype =~ /^pfsync/
-          lines = @items
-        elsif @iftype =~ /^ppp/
-        elsif @iftype =~ /^pppoe/
-        elsif @iftype =~ /^sl/
-        elsif @iftype =~ /^trunk/
-          lines = @items
-        elsif @iftype =~ /^tun/
-          lines = @items
-        elsif @iftype =~ /^vether/
-          lines = @items
-        elsif @iftype =~ /^vlan/
+        if supported_virtual_devices.include?(@iftype)
           lines = @items
         elsif supported_wifi_devices.include?(@iftype)
           lines = @items
