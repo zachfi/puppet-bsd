@@ -11,6 +11,7 @@ define bsd::network::interface::vlan (
 ) {
 
   $if_name = $name
+  validate_re($if_name, ['vlan'])
 
   validate_re(
     $state,

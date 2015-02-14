@@ -2,6 +2,15 @@
 #
 # Manage a network interface
 #
+# This define is a generic interface to the underlying bsd interface
+# configuration.  For OpenBSD, manage the hostname_if(5) config files, and
+# rc.conf(5) on FreeBSD.
+#
+# This code can be implemented and used directly, though there are specific
+# Puppet classes for many common network interface configuration, such as vlan,
+# carp, trunk, and it is recommended to use the more specific classes when
+# available.
+#
 define bsd::network::interface (
   $ensure        = 'present',
   $state         = undef,
