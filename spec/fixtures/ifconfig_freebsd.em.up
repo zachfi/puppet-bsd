@@ -1,0 +1,9 @@
+em0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> metric 0 mtu 9000
+	options=4219b<RXCSUM,TXCSUM,VLAN_MTU,VLAN_HWTAGGING,VLAN_HWCSUM,TSO4,WOL_MAGIC,VLAN_HWTSO>
+	ether 00:11:22:33:44:55
+	inet 10.0.0.10 netmask 0xffffff00 broadcast 10.0.0.255 
+	inet6 fe80::225:9999:ffff:ac26%em0 prefixlen 64 scopeid 0x1 
+	inet6 2fff:fff:ffff:1ab::10:10 prefixlen 64 
+	nd6 options=21<PERFORMNUD,AUTO_LINKLOCAL>
+	media: Ethernet autoselect (1000baseT <full-duplex>)
+	status: active

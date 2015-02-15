@@ -1,0 +1,5 @@
+em0: flags=28802<BROADCAST,SIMPLEX,MULTICAST,NOINET6> mtu 1500
+	lladdr 00:11:22:33:44:55
+	priority: 0
+	media: Ethernet autoselect (none)
+	status: no carrier

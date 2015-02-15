@@ -3,8 +3,25 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
 
   confine :kernel => [:openbsd, :freebsd]
   defaultfor :operatingsystem => :freebsd
-
   commands :ifconfig => '/sbin/ifconfig'
+  #mk_resource_methods
+
+  def state
+    output = ifconfig([resource[:name]])
+    case output
+    when /#{resource[:name]}:\sflags=.*<[^UP].*>/
+      return 'down'
+    when /#{resource[:name]}:\sflags=.*<UP,/
+      return 'up'
+    else
+      return 'absent'
+    end
+  end
+
+  def state=(value)
+    up() if value == 'up'
+    down() if value == 'down'
+  end
 
   def pseudo_devices
     ifconfig(['-C']).split(' ')

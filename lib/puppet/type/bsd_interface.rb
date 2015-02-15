@@ -32,4 +32,10 @@ Puppet::Type.newtype(:bsd_interface) do
 
     defaultto :present
   end
+
+  newproperty(:state) do
+    newvalue(:up)
+    newvalue(:down)
+    newvalue(:absent)
+  end
 end

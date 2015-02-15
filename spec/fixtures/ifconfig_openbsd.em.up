@@ -1,0 +1,10 @@
+em0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	lladdr 00:11:22:33:44:55
+	description: Upstream to soek
+	priority: 0
+	groups: egress
+	media: Ethernet autoselect (1000baseT full-duplex,master,rxpause,txpause)
+	status: active
+	inet6 fe80::200:9999:ffff:6404%em0 prefixlen 64 scopeid 0x1
+	inet6 2fff:fff:ffff::10:10 prefixlen 64
+	inet 10.0.0.10 netmask 0xffffff00 broadcast 10.0.0.255
