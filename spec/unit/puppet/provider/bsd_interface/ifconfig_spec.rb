@@ -17,43 +17,7 @@ describe provider_class do
 
   let (:provider) { resource.provider }
 
-  context "#destroy" do
-    before do
-      expect(provider_class).to receive(:ifconfig).with(['-C']) { 'vlan pflog0' }
-    end
-
-    context "when created" do
-      it "should destroy a pseudo interface" do
-        expect(provider_class).to receive(:ifconfig).with(['vlan0', 'down'])
-        expect(provider_class).to receive(:ifconfig).with(['vlan0', 'destroy'])
-        vlan_interface.provider.destroy
-      end
-
-      it "should shutdown a real interface" do
-        expect(provider_class).to receive(:ifconfig).with(['em0', 'down'])
-        expect(provider_class).to_not receive(:ifconfig).with(['em0', 'destroy'])
-        em_interface.provider.destroy
-      end
-    end
-  end
-
-  context "#create" do
-    before do
-      expect(provider_class).to receive(:ifconfig).with(['-C']) { 'vlan pflog0' }
-    end
-
-    it "should create a pseudo interface" do
-      expect(provider_class).to receive(:ifconfig).with(['vlan0', 'create'])
-      expect(provider_class).to receive(:ifconfig).with(['vlan0', 'up'])
-      vlan_interface.provider.create
-    end
-
-    it "should create a real interface" do
-      expect(provider_class).to_not receive(:ifconfig).with(['em0', 'create'])
-      expect(provider_class).to receive(:ifconfig).with(['em0', 'up'])
-      em_interface.provider.create
-    end
-  end
+  [:up, :down, :create, :destroy].each {|m| it { should respond_to(m) } }
 
   context "#state" do
     platforms = ['FreeBSD', 'OpenBSD']
@@ -73,4 +37,84 @@ describe provider_class do
       end
     end
   end
+
+  context "#create" do
+    if_types = ['pseudo', 'real']
+    states = ['absent','up']
+    platforms = ['OpenBSD']
+
+    states.each do |state|
+      context "interface state is #{state}" do
+        if_types.each do |if_type|
+
+          case if_type
+          when 'pseudo'
+            ifname = 'vlan0'
+          when 'real'
+            ifname = 'em0'
+          end
+
+          context "when managing #{if_type} interface" do
+            platforms.each do |platform|
+              context "on #{platform}" do
+                #p = platform.downcase
+                #ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.em.#{state}"
+                #puts ifconfig_fixture
+                #expect(provider_class).to receive(:ifconfig).with([ifname]).at_least(:once) { info }
+                p = platform.downcase
+                case if_type
+                when 'real'
+                  ifname = 'em0'
+                  ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.em.#{state}"
+                when 'pseudo'
+                  ifname = 'vlan0'
+                  ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.vlan.#{state}"
+                end
+
+                let(:info) { File.read(ifconfig_fixture) }
+
+                case if_type
+                when 'real'
+                  case state
+                  when 'up'
+                    it "should set the interface up" do
+                      expect(provider_class).to receive(:ifconfig).with(['-C']) { 'vlan pflog0' }
+                      expect(provider_class).to_not receive(:ifconfig).with([ifname, 'create'])
+                      expect(provider_class).to receive(:ifconfig).with([ifname, 'up'])
+                      em_interface.provider.create
+                    end
+                  end
+                when 'pseudo'
+                  case state
+                  when 'absent'
+                    it "should create the interface" do
+                      expect(provider_class).to receive(:ifconfig).with(['-C']) { 'vlan pflog0' }
+                      expect(provider_class).to receive(:ifconfig).with([ifname]) { info }
+                      expect(provider_class).to receive(:ifconfig).with([ifname, 'create'])
+                      expect(provider_class).to receive(:ifconfig).with([ifname, 'up'])
+                      vlan_interface.provider.create
+                    end
+                  when 'up'
+                    it "should set the interface up" do
+                      expect(provider_class).to receive(:ifconfig).with(['-C']) { 'vlan pflog0' }
+                      expect(provider_class).to receive(:ifconfig).with([ifname]) { info }
+                      expect(provider_class).to_not receive(:ifconfig).with([ifname, 'create'])
+                      expect(provider_class).to receive(:ifconfig).with([ifname, 'up'])
+                      vlan_interface.provider.create
+                    end
+
+                  end
+                end
+
+              end
+
+            end
+          end
+
+        end
+
+      end
+    end
+  end
+
 end

@@ -49,7 +49,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def create
-    if destroyable?
+    if destroyable? and state == 'absent'
       ifconfig([resource[:name], 'create'])
     end
     up()
