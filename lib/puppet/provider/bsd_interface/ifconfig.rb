@@ -19,8 +19,12 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def state=(value)
-    up() if value == 'up'
-    down() if value == 'down'
+    case value
+    when 'up'
+      up()
+    when 'down'
+      down()
+    end
   end
 
   def pseudo_devices
@@ -53,7 +57,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
 
   def destroy
     down()
-    if destroyable? and state != 'absent'
+    if destroyable? and state() != 'absent'
       ifconfig([resource[:name], 'destroy'])
     end
   end

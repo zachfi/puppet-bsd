@@ -4,6 +4,7 @@
 #
 define bsd::network::interface::trunk (
   $interface,
+  $ensure      = 'present',
   $proto       = 'lacp',
   $address     = undef,
   $description = undef,
@@ -11,6 +12,12 @@ define bsd::network::interface::trunk (
 
   $if_name = $name
   validate_re($if_name, ['trunk'])
+
+  validate_re(
+    $ensure,
+    '(up|down|present|absent)',
+    '$ensure can only be one of up, down, present, or absent'
+  )
 
   $config = {
     interface => $interface,
@@ -21,7 +28,8 @@ define bsd::network::interface::trunk (
   $trunk_ifconfig = get_hostname_if_trunk($config)
 
   bsd::network::interface { $if_name:
+    ensure      => $ensure,
     description => $description,
-    values      => [$trunk_ifconfig, 'up'],
+    values      => [$trunk_ifconfig],
   }
 }
