@@ -1,7 +1,11 @@
 fixtures:
+  symlinks:
+    my_module: "#{source_dir}"
+
+  repositories:
+    sysctl: 'git://github.com/duritong/puppet-sysctl'
+    stdlib: 'git://github.com/puppetlabs/puppetlabs-stdlib'
+    concat: 'git://github.com/puppetlabs/puppetlabs-concat'
   forge_modules:
     shell_config: 'csail/shell_config'
-    sysctl: 'duritong/sysctl'
-    stdlib: 'puppetlabs/stdlib'
-    concat: 'puppetlabs/concat'
 

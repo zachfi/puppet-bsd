@@ -81,7 +81,8 @@ module PuppetX
             end
           end
         else
-          raise ArgumentError "a description, value, or option is required"
+          raise ArgumentError,
+            "a description, value, or option is required"
         end
       end
 

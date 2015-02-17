@@ -13,7 +13,6 @@
 #
 define bsd::network::interface (
   $ensure        = 'present',
-  $state         = undef,
   $description   = undef,
   $values        = undef,
   $options       = undef,
@@ -23,13 +22,11 @@ define bsd::network::interface (
   $interface_file = "/etc/hostname.${if_name}"
   $if_type        = split($if_name, '\d+')
 
-  if $state != undef {
-    validate_re(
-      $state,
-      '(up|down)',
-      'The $state can only be \'up\' or \'down\'.'
-    )
-  }
+  validate_re(
+    $ensure,
+    '(up|down|present|absent)',
+    '$ensure can only be one of up, down, present, or absent'
+  )
 
   $config = {
     'name'        => $name,
@@ -39,33 +36,65 @@ define bsd::network::interface (
     'options'     => $options,
   }
 
+  # Set a more common ensure value in a variable
+  case $ensure {
+    'present','up','down': {
+      $file_ensure = 'present'
+    }
+    'absent': {
+      $file_ensure = 'absent'
+    }
+  }
+
+  # Set the interface state variable
+  case $ensure {
+    'present','up': {
+      $state = 'up'
+    }
+    'absent','down': {
+      $state = 'down'
+    }
+  }
+
   debug("config: ${config}")
 
   case $::kernel {
     'OpenBSD': {
-      $content = get_openbsd_hostname_if_content($config)
+      if $file_ensure == 'present' {
+        $content = get_openbsd_hostname_if_content($config)
 
-      if $state != undef {
-        $text = inline_template('<%= [@content,@state].join("\n") + "\n" %>')
+        if $state != undef {
+          $text = inline_template('<%= [@content,@state].join("\n") + "\n" %>')
+        } else {
+          $text = inline_template('<%= @content + "\n" %>')
+        }
       } else {
-        $text = inline_template('<%= @content + "\n" %>')
+        $text = ''
       }
 
       file { "/etc/hostname.${if_name}":
+        ensure  => $file_ensure,
         content => $text,
-        notify  => Exec["netstart_${if_name}"],
       }
 
-      exec { "netstart_${if_name}":
-        command     => "/bin/sh /etc/netstart ${if_name}",
-        refreshonly => true,
+      if $file_ensure == 'present' {
+        exec { "netstart_${if_name}":
+          command     => "/bin/sh /etc/netstart ${if_name}",
+          refreshonly => true,
+          subscribe   => File["/etc/hostname.${if_name}"],
+        }
+      }
+
+      bsd_interface { $if_name:
+        ensure => $ensure,
       }
     }
     'FreeBSD': {
       $rec_hash = get_freebsd_rc_conf_shellconfig($config)
 
       Shell_config {
-        file => '/etc/rc.conf'
+        ensure => $file_ensure,
+        file   => '/etc/rc.conf'
       }
 
       create_resources('shell_config', $rec_hash)
@@ -79,6 +108,10 @@ define bsd::network::interface (
       exec { "netifstart_${if_name}":
         command     => "/usr/sbin/service netif ${action} ${if_name}",
         refreshonly => true,
+      }
+
+      bsd_interface { $if_name:
+        ensure => $ensure,
       }
     }
     default: {

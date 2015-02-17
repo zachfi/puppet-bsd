@@ -22,7 +22,7 @@ define bsd::network::interface::wifi (
 
   bsd::network::interface { $if_name:
     description => $description,
-    values      => [$wifi_ifconfig, 'up'],
+    values      => [$wifi_ifconfig],
     options     => $options,
   }
 }
