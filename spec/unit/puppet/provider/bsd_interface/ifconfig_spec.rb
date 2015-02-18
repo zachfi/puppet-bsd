@@ -102,19 +102,13 @@ describe provider_class do
                       expect(provider_class).to receive(:ifconfig).with([ifname, 'up'])
                       vlan_interface.provider.create
                     end
-
                   end
                 end
-
               end
-
             end
           end
-
         end
-
       end
     end
   end
-
 end
