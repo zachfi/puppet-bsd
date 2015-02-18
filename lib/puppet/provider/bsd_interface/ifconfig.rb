@@ -7,8 +7,8 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   #mk_resource_methods
 
   def state
-    output = ifconfig([resource[:name]])
-    case output
+    @state_output ||= ifconfig([resource[:name]])
+    case @state_output
     when /#{resource[:name]}:\sflags=.*<[^UP].*>/
       return 'down'
     when /#{resource[:name]}:\sflags=.*<UP,/
@@ -28,7 +28,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def pseudo_devices
-    ifconfig(['-C']).split(' ')
+    @pseudo_devices ||= ifconfig(['-C']).split(' ')
   end
 
   def destroyable?
@@ -63,6 +63,10 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def exists?
-    state() != 'absent'
+    if destroyable?
+      state() != 'absent'
+    else
+      state() != 'absent' and state() != 'down'
+    end
   end
 end
