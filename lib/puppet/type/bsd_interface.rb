@@ -14,14 +14,6 @@ Puppet::Type.newtype(:bsd_interface) do
       provider.destroy
     end
 
-    newvalue(:created) do
-      provider.create
-    end
-
-    newvalue(:destroyed) do
-      provider.destroy
-    end
-
     newvalue(:up) do
       provider.up
     end
@@ -29,6 +21,9 @@ Puppet::Type.newtype(:bsd_interface) do
     newvalue(:down) do
       provider.down
     end
+
+    aliasvalue(:down, :absent)
+    aliasvalue(:up, :present)
 
     defaultto :present
   end

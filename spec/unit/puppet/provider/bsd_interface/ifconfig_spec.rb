@@ -19,6 +19,105 @@ describe provider_class do
 
   [:up, :down, :create, :destroy].each {|m| it { should respond_to(m) } }
 
+  context "#exists?" do
+    states = ['present','up','absent','down']
+    if_types = ['pseudo', 'real']
+    platforms = ['OpenBSD']
+
+    states.each do |state|
+      context "interface state is #{state}" do
+        platforms.each do |platform|
+
+          context "on #{platform}" do
+            if_types.each do |if_type|
+              context "on a #{if_type} interface" do
+
+                case if_type
+                when 'pseudo'
+                  ifname = 'vlan0'
+                when 'real'
+                  ifname = 'em0'
+                end
+
+                before do
+                  expect(provider_class).to receive(:ifconfig).with(['-C']) { 'vlan pflog0' }
+                  expect(provider_class).to receive(:ifconfig).with([ifname]) { info }
+                end
+
+                p = platform.downcase
+
+                case if_type
+                when 'real'
+                  ifname = 'em0'
+                  case state
+                  when 'present'
+                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.em.up"
+                  else
+                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.em.#{state}"
+                  end
+                when 'pseudo'
+                  ifname = 'vlan0'
+                  case state
+                  when 'present'
+                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.vlan.up"
+                  else
+                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.vlan.#{state}"
+                  end
+                end
+
+                let(:info) { File.read(ifconfig_fixture) }
+
+                case state
+                when 'up', 'present'
+                  it "should be present" do
+                    interface = Puppet::Type.type(:bsd_interface).new(
+                      :name => ifname,
+                      :provider => 'ifconfig',
+                      :ensure => state,
+                    )
+                    expect(interface.provider.exists?).to eq(true)
+                  end
+                when 'absent'
+                  it "should be absent" do
+                    interface = Puppet::Type.type(:bsd_interface).new(
+                      :name => ifname,
+                      :provider => 'ifconfig',
+                      :ensure => state,
+                    )
+                    expect(interface.provider.exists?).to eq(false)
+                  end
+                when 'down'
+                  case if_type
+                  when 'real'
+                    it "should be absent" do
+                      interface = Puppet::Type.type(:bsd_interface).new(
+                        :name => ifname,
+                        :provider => 'ifconfig',
+                        :ensure => state,
+                      )
+                      expect(interface.provider.exists?).to eq(false)
+                    end
+                  when 'pseudo'
+                    it "should be present" do
+                      interface = Puppet::Type.type(:bsd_interface).new(
+                        :name => ifname,
+                        :provider => 'ifconfig',
+                        :ensure => state,
+                      )
+                      expect(interface.provider.exists?).to eq(true)
+                    end
+                  end
+                end
+
+              end
+            end
+
+          end
+        end
+      end
+    end
+  end
+
   context "#state" do
     platforms = ['FreeBSD', 'OpenBSD']
     states = ['up','down']
@@ -102,19 +201,13 @@ describe provider_class do
                       expect(provider_class).to receive(:ifconfig).with([ifname, 'up'])
                       vlan_interface.provider.create
                     end
-
                   end
                 end
-
               end
-
             end
           end
-
         end
-
       end
     end
   end
-
 end
