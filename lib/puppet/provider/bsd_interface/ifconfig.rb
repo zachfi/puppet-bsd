@@ -6,8 +6,20 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   commands :ifconfig => '/sbin/ifconfig'
   #mk_resource_methods
 
+  def get_state
+    output = execute(['/sbin/ifconfig', resource[:name]], :failonfail => false, :combine => true)
+    return output
+  end
+
   def state
-    @state_output ||= ifconfig([resource[:name]])
+    @state_output ||= get_state()
+
+    # Unsure how to test this, and the output from the command works well
+    # enough to determine the state.
+    #if output.exitstatus != 0
+    #  return 'absent'
+    #end
+
     case @state_output
     when /#{resource[:name]}:\sflags=.*<[^UP].*>/
       return 'down'
@@ -49,10 +61,12 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def create
-    if destroyable? and state == 'absent'
+    if destroyable? and state() == 'absent'
       ifconfig([resource[:name], 'create'])
+      up()
+    elsif state() != 'up'
+      up()
     end
-    up()
   end
 
   def destroy
