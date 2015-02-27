@@ -45,6 +45,7 @@ module PuppetX
                   line << 'alias' if @ip6set
                   line << ip.compressed
                   line << ip.prefix
+                  line << "\n"
                   @ip6set = true
                 elsif ip.ipv4?
                   line = ['inet']
@@ -52,6 +53,7 @@ module PuppetX
                   line << ip.address
                   line << ip.netmask
                   line << 'NONE'
+                  line << "\n"
                   @ipset = true
                 end
                 if line
