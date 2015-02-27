@@ -41,7 +41,7 @@ describe 'PuppetX::BSD::Hostname_if::Wifi' do
         :network_name => 'myssid',
         :address      => ['dhcp'],
       }
-      expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/dhcp nwid myssid/)
+      expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/dhcp\nnwid myssid/)
     end
 
     it 'should support a partial example' do
@@ -58,7 +58,7 @@ describe 'PuppetX::BSD::Hostname_if::Wifi' do
         :network_key => 'mykey',
         :address => '10.0.0.1/24',
       }
-      expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/inet 10.0.0.1 255.255.255.0 NONE nwid myssid wpakey mykey/)
+      expect(PuppetX::BSD::Hostname_if::Wifi.new(c).content).to match(/inet 10.0.0.1 255.255.255.0 NONE\nnwid myssid wpakey mykey/)
     end
   end
 end

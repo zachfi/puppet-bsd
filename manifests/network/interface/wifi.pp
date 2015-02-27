@@ -4,6 +4,7 @@
 #
 define bsd::network::interface::wifi (
   $network_name,
+  $ensure      = 'present',
   $network_key = undef,
   $address     = undef,
   $description = undef,
@@ -11,6 +12,12 @@ define bsd::network::interface::wifi (
 ) {
 
   $if_name = $name
+
+  validate_re(
+    $ensure,
+    '(up|down|present|absent)',
+    '$ensure can only be one of up, down, present, or absent'
+  )
 
   $config = {
     network_name => $network_name,
