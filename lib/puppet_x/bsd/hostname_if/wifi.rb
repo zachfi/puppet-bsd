@@ -42,11 +42,15 @@ module PuppetX
             data << inet
           end
 
-          data << ['nwid',@config[:network_name]].join(' ')
-          if @config[:network_key]
-            data << ['wpakey',@config[:network_key]].join(' ')
-          end
-          data.join(' ')
+          data << wifi_string()
+          data.join("\n")
+        end
+
+        def wifi_string
+          wifistring = []
+          wifistring << 'nwid' << @config[:network_name]
+          wifistring << 'wpakey' << @config[:network_key] if @config[:network_key]
+          wifistring.join(' ')
         end
       end
     end
