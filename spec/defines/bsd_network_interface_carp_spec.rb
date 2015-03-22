@@ -17,7 +17,7 @@ describe "bsd::network::interface::carp" do
       }
       it do
         should contain_bsd__network__interface('carp0')
-        should contain_file('/etc/hostname.carp0').with_content(/inet 10.0.0.1 255.255.255.0 NONE vhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\nup\n/)
+        should contain_file('/etc/hostname.carp0').with_content(/inet 10.0.0.1 255.255.255.0 NONE\nvhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\nup\n/)
       end
     end
   end
