@@ -181,8 +181,8 @@ module PuppetX
             end
           end
         }
-      rescue
-        raise "addr is #{a} of class #{a.class}: #{e.message}"
+      rescue Exception => e
+        raise e.message
       end
     end
   end
