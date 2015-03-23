@@ -178,11 +178,11 @@ module PuppetX
               else
                 raise "Value nont found"
               end
+            rescue Exception => e
+              raise "addr is #{a} of class #{a.class}: #{e.message}"
             end
           end
         }
-      rescue Exception => e
-        raise e.message
       end
     end
   end
