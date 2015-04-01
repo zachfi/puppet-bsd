@@ -1,0 +1,7 @@
+vlan0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> metric 0 mtu 1500
+        options=103<RXCSUM,TXCSUM,TSO4>
+        ether 00:25:90:6c:ac:27
+        nd6 options=29<PERFORMNUD,IFDISABLED,AUTO_LINKLOCAL>
+        media: Ethernet autoselect
+        status: no carrier
+        vlan: 1 parent interface: em1
