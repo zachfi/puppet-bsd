@@ -22,7 +22,7 @@ describe provider_class do
   context "#exists?" do
     states = ['present','up','absent','down']
     if_types = ['pseudo', 'real']
-    platforms = ['OpenBSD']
+    platforms = ['OpenBSD','FreeBSD']
 
     platforms.each do |platform|
       context "on #{platform}" do

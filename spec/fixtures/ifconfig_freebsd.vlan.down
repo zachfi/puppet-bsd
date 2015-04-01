@@ -1,0 +1,4 @@
+vlan0: flags=8002<BROADCAST,MULTICAST> metric 0 mtu 1500
+        ether 00:00:00:00:00:00
+        nd6 options=29<PERFORMNUD,IFDISABLED,AUTO_LINKLOCAL>
+        vlan: 0 parent interface: <none>
