@@ -33,7 +33,14 @@ define bsd::network::interface::carp (
     pass    => $pass,
   }
 
-  $carp_ifconfig = get_hostname_if_carp($config)
+  case $::kernel {
+    'FreeBSD': {
+      $carp_ifconfig = get_rc_conf_carp($config)
+    }
+    'OpenBSD': {
+      $carp_ifconfig = get_hostname_if_carp($config)
+    }
+  }
 
   bsd::network::interface { $if_name:
     ensure      => $ensure,
