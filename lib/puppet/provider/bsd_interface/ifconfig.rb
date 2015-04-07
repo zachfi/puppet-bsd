@@ -2,7 +2,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   desc "Manage a BSD network interface state"
 
   confine :kernel => [:openbsd, :freebsd]
-  defaultfor :operatingsystem => :freebsd
+  defaultfor :kernel => [:openbsd, :freebsd]
   commands :ifconfig => '/sbin/ifconfig'
   #mk_resource_methods
 
@@ -13,12 +13,6 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
 
   def state
     @state_output ||= get_state()
-
-    # Unsure how to test this, and the output from the command works well
-    # enough to determine the state.
-    #if output.exitstatus != 0
-    #  return 'absent'
-    #end
 
     case @state_output
     when /#{resource[:name]}:\sflags=.*<[^UP].*>/

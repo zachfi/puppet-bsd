@@ -22,6 +22,28 @@ describe 'PuppetX::BSD::Rc_conf' do
   end
 
   describe '#get_hash' do
+
+    context 'with a dynamic v4-only config' do
+
+      it "should return a valid config" do
+        hash = {
+          :re0 => {
+            :addrs => [
+              'DHCP',
+            ],
+          }
+        }
+
+        c = {
+          :name => 're0',
+          :address => [
+            'dhcp'
+          ]
+        }
+        expect(rc.new(c).get_hash).to eq(hash)
+      end
+    end
+
     context 'when a full config is supplied' do
       it 'should return the desired hash' do
 
