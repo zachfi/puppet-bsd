@@ -125,7 +125,9 @@ module PuppetX
         ipset    = false
 
         process_addresses(@address) {|addr|
-          if addr =~ /inet6 /
+          if addr =~ /DHCP/
+            addrs << addr
+          elsif addr =~ /inet6 /
             if ip6set
               aliases << addr
             else
@@ -147,9 +149,14 @@ module PuppetX
         # append the options to the first address
         if addrs.size > 0
           ifconfig[:addrs] = addrs
-          ifconfig[:addrs][0] = [ifconfig[:addrs][0],options_string()].join(' ')
+
+          if @options.size > 0
+            ifconfig[:addrs][0] = [ifconfig[:addrs][0],options_string()].join(' ')
+          end
         else
-          ifconfig[:addrs] = options_string()
+          if @options.size > 0
+            ifconfig[:addrs] = options_string()
+          end
         end
 
         if aliases.size > 0
@@ -161,8 +168,8 @@ module PuppetX
 
       def process_addresses(address=@address)
         address.each {|a|
-          if a =~ /^DHCP/
-            yield a
+          if a =~ /^(DHCP|dhcp)/
+            yield 'DHCP'
           else
             begin
               ip = IPAddress a
