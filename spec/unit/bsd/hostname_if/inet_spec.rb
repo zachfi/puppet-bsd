@@ -16,14 +16,49 @@ describe 'PuppetX::BSD::Hostname_if::Inet' do
   end
 
   describe 'process' do
-    it "should yield the the dynamic addressing is specified for all AF" do
-      a = [
-        'dhcp',
-        'rtsol',
-      ]
-      expect {|b|
-        PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
-      }.to yield_successive_args('dhcp','rtsol')
+    context 'On OpenBSD 5.6' do
+      it "should yield the the dynamic addressing is specified for all AF with rtsol" do
+        a = [
+          'dhcp',
+          'rtsol',
+        ]
+        expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.6')
+        expect {|b|
+          PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
+        }.to yield_successive_args('dhcp','rtsol')
+      end
+      it "should yield the the dynamic addressing is specified for all AF with inet6 autoconf" do
+        a = [
+          'dhcp',
+          'inet6 autoconf',
+        ]
+        expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.6')
+        expect {|b|
+          PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
+        }.to yield_successive_args('dhcp','rtsol')
+      end
+    end
+    context 'On OpenBSD 5.7' do
+      it "should yield the the dynamic addressing is specified for all AF with rtsol" do
+        a = [
+          'dhcp',
+          'rtsol',
+        ]
+        expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.7')
+        expect {|b|
+          PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
+        }.to yield_successive_args('dhcp','inet6 autoconf')
+      end
+      it "should yield the the dynamic addressing is specified for all AF with inet6 autoconf" do
+        a = [
+          'dhcp',
+          'inet6 autoconf',
+        ]
+        expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.7')
+        expect {|b|
+          PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
+        }.to yield_successive_args('dhcp','inet6 autoconf')
+      end
     end
 
     it "should yield multiple addresses when specified" do

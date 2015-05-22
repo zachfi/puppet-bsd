@@ -85,14 +85,62 @@ describe 'PuppetX::BSD::Hostname_if' do
       expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
     end
 
-    it "should set the the dynamic property of the interface is specified for all AF" do
-      c = {
-        :values => [
-          'dhcp',
-          'rtsol',
-        ]
-      }
-      expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
+    context 'On OpenBSD 5.6' do
+      context 'with rtsol given for IPv6' do
+        it "should set the the dynamic property of the interface is specified for all AF keeping rtsol" do
+          c = {
+            :values => [
+              'dhcp',
+              'rtsol',
+            ]
+          }
+          expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.6')
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^rtsol/)
+        end
+      end
+      context 'with inet6 autoconf given for IPv6' do
+        it "should set the the dynamic property of the interface is specified for all AF setting rtsol for inet6" do
+          c = {
+            :values => [
+              'dhcp',
+              'inet6 autoconf',
+            ]
+          }
+          expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.6')
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^rtsol/)
+        end
+      end
+    end
+
+    context 'On OpenBSD 5.7' do
+      context 'with rtsol given for IPv6' do
+        it "should set the the dynamic property of the interface is specified for all AF setting inet6 autoconf for rtsol" do
+          c = {
+            :values => [
+              'dhcp',
+              'rtsol',
+            ]
+          }
+          expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.7')
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^inet6 autoconf/)
+        end
+      end
+      context 'with inet6 autoconf given for IPv6' do
+        it "should set the the dynamic property of the interface is specified for all AF keeping" do
+          c = {
+            :values => [
+              'dhcp',
+              'inet6 autoconf',
+            ]
+          }
+          expect(Facter).to receive(:value).with('kernelversion').at_least(:once).and_return('5.7')
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^dhcp/)
+          expect(PuppetX::BSD::Hostname_if.new(c).content).to match(/^inet6 autoconf/)
+        end
+      end
     end
 
     it "should set the primary interface address and prefix" do
