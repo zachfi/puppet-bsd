@@ -21,7 +21,7 @@ module PuppetX
 
           # compensate for puppet oddities
           @config.reject!{ |k,v|
-            k == :undef or v == :undef or v.length == 0
+            k == :undef or v == :undef or v.to_s.length == 0
           }
 
           required_config_items = [
@@ -51,7 +51,7 @@ module PuppetX
         # Return an array of parsed values
         def values
           data = []
-          data << 'vlan ' + @config[:id]
+          data << 'vlan ' + @config[:id].to_s
           data << 'vlandev ' + @config[:device]
           data.flatten
         end

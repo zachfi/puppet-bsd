@@ -63,6 +63,18 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
           PuppetX::BSD::Rc_conf::Vlan.new(c).content
         }.to raise_error(ArgumentError, /unknown configuration item/)
       end
+
+      it "should not raise an error if the id is an integer" do
+        c = {
+          :id      => 1,
+          :device  => 'em0',
+          :address => '10.0.0.0/24',
+        }
+        expect {
+          PuppetX::BSD::Rc_conf::Vlan.new(c).content
+        }.not_to raise_error
+      end
+
     end
   end
 
