@@ -1,3 +1,4 @@
+require 'puppet/util/package'
 begin
   require 'ipaddress'
 rescue => e
@@ -9,6 +10,8 @@ module PuppetX
   module BSD
     class Hostname_if
       attr_reader :content
+
+      include Puppet::Util::Package
 
       def initialize(config)
         @config = config
@@ -110,8 +113,15 @@ module PuppetX
           # Process each one of the line items
           items.each {|i|
             # Return the dynamic address assignemnt if found
-            if i =~ /^(rtsol|dhcp)$/
+            if i =~ /^(dhcp)$/
               yield i
+            elsif i =~ /^(rtsol|inet6 autoconf)$/
+              kernelversion = Facter.value('kernelversion')
+              if versioncmp(kernelversion, "5.6") <= 0
+                yield 'rtsol'
+              else
+                yield 'inet6 autoconf'
+              end
             # return up/down if found
             elsif i  =~ /^(up|down)$/
               yield i
