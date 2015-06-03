@@ -1,6 +1,6 @@
 {
   "name": "zleslie-bsd",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "author": "zleslie",
   "summary": "BSD management with Puppet",
   "license": "Apache License Version 2.0",
