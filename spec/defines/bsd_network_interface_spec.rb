@@ -37,4 +37,16 @@ describe "bsd::network::interface" do
       end
     end
   end
+
+  context "on FreeBSD" do
+    let(:facts) { {:kernel => 'FreeBSD'} }
+    context "a basic configuration" do
+      let(:title) { 'igb0' }
+      let(:params) { {:values => ['10.0.0.1/24'], :description => 'simple' } }
+
+      it do
+        should contain_exec('netif_restart_igb0').with_command(/service netif restart igb0/)
+      end
+    end
+  end
 end
