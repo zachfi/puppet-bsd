@@ -2,7 +2,6 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   desc "Manage a BSD network interface state"
 
   confine :kernel => [:openbsd, :freebsd]
-  defaultfor :kernel => [:openbsd, :freebsd]
   commands :ifconfig => '/sbin/ifconfig'
   #mk_resource_methods
 

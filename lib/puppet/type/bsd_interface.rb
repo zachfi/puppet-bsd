@@ -33,4 +33,8 @@ Puppet::Type.newtype(:bsd_interface) do
     newvalue(:down)
     newvalue(:absent)
   end
+
+  def refresh
+    provider.restart
+  end
 end
