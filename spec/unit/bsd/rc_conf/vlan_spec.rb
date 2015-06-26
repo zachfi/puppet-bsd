@@ -51,8 +51,7 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
         }.not_to raise_error
       end
 
-
-      it "should raise an error if missing arguments" do
+      it "should raise an error when an invalid option is received" do
         c = {
           :id      => '1',
           :device  => 'em0',
