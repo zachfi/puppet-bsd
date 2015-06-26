@@ -15,6 +15,7 @@ module PuppetX
         def initialize(config)
           @config = config
           ::PuppetX::BSD::Util.normalize_config(@config)
+
           required_config_items = [
             :network_name,
           ]
