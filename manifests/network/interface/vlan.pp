@@ -38,6 +38,7 @@ define bsd::network::interface::vlan (
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => $vlan_values,
+    values      => $address,
+    options     => $vlan_values,
   }
 }

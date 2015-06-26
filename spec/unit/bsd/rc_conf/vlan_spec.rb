@@ -73,7 +73,6 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
           PuppetX::BSD::Rc_conf::Vlan.new(c).content
         }.not_to raise_error
       end
-
     end
   end
 
@@ -86,6 +85,20 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
         }
         wanted = [
         'vlan 1 vlandev em0',
+        ]
+        expect(PuppetX::BSD::Rc_conf::Vlan.new(c).content).to match(wanted.join('\n'))
+      end
+    end
+
+    context 'when a single address is passed' do
+      it 'should return only the vlan string' do
+        c = {
+          :id      => '1',
+          :device  => 'em0',
+          :address => ['10.0.0.1/24'],
+        }
+        wanted = [
+          'vlan 1 vlandev em0',
         ]
         expect(PuppetX::BSD::Rc_conf::Vlan.new(c).content).to match(wanted.join('\n'))
       end

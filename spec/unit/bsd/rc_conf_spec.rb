@@ -22,9 +22,7 @@ describe 'PuppetX::BSD::Rc_conf' do
   end
 
   describe '#get_hash' do
-
     context 'with a dynamic v4-only config' do
-
       it "should return a valid config" do
         hash = {
           :re0 => {
@@ -41,6 +39,57 @@ describe 'PuppetX::BSD::Rc_conf' do
           ]
         }
         expect(rc.new(c).get_hash).to eq(hash)
+      end
+
+      context "when an empty address set is passed" do
+        it "should return useless hash" do
+          hash = {
+            :re0=>{}
+          }
+          c = {
+            :name   => 're0',
+            :address => [],
+          }
+
+          expect(rc.new(c).get_hash).to eq(hash)
+        end
+      end
+
+      context "when a single address is passed" do
+        it "should return a correctly formatted hash" do
+          hash = {
+            :re0=>{:addrs=>["inet 10.0.0.1/24"]}
+          }
+          c = {
+            :name   => 're0',
+            :address => [
+              '10.0.0.1/24'
+            ],
+          }
+
+          expect(rc.new(c).get_hash).to eq(hash)
+        end
+      end
+      context "when multiple addresses are passed" do
+        it "should return a correctly formatted hash" do
+          hash = {
+            :re0 => {
+              :addrs=>["inet 10.0.0.1/24"],
+              :aliases=>[
+                "inet 10.0.0.2/24",
+                "inet 10.0.0.3/24"]}
+          }
+          c = {
+            :name   => 're0',
+            :address => [
+              '10.0.0.1/24',
+              '10.0.0.2/24',
+              '10.0.0.3/24'
+            ],
+          }
+
+          expect(rc.new(c).get_hash).to eq(hash)
+        end
       end
     end
 

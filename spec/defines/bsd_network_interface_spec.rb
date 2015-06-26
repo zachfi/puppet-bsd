@@ -45,7 +45,20 @@ describe "bsd::network::interface" do
       let(:params) { {:values => ['10.0.0.1/24'], :description => 'simple' } }
 
       it do
-        should contain_exec('netif_restart_igb0').with_command(/service netif restart igb0/)
+        should contain_shell_config('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
+      end
+    end
+
+    context "when processing a vlan interface with one address" do
+      let(:title) { 'vlan1' }
+      let(:params) { {:values => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
+
+      it do
+        should contain_shell_config('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
+      end
+
+      it do
+        should contain_shell_config('ifconfig_vlan1').with_ensure('present')
       end
     end
   end

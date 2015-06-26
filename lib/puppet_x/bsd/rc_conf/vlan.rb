@@ -31,7 +31,12 @@ module PuppetX
           )
         end
 
-        # Return an array of parsed values
+        # Return an array of parsed vlan values
+
+        # NOTE: the addresses are not processed here due to the
+        # calling function and define for
+        # bsd::network::interface::vlan passnig 'address' directly to
+        # the bsd::network::interface define.
         def values
           data = []
           data << 'vlan ' + @config[:id].to_s

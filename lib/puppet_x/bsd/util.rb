@@ -5,6 +5,7 @@ module PuppetX
         # Modify the config object to reject all undef values
         raise ArgumentError, "Config object must be a Hash" unless config.is_a? Hash
         config.reject!{|k,v| k == :undef or v == :undef }
+        config.reject!{|k,v| k == :nil or v == :nil }
       end
 
       def self.validate_config(config,required_items,optional_items)
