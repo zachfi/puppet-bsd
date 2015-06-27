@@ -75,14 +75,7 @@ define bsd::network::interface (
       file { "/etc/hostname.${if_name}":
         ensure  => $file_ensure,
         content => $text,
-      }
-
-      if $file_ensure == 'present' {
-        exec { "netstart_${if_name}":
-          command     => "/bin/sh /etc/netstart ${if_name}",
-          refreshonly => true,
-          subscribe   => File["/etc/hostname.${if_name}"],
-        }
+        notify  => Bsd_interface[$if_name],
       }
 
       bsd_interface { $if_name:
@@ -94,7 +87,8 @@ define bsd::network::interface (
 
       Shell_config {
         ensure => $file_ensure,
-        file   => '/etc/rc.conf'
+        file   => '/etc/rc.conf',
+        notify => Bsd_interface[$if_name],
       }
 
       create_resources('shell_config', $rec_hash)
@@ -103,11 +97,6 @@ define bsd::network::interface (
         $action = 'start'
       } elsif $state == 'down' {
         $action = 'stop'
-      }
-
-      exec { "netifstart_${if_name}":
-        command     => "/usr/sbin/service netif ${action} ${if_name}",
-        refreshonly => true,
       }
 
       bsd_interface { $if_name:
