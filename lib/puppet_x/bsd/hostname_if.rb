@@ -105,7 +105,7 @@ module PuppetX
         if items
 
           # We begin here with no IPs set.  This is used to determin if we are
-          # setting the primary address, or simply providing an aliase to an
+          # setting the primary address, or simply providing an alias to an
           # already existing interface.
           ipset  = false
           ip6set = false
