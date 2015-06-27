@@ -56,8 +56,6 @@ define bsd::network::interface (
     }
   }
 
-  debug("config: ${config}")
-
   case $::kernel {
     'OpenBSD': {
       if $file_ensure == 'present' {

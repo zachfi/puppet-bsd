@@ -5,53 +5,42 @@ rescue => e
   puts e.backtrace.inspect
 end
 
+require 'puppet_x/bsd/util'
+
 module PuppetX
   module BSD
     class Rc_conf
 
       def initialize(config)
         @config = config
-        validate_config()
-        normalize_config()
-        @data = load_hash()
-      end
+        ::PuppetX::BSD::Util.normalize_config(@config)
 
-      def normalize_config
-        @name    = @config[:name]
-        @desc    = @config[:desc]
-        @address = [@config[:address]].flatten
-        @options = [@config[:options]].flatten
-
-        @address.reject!{ |i| i == nil or i == :undef }
-        @options.reject!{ |i| i == nil or i == :undef }
-      end
-
-      def validate_config
-        # compensate for puppet oddities
-        @config.reject!{ |k,v| k == :undef or v == :undef }
-
-        config_items = [
-          :name,
+        optional_config_items = [
           :desc,
           :address,
           :options
         ]
 
-        required_items = [
+        required_config_items = [
           :name
         ]
 
-        required_items.map {|k|
-          unless @config.keys.include? k
-            raise ArgumentError, "required config paramater #{k} not found"
-          end
-        }
+        ::PuppetX::BSD::Util.validate_config(
+          @config,
+          required_config_items,
+          optional_config_items
+        )
 
-        @config.each do |k,v|
-          unless config_items.include? k
-            raise ArgumentError, "unknown configuration item found: #{k}"
-          end
-        end
+        # Ugly junk
+        @name    = @config[:name]
+        @desc    = @config[:desc]
+        @address = [@config[:address]].flatten
+        @options = [@config[:options]].flatten
+        @address.reject!{ |i| i == nil or i == :undef }
+        @options.reject!{ |i| i == nil or i == :undef }
+
+        # The blob
+        @data = load_hash()
       end
 
       def options_string
@@ -106,6 +95,8 @@ module PuppetX
             }
           end
         }
+
+        Puppet.debug("Returning resources: #{resources}")
 
         resources
       end
@@ -166,7 +157,7 @@ module PuppetX
         {@name.to_sym => ifconfig}
       end
 
-      def process_addresses(address=@address)
+      def process_addresses(address)
         address.each {|a|
           if a =~ /^(DHCP|dhcp)/
             yield 'DHCP'
@@ -183,7 +174,7 @@ module PuppetX
               if value
                 yield value.join(' ')
               else
-                raise "Value nont found"
+                raise "Value not found"
               end
             rescue Exception => e
               raise "addr is #{a} of class #{a.class}: #{e.message}"

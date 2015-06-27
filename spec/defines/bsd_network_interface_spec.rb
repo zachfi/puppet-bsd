@@ -37,4 +37,29 @@ describe "bsd::network::interface" do
       end
     end
   end
+
+  context "on FreeBSD" do
+    let(:facts) { {:kernel => 'FreeBSD'} }
+    context "a basic configuration" do
+      let(:title) { 'igb0' }
+      let(:params) { {:values => ['10.0.0.1/24'], :description => 'simple' } }
+
+      it do
+        should contain_shell_config('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
+      end
+    end
+
+    context "when processing a vlan interface with one address" do
+      let(:title) { 'vlan1' }
+      let(:params) { {:values => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
+
+      it do
+        should contain_shell_config('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
+      end
+
+      it do
+        should contain_shell_config('ifconfig_vlan1').with_ensure('present')
+      end
+    end
+  end
 end
