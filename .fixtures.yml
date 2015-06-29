@@ -1,6 +1,6 @@
 fixtures:
   symlinks:
-    my_module: "#{source_dir}"
+    bsd: "#{source_dir}"
 
   repositories:
     sysctl: 'git://github.com/duritong/puppet-sysctl'
