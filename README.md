@@ -113,7 +113,6 @@ specify the VLAN ID and the device to attach the VLAN to.
 bsd::network::interface::vlan { 'vlan100':
   id      => '100',
   device  => 'em0',
-  address => '10.0.0.1/24',
 }
 ```
 
@@ -145,18 +144,16 @@ bsd::network::interface::trunk { "trunk0":
   interface => ['em0','em1'],
 }
 
-bsd::network::interface::carp { "vlan10":
+bsd::network::interface::vlan { "vlan10":
   id      => '10',
   address => '10.0.10.1/24',
   device  => 'trunk0',
-  pass    => 'TopSecret',
 }
 
-bsd::network::interface::carp { "vlan11":
+bsd::network::interface::vlan { "vlan11":
   id      => '11',
   address => '10.0.11.1/24',
   device  => 'trunk0',
-  pass    => 'TopSecret',
 }
 ```
 
