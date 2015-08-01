@@ -99,7 +99,7 @@ like the following.
 
 ```Puppet
 bsd::network::interface::vlan { 'vlan100':
-  id      => '1',
+  id      => '100',
   device  => 'em0',
   address => '10.0.0.1/24',
 }
@@ -111,7 +111,7 @@ specify the VLAN ID and the device to attach the VLAN to.
 
 ```Puppet
 bsd::network::interface::vlan { 'vlan100':
-  id      => '1',
+  id      => '100',
   device  => 'em0',
   address => '10.0.0.1/24',
 }
