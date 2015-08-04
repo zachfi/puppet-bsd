@@ -24,6 +24,38 @@ module PuppetX
           end
         end
       end
+
+      def self.uber_merge(h1, h2)
+
+        h2.keys.each {|key|
+          # Move the keys that won't clobber from h2 to h1
+          if not h1.keys.include? key
+            h1[key] = h2[key]
+            h2.delete(key)
+          end
+        }
+
+        h1.keys.each {|key|
+          # Move more complicated keys from h2 to h1
+          if not h2.keys.include? key
+            next
+          elsif h1[key].is_a? Hash and h2[key].is_a? Hash
+            h1[key] = self.uber_merge(h1[key], h2[key])
+            next
+          elsif h1[key].is_a? Array
+            h1[key] << h2[key]
+            h1[key].flatten!
+            next
+          else
+            # key values conflict and should be combined
+            unless h1[key] == h2[key]
+              h1[key] = Array([h1[key], h2[key]]).flatten
+            end
+          end
+        }
+
+        h1
+      end
     end
   end
 end
