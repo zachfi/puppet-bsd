@@ -27,5 +27,5 @@ describe 'get_freebsd_rc_conf_shellconfig' do
     ]
   }
 
-  #it { should run.with_params(full).and_return(hash) }
+  it { should run.with_params(full).and_return(hash) }
 end
