@@ -1,9 +1,37 @@
+require 'puppet_x/bsd/ifconfig'
+
 Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   desc "Manage a BSD network interface state"
 
   confine :kernel => [:openbsd, :freebsd]
   commands :ifconfig => '/sbin/ifconfig'
   #mk_resource_methods
+
+  def self.prefetch(resources)
+    instances.each do |prov|
+      if resource = resources[prov.name]
+        resource.provider = prov
+      end
+    end
+  end
+
+  def self.instances
+    iflist = Array.new()
+    begin
+      output = ifconfig()
+      PuppetX::BSD::Ifconfig.new(output).parse.each {|k,v|
+        if_properties = {
+          :provider => :bsd_interface,
+          :name => k.to_s
+        }
+
+        iflist << new(if_properties)
+      }
+      return iflist
+    rescue Puppet::ExecutionFailure
+      nil
+    end
+  end
 
   def get_state
     output = execute(['/sbin/ifconfig', resource[:name]], :failonfail => false, :combine => true)

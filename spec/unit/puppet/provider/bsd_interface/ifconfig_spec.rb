@@ -17,6 +17,22 @@ describe provider_class do
 
   let (:provider) { resource.provider }
 
+  context "#instances" do
+    let(:output) { File.read("spec/fixtures/ifconfig_openbsd.full") }
+
+    before do
+      expect(provider_class).to receive(:ifconfig) { output }
+    end
+
+    it "should return an array of interfaces" do
+      expect(provider_class.instances.class).to be(Array)
+    end
+
+    it "should return all interfaces names" do
+      expect(provider_class.instances.map(&:name).sort).to eq(["bridge0", "bridge1", "em0", "em1", "em2", "em3", "em4", "em5", "em6", "em7", "lo0", "pflog0", "vether0", "vether1", "vlan88"])
+    end
+  end
+
   [:up, :down, :create, :destroy].each {|m| it { should respond_to(m) } }
 
   context "#exists?" do
