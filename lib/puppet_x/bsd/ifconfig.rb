@@ -28,11 +28,12 @@ module PuppetX
           # the brignning of an interface block.
           if line =~ /^\S+\d+:/
             lineparts = line.split(/ /, 2)
-            curint = lineparts.shift.sub(':', '').to_sym
-            parse_interface_tokens(lineparts.join(' ')) {|t|
+            curint = /(^\S+\d+):/.match(lineparts[0])[1].to_sym
+            parse_interface_tokens(lineparts[1]) {|t|
               yield Hash({curint => t})
             }
           end
+
 
           if curint
             parse_interface_tokens(line.strip) {|t|
@@ -45,7 +46,7 @@ module PuppetX
       # flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 32768
       def parse_interface_tokens(tokenstring)
         case tokenstring
-        when /^flags=\d+<.*>/
+        when /^flags=[[:xdigit:]]+<.*>/
           flagstring, remain = tokenstring.split(/ /, 2)
           flags = /<(.*)>/.match(flagstring)[1].split(',')
           if flags.size > 0
