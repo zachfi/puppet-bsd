@@ -3,6 +3,7 @@
 # Responsible for processing the trunk(4) interfaces for hostname_if(5)
 #
 require 'puppet_x/bsd/util'
+require 'puppet_x/bsd/hostname_if/inet'
 
 module PuppetX
   module BSD
@@ -31,10 +32,22 @@ module PuppetX
           )
         end
 
-        def content
+        def values
+          inet = []
+          if @config[:address]
+            PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+              inet << i
+            }
+          end
+
           data = []
-          data << trunk_string()
-          data.join(' ')
+          data << trunk_string
+          data << inet if inet
+          data.flatten
+        end
+
+        def content
+          values.join("\n")
         end
 
         def trunk_string
