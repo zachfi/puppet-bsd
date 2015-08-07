@@ -43,13 +43,13 @@ module PuppetX
           end
 
           data = []
-          data << vlan_string()
+          data << vlan_string
           data << inet if inet
           data.flatten
         end
 
         def content
-          values().join("\n")
+          values.join("\n")
         end
 
         def vlan_string

@@ -28,10 +28,10 @@ define bsd::network::interface::vlan (
 
   case $::kernel {
     'FreeBSD': {
-      $vlan_values = get_rc_conf_vlan($config)
+      $vlan_options = get_rc_conf_vlan($config)
     }
     'OpenBSD': {
-      $vlan_values = get_hostname_if_vlan($config)
+      $vlan_options = get_hostname_if_vlan($config)
     }
   }
 
@@ -39,6 +39,6 @@ define bsd::network::interface::vlan (
     ensure      => $ensure,
     description => $description,
     values      => $address,
-    options     => $vlan_values,
+    options     => $vlan_options,
   }
 }
