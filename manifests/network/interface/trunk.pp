@@ -25,11 +25,18 @@ define bsd::network::interface::trunk (
     address   => $address,
   }
 
-  $trunk_ifconfig = get_hostname_if_trunk($config)
+  case $::kernel {
+    'FreeBSD': {
+      fail('trunk interfaces not implemnted on FreeBSD')
+    }
+    'OpenBSD': {
+      $trunk_values = get_hostname_if_trunk($config)
+    }
+  }
 
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => [$trunk_ifconfig],
+    values      => $trunk_values,
   }
 }
