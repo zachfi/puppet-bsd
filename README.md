@@ -28,6 +28,14 @@ package { 'ipaddress':
 }
 ```
 
+## Installation
+
+The easiest way to install is to install from the forge.
+
+```
+puppet module install zleslie/bsd
+```
+
 ## Network
 
 Network configuration is handled under the `bsd::network` name space.  Under
