@@ -125,7 +125,17 @@ bsd::network::interface::vlan { 'vlan100':
 ```
 
 #### carp(4)
+
+The carp(4) device is supported through the `bsd::network::interface::carp`
+defined type. Carp interface preemption is handled via the `bsd::network::carp`
+class, and defaults to `false`. This class is automatically included, when
+a carp device is managed.
+
 ```Puppet
+class { 'bsd::network::carp':
+  preempt => true,
+}
+
 bsd::network::interface::carp { "carp0":
   id      => '1',
   address => '10.0.0.1/24',
@@ -133,6 +143,19 @@ bsd::network::interface::carp { "carp0":
   pass    => 'TopSecret',
 }
 ```
+
+
+
+#### pfsync(4)
+Closely related to carp(4) interfaces are the pfsync(4) interfaces.
+They are directly supported by `bsd::network::interface` defined type.
+
+```Puppet
+bsd::network::interface { "pfsync0":
+  description => 'sync interface',
+  values      => [ 'syncdev bge0', ],
+}
+
 #### lagg(4) and trunk(4)
 ```Puppet
 bsd::network::interface::trunk { "trunk0":
