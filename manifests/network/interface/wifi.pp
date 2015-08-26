@@ -9,6 +9,7 @@ define bsd::network::interface::wifi (
   $address     = undef,
   $description = undef,
   $options     = undef,
+  $values      = undef,
 ) {
 
   $if_name = $name
@@ -27,9 +28,15 @@ define bsd::network::interface::wifi (
 
   $wifi_ifconfig = get_hostname_if_wifi($config)
 
+  if $values {
+    $wifi_values = concat([$wifi_ifconfig], $values)
+  } else {
+    $wifi_values = [$wifi_ifconfig]
+  }
+
   bsd::network::interface { $if_name:
     description => $description,
-    values      => [$wifi_ifconfig],
+    values      => $wifi_values,
     options     => $options,
   }
 }

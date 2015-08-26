@@ -11,6 +11,7 @@ define bsd::network::interface::carp (
   $advskew     = undef,
   $description = undef,
   $pass        = undef,
+  $values      = undef,
 ) {
 
   include bsd::network::carp
@@ -35,9 +36,15 @@ define bsd::network::interface::carp (
 
   $carp_ifconfig = get_hostname_if_carp($config)
 
+  if $values {
+    $carp_values = concat([$carp_ifconfig], $values)
+  } else {
+    $carp_values = [$carp_ifconfig]
+  }
+
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => [$carp_ifconfig],
+    values      => $carp_values,
   }
 }

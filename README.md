@@ -110,6 +110,7 @@ bsd::network::interface::vlan { 'vlan100':
   id      => '100',
   device  => 'em0',
   address => '10.0.0.1/24',
+  values  => ['!/sbin/route add -net 10.10.10.0/24 10.10.0.254',],
 }
 ```
 
@@ -141,6 +142,7 @@ bsd::network::interface::carp { "carp0":
   address => '10.0.0.1/24',
   carpdev => 'em0',
   pass    => 'TopSecret',
+  values  => ['!/sbin/route add -net 10.10.10.0/24 10.0.0.254',],
 }
 ```
 
@@ -185,6 +187,7 @@ bsd::network::interface::vlan { "vlan11":
   id      => '11',
   address => '10.0.11.1/24',
   device  => 'trunk0',
+  values  => ['!/sbin/route add -net 10.10.10.0/24 10.0.11.254',],
 }
 ```
 

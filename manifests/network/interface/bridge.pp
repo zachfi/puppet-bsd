@@ -6,6 +6,7 @@ define bsd::network::interface::bridge (
   $interface,
   $ensure      = 'present',
   $description = undef,
+  $values      = undef,
 ) {
 
   $if_name = $name
@@ -23,9 +24,15 @@ define bsd::network::interface::bridge (
 
   $bridge_ifconfig = get_hostname_if_bridge($config)
 
+  if $values {
+    $bridge_values = concat([$bridge_ifconfig], $values)
+  } else {
+    $bridge_values = [$bridge_ifconfig]
+  }
+
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => [$bridge_ifconfig],
+    values      => $bridge_values,
   }
 }

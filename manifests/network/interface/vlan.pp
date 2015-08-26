@@ -9,6 +9,7 @@ define bsd::network::interface::vlan (
   $address     = [],
   $state       = 'up',
   $description = undef,
+  $values      = undef,
 ) {
 
   $if_name = $name
@@ -29,16 +30,28 @@ define bsd::network::interface::vlan (
   case $::kernel {
     'FreeBSD': {
       $vlan_options = get_rc_conf_vlan($config)
+
+      bsd::network::interface { $if_name:
+        ensure      => $ensure,
+        description => $description,
+        values      => $address,
+        options     => $vlan_options,
+      }
     }
     'OpenBSD': {
-      $vlan_options = get_hostname_if_vlan($config)
-    }
-  }
+      $vlan_ifconfig = get_hostname_if_vlan($config)
 
-  bsd::network::interface { $if_name:
-    ensure      => $ensure,
-    description => $description,
-    values      => $address,
-    options     => $vlan_options,
+      if $values {
+        $vlan_values = concat([$vlan_ifconfig], $values)
+      } else {
+        $vlan_values = [$vlan_ifconfig]
+      }
+
+      bsd::network::interface { $if_name:
+        ensure      => $ensure,
+        description => $description,
+        values      => $vlan_values,
+      }
+    }
   }
 }
