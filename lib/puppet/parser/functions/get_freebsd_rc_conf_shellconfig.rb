@@ -7,10 +7,11 @@ module Puppet::Parser::Functions
     config = args.shift
 
     c = {}
-    c[:name]    = config["name"] if config["name"]
-    c[:desc]    = config["description"] if config["description"]
-    c[:address] = config["values"] if config["values"]
-    c[:options] = config["options"] if config["options"]
+    c[:name]      = config["name"] if config["name"]
+    c[:desc]      = config["description"] if config["description"]
+    c[:addresses] = config["addresses"] if config["addresses"]
+    c[:options]   = config["options"] if config["options"]
+    c[:values]    = config["values"] if config["values"]
 
     return PuppetX::BSD::Rc_conf.new(c).to_create_resources
   end

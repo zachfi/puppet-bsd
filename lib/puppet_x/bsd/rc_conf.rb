@@ -17,8 +17,9 @@ module PuppetX
 
         optional_config_items = [
           :desc,
-          :address,
-          :options
+          :addresses,
+          :options,
+          :values
         ]
 
         required_config_items = [
@@ -31,12 +32,22 @@ module PuppetX
           optional_config_items
         )
 
+        if @config[:values]
+          if @config[:addresses]
+            @config[:addresses].push(*@config[:values]).uniq!
+          else
+            @config[:addresses] = @config[:values]
+          end
+          Puppet.warning('Using the "values" parameter is deprecated, use "addresses" parameter instead')
+        end
+
+
         # Ugly junk
-        @name    = @config[:name]
-        @desc    = @config[:desc]
-        @address = [@config[:address]].flatten
-        @options = [@config[:options]].flatten
-        @address.reject!{ |i| i == nil or i == :undef }
+        @name      = @config[:name]
+        @desc      = @config[:desc]
+        @addresses = [@config[:addresses]].flatten
+        @options   = [@config[:options]].flatten
+        @addresses.reject!{ |i| i == nil or i == :undef }
         @options.reject!{ |i| i == nil or i == :undef }
 
         # The blob
@@ -115,7 +126,7 @@ module PuppetX
         ip6set   = false
         ipset    = false
 
-        process_addresses(@address) {|addr|
+        process_addresses(@addresses) {|addr|
           if addr =~ /DHCP/
             addrs << addr
           elsif addr =~ /inet6 /
@@ -157,8 +168,8 @@ module PuppetX
         {@name.to_sym => ifconfig}
       end
 
-      def process_addresses(address)
-        address.each {|a|
+      def process_addresses(addresses)
+        addresses.each {|a|
           if a =~ /^(DHCP|dhcp)/
             yield 'DHCP'
           else

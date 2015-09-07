@@ -14,6 +14,7 @@
 define bsd::network::interface (
   $ensure        = 'present',
   $description   = undef,
+  $addresses     = undef,
   $values        = undef,
   $options       = undef,
 ) {
@@ -32,6 +33,7 @@ define bsd::network::interface (
     'name'        => $name,
     'type'        => $if_type[0],
     'description' => $description,
+    'addresses'   => $addresses,
     'values'      => $values,
     'options'     => $options,
   }
