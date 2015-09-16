@@ -8,6 +8,7 @@ define bsd::network::interface::trunk (
   $proto       = 'lacp',
   $address     = undef,
   $description = undef,
+  $values      = undef,
 ) {
 
   $if_name = $name
@@ -27,11 +28,17 @@ define bsd::network::interface::trunk (
 
   case $::kernel {
     'FreeBSD': {
-      fail('trunk interfaces not implemnted on FreeBSD')
+      fail('trunk interfaces not implemented on FreeBSD')
     }
     'OpenBSD': {
-      $trunk_values = get_hostname_if_trunk($config)
+      $trunk_ifconfig = get_hostname_if_trunk($config)
     }
+  }
+
+  if $values {
+    $trunk_values = concat([$trunk_ifconfig], $values)
+  } else {
+    $trunk_values = [$trunk_ifconfig]
   }
 
   bsd::network::interface { $if_name:
