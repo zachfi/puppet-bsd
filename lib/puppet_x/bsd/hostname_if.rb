@@ -1,4 +1,5 @@
 require 'puppet/util/package'
+require 'puppet_x/bsd/hostname_if/inet'
 begin
   require 'ipaddress'
 rescue => e
@@ -21,9 +22,11 @@ module PuppetX
 
       def normalize_config
 
-        @items   = [@config[:values]].flatten
-        @options = [@config[:options]].flatten
+        @addresses = [@config[:addresses]].flatten
+        @items     = [@config[:values]].flatten
+        @options   = [@config[:options]].flatten
 
+        @addresses.reject!{ |i| i == nil or i == :undef }
         @items.reject!{ |i| i == nil or i == :undef }
         @options.reject!{ |i| i == nil or i == :undef }
       end
@@ -36,6 +39,7 @@ module PuppetX
         config_items = [
           :type,
           :desc,
+          :addresses,
           :values,
           :options
         ]
@@ -63,6 +67,15 @@ module PuppetX
             else
               raise ArgumentError,
                 "description must be a String, is: #{@config[:desc].class}"
+            end
+          end
+
+          if @config[:addresses]
+            if [String, Array].include? @config[:addresses].class
+              @values = @config[:addresses]
+            else
+              raise ArgumentError,
+                "addresses must be a String or Array, is: #{@config[:addresses].class}"
             end
           end
 
@@ -94,11 +107,16 @@ module PuppetX
         @desc and @desc.is_a? String and @desc.length > 0
       end
 
+      def has_addresses?
+        @addresses and @addresses.is_a? Array and @addresses.size > 0
+      end
+
       def has_options?
         @options and @options.is_a? Array and @options.size > 0
       end
 
-      # Receivs array of strings that match an inet or inet6 configuration
+      # Receives array of strings that match an inet or inet6 configuration
+      # Address parsing is kept here for a while for backward compatibility
       #
       # Yields complete, formatted lines
       def process_items(items)
@@ -114,9 +132,19 @@ module PuppetX
           items.each {|i|
             # Return the dynamic address assignemnt if found
             if i =~ /^(dhcp)$/
+              if has_addresses?
+                raise ArgumentError, "Using the 'addresses' parameter in combination with setting IP information via 'values' parameter is not allowed"
+              else
+                Puppet.notice "Using the 'values' parameter is deprecated in favor of the 'addresses' in order to set #{i}"
+              end
               yield i
             elsif i =~ /^(rtsol|inet6 autoconf)$/
               kernelversion = Facter.value('kernelversion')
+              if has_addresses?
+                raise ArgumentError, "Using the 'addresses' parameter in combination with setting IP information via 'values' parameter is not allowed"
+              else
+                Puppet.notice "Using the 'values' parameter is deprecated in favor of the 'addresses' in order to set #{i}"
+              end
               if versioncmp(kernelversion, "5.6") <= 0
                 yield 'rtsol'
               else
@@ -130,6 +158,11 @@ module PuppetX
               yield i
             else
               begin
+                if has_addresses?
+                  raise ArgumentError, "Using the 'addresses' parameter in combination with setting IP information via 'values' parameter is not allowed"
+                else
+                  Puppet.notice "Using the 'values' parameter is deprecated in favor of the 'addresses' in order to set #{i}"
+                end
                 ip = IPAddress i
                 if ip.ipv6?
                   line = ['inet6']
@@ -182,6 +215,7 @@ module PuppetX
           'enc',
           'gif',
           'gre',
+          'pflog',
           'pflow',
           'pfsync',
           'trunk',
@@ -192,22 +226,31 @@ module PuppetX
 
         # please_help_add_support_for = [
         #   'mpe',
+        #   'mpw',
         #   'ppp',
         #   'pppoe',
         #   'sl',
+        #   'svlan',
+        #   'vxlan',
         # ]
+
+        if has_addresses?
+          PuppetX::BSD::Hostname_if::Inet.new(@addresses).process {|i|
+            lines << i
+          }
+        end
 
         # Supported interfaces return the already processed lines.
         if supported_virtual_devices.include?(@iftype)
-          lines = @items
+          lines.push(*@items)
         elsif supported_wifi_devices.include?(@iftype)
-          lines = @items
+          lines.push(*@items)
         else
           Puppet.info @iftype
 
-          # Process the physical interface config
+          # Process other values given
           process_items(@items) {|line|
-            lines << line
+            lines.push(*line)
           }
         end
 

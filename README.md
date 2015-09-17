@@ -83,7 +83,7 @@ Once you have the gateway set, you may wish to set some interface addresses.
 ```Puppet
 bsd::network::interface { 'em0':
   description => 'Primary Interface',
-  values      => [ '10.0.0.2/24', 'fc00::b0b/64' ],
+  addresses   => [ '10.0.0.2/24', 'fc00::b0b/64' ],
 }
 ```
 

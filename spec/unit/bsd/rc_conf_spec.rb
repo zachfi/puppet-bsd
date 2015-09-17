@@ -34,7 +34,7 @@ describe 'PuppetX::BSD::Rc_conf' do
 
         c = {
           :name => 're0',
-          :address => [
+          :addresses => [
             'dhcp'
           ]
         }
@@ -48,7 +48,7 @@ describe 'PuppetX::BSD::Rc_conf' do
           }
           c = {
             :name   => 're0',
-            :address => [],
+            :addresses => [],
           }
 
           expect(rc.new(c).get_hash).to eq(hash)
@@ -62,7 +62,7 @@ describe 'PuppetX::BSD::Rc_conf' do
           }
           c = {
             :name   => 're0',
-            :address => [
+            :addresses => [
               '10.0.0.1/24'
             ],
           }
@@ -81,7 +81,7 @@ describe 'PuppetX::BSD::Rc_conf' do
           }
           c = {
             :name   => 're0',
-            :address => [
+            :addresses => [
               '10.0.0.1/24',
               '10.0.0.2/24',
               '10.0.0.3/24'
@@ -114,7 +114,7 @@ describe 'PuppetX::BSD::Rc_conf' do
         c = {
           :name   => 're0',
           :desc   => "Uplink",
-          :address => [
+          :addresses => [
             '10.0.1.12/24',
             '10.0.1.13/24',
             '10.0.1.14/24',
@@ -160,7 +160,7 @@ describe 'PuppetX::BSD::Rc_conf' do
         c = {
           :name   => 're0',
           :desc   => "Uplink",
-          :address => [
+          :addresses => [
             '10.0.1.12/24',
             '10.0.1.13/24',
             '10.0.1.14/24',
