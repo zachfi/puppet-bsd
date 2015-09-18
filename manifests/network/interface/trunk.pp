@@ -45,5 +45,6 @@ define bsd::network::interface::trunk (
     ensure      => $ensure,
     description => $description,
     values      => $trunk_values,
+    parents     => [$interface],
   }
 }

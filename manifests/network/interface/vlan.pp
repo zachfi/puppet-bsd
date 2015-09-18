@@ -36,6 +36,7 @@ define bsd::network::interface::vlan (
         description => $description,
         values      => $address,
         options     => $vlan_options,
+        parents     => [$device],
       }
     }
     'OpenBSD': {
@@ -51,6 +52,7 @@ define bsd::network::interface::vlan (
         ensure      => $ensure,
         description => $description,
         values      => $vlan_values,
+        parents     => [$device],
       }
     }
   }

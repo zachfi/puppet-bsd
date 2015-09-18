@@ -34,5 +34,6 @@ define bsd::network::interface::bridge (
     ensure      => $ensure,
     description => $description,
     values      => $bridge_values,
+    parents     => [$interface],
   }
 }

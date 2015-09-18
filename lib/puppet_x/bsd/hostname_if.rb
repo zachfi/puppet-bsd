@@ -41,7 +41,7 @@ module PuppetX
           :desc,
           :addresses,
           :values,
-          :options
+          :options,
         ]
 
         @config.each do |k,v|
@@ -60,7 +60,7 @@ module PuppetX
           end
         end
 
-        if @config[:desc] or @config[:values] or @config[:options]
+        if @config[:desc] or @config[:addresses] or @config[:values] or @config[:options]
           if @config[:desc]
             if @config[:desc].is_a? String
               @desc = @config[:desc]
@@ -96,9 +96,10 @@ module PuppetX
                 "options can only be a String or an Array, is: #{@config[:options].class}"
             end
           end
+
         else
           raise ArgumentError,
-            "a description, value, or option is required"
+            "a description, address, value, or option is required"
         end
       end
 
