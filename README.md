@@ -158,13 +158,15 @@ bsd::network::interface::carp { "carp0":
 
 #### pfsync(4)
 Closely related to carp(4) interfaces are the pfsync(4) interfaces.
-They are directly supported by `bsd::network::interface` defined type.
+They are supported by `bsd::network::interface::pfsync` defined type.
 
 ```Puppet
-bsd::network::interface { "pfsync0":
-  description => 'sync interface',
-  parents     => 'bge0',
-  values      => [ 'syncdev bge0', ],
+bsd::network::interface::pfsync { "pfsync0":
+  description => 'PF state sync interface',
+  syncdev     => 'bge0',
+  syncpeer    => '10.0.0.123',
+  maxupd      => 128,
+  defer       => false,
 }
 
 #### lagg(4) and trunk(4)
