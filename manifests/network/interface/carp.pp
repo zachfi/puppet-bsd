@@ -46,5 +46,6 @@ define bsd::network::interface::carp (
     ensure      => $ensure,
     description => $description,
     values      => $carp_values,
+    parents     => [$device],
   }
 }

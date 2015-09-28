@@ -94,6 +94,14 @@ address and gateway.
 NOTE: This only sets the configuration, it does not currently set the running interfaces addresses.
 ```
 
+### Interface configuration order
+
+Clonable interfaces might require other interfaces to be configured first.
+The bsd::network::interface defined type has a 'parents' parameter that
+can take a string or array of interface names, that in turn will be
+required to be configured before. Note that the parent interfaces are not
+required to be managed via Puppet.
+
 ### Interfaces
 
 Interface configurations are handled per interface type.  Each supported type
@@ -155,6 +163,7 @@ They are directly supported by `bsd::network::interface` defined type.
 ```Puppet
 bsd::network::interface { "pfsync0":
   description => 'sync interface',
+  parents     => 'bge0',
   values      => [ 'syncdev bge0', ],
 }
 
@@ -213,6 +222,7 @@ defined type. I.e. an IPv6 via IPv4 tunnel could look like:
 ```Puppet
 bsd::network::interface { 'gif0':
   description => 'IPv6 in IPv4 tunnel',
+  parents     => 'em0',
   values      => [
     'tunnel 1.2.3.4 5.6.7.8',
     'inet6 alias 2001:470:6c:bbb::2 2001:470:6c:bbb::1 prefixlen 128',
@@ -239,6 +249,7 @@ class { 'bsd::network::gre':
 
 bsd::network::interface { 'gre0':
   description => 'Tunnel interface',
+  parents     => 'em0',
   values      => [
     '172.16.0.1 172.16.0.2 netmask 0xffffffff link0 up',
     'tunnel 1.2.3.4 5.6.7.8',
@@ -253,6 +264,7 @@ defined type.
 ```Puppet
 bsd::network::interface { 'pflow0':
   description => 'Pflow to collector',
+  parents     => 'em0',
   values      => [
     'flowsrc 1.2.3.4 flowdst 5.6.7.8:1234',
     'pflowproto 10',

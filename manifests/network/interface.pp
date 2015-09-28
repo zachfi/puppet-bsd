@@ -17,6 +17,7 @@ define bsd::network::interface (
   $addresses     = undef,
   $values        = undef,
   $options       = undef,
+  $parents       = undef,
 ) {
 
   $if_name        = $name
@@ -79,7 +80,9 @@ define bsd::network::interface (
       }
 
       bsd_interface { $if_name:
-        ensure => $ensure,
+        ensure  => $ensure,
+        parents => $parents,
+        require => File["/etc/hostname.${if_name}"],
       }
     }
     'FreeBSD': {
@@ -100,7 +103,9 @@ define bsd::network::interface (
       }
 
       bsd_interface { $if_name:
-        ensure => $ensure,
+        ensure  => $ensure,
+        parents => $parents,
+        require => Shell_config["ifconfig_${if_name}"],
       }
     }
     default: {

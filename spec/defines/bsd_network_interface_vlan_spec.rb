@@ -13,9 +13,8 @@ describe "bsd::network::interface::vlan" do
         }
       }
       it do
-        should contain_bsd__network__interface('vlan0')
+        should contain_bsd__network__interface('vlan0').with_parents(['em0'])
       end
-
       it do
         should contain_file('/etc/hostname.vlan0').with_content(/vlan 1 vlandev em0\ninet 10.0.0.1 255.255.255.0 NONE\nup\n/)
       end
@@ -30,9 +29,8 @@ describe "bsd::network::interface::vlan" do
         }
       }
       it do
-        should contain_bsd__network__interface('vlan0')
+        should contain_bsd__network__interface('vlan0').with_parents(['em0'])
       end
-
       it do
         should contain_file('/etc/hostname.vlan0').with_content(/vlan 1 vlandev em0\ninet 10.0.0.1 255.255.255.0 NONE\n!route add -net 10.10.10.0\/24 10.0.0.254\nup\n/)
       end
@@ -68,9 +66,11 @@ describe "bsd::network::interface::vlan" do
         }
       }
       it do
+        should contain_bsd__network__interface('vlan0').with_parents(['em0'])
+      end
+      it do
         should contain_bsd__network__interface('vlan0').with_options(['vlan 1', 'vlandev em0'])
       end
-
       it do
         should contain_bsd__network__interface('vlan0').with_values(['10.0.0.1/24'])
       end

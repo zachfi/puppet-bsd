@@ -19,7 +19,7 @@ module PuppetX
           :desc,
           :addresses,
           :options,
-          :values
+          :values,
         ]
 
         required_config_items = [
