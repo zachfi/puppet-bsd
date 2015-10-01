@@ -39,7 +39,17 @@ describe 'PuppetX::BSD::Hostname_if::Vlan' do
       }.not_to raise_error
     end
 
-    it "should raise an error if missing arguments" do
+    it "should raise an error if invalid vlan id given" do
+      c = {
+        :id     => '4095',
+        :device => 'em0',
+      }
+      expect {
+        PuppetX::BSD::Hostname_if::Vlan.new(c).content
+      }.to raise_error(ArgumentError, /invalid vlan ID: 4095/)
+    end
+
+    it "should raise an error with invalid parameter" do
       c = {
         :id      => '1',
         :device  => 'em0',

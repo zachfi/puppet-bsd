@@ -52,6 +52,10 @@ module PuppetX
 
         def trunk_string
           trunkstring = []
+
+          if ! %w(broadcast failover lacp loadbalance none roundrobin).include? @config[:proto]
+            raise ArgumentError, "invalid trunk protocol: #{@config[:proto]}"
+          end
           trunkstring << 'trunkproto' << @config[:proto]
 
           if @config[:interface].is_a? Array

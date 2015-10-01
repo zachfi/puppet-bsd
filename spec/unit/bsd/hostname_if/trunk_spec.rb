@@ -17,8 +17,17 @@ describe 'PuppetX::BSD::Hostname_if::Trunk' do
         PuppetX::BSD::Hostname_if::Trunk.new(c).content
       }.to raise_error(ArgumentError, /interface.*required/)
     end
+    it "should raise an error on invalid trunk protocol" do
+      c = {
+        :proto     => 'hellwhatisthis',
+        :interface => 'em0',
+      }
+      expect {
+        PuppetX::BSD::Hostname_if::Trunk.new(c).content
+      }.to raise_error(ArgumentError, /invalid trunk protocol: hellwhatisthis/)
+    end
 
-    it "should raise an error if missing arguments" do
+    it "should raise an error with invalid parameter" do
       c = {
         :proto     => 'lacp',
         :interface => 'em0',
