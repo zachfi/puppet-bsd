@@ -54,6 +54,9 @@ module PuppetX
 
         def vlan_string
           vlanstring = []
+          if @config[:id].to_i < 1 or @config[:id].to_i > 4094
+            raise ArgumentError, "invalid vlan ID: #{@config[:id]}"
+          end
           vlanstring << 'vlan' << @config[:id]
           vlanstring << 'vlandev' << @config[:device]
           vlanstring.join(' ')
