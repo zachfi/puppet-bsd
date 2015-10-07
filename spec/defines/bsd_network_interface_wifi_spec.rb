@@ -4,7 +4,7 @@ describe "bsd::network::interface::wifi" do
   let(:facts) { {:kernel => 'OpenBSD'} }
   let(:title) { 'athn0' }
 
-  context "with minimal paramaters" do
+  context "with minimal parameters" do
     let(:params) { {:network_name => 'myssid', :network_key => 'mysecretkey'} }
 
     it do
@@ -12,7 +12,7 @@ describe "bsd::network::interface::wifi" do
     end
   end
 
-  context "with minimal paramaters" do
+  context "with more parameters" do
     let(:params) { {:network_name => 'myssid',
                     :network_key => 'mysecretkey',
                     :description => 'something good',

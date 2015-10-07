@@ -19,6 +19,21 @@ describe "bsd::network::interface::vlan" do
         should contain_file('/etc/hostname.vlan0').with_content(/vlan 1 vlandev em0\ninet 10.0.0.1 255.255.255.0 NONE\nup\n/)
       end
     end
+    context " a minimal example with multiple addresses" do
+      let(:params) {
+        {
+          :id      => '1',
+          :device  => 'em0',
+          :address => [ '10.0.0.1/24', '10.0.0.2/32', ],
+        }
+      }
+      it do
+        should contain_bsd__network__interface('vlan0').with_parents(['em0'])
+      end
+      it do
+        should contain_file('/etc/hostname.vlan0').with_content(/vlan 1 vlandev em0\ninet 10.0.0.1 255.255.255.0 NONE\ninet alias 10.0.0.2 255.255.255.255 NONE\nup\n/)
+      end
+    end
     context " a bit more extensive example with values set" do
       let(:params) {
         {
