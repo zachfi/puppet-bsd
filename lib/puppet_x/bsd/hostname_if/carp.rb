@@ -43,9 +43,9 @@ module PuppetX
           }
 
           data = []
-          data << inet
           data << carp_string()
-          data.join(' ')
+          data << inet if inet
+          data.join("\n")
         end
 
         def carp_string
