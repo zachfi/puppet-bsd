@@ -6,7 +6,7 @@ describe 'PuppetX::BSD::Rc_conf' do
   describe '#validate_config' do
     context "when config is not present" do
       it "should raise an error" do
-        expect { rc.new() }.to raise_error
+        expect { rc.new() }.to raise_error(ArgumentError)
       end
     end
 
@@ -16,7 +16,7 @@ describe 'PuppetX::BSD::Rc_conf' do
           :name   => 're0',
           :desc   => "Uplink",
         }
-        expect { rc.new(c) }.to_not raise_error
+        expect { rc.new(c) }.to_not raise_error(ArgumentError)
       end
     end
   end

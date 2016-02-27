@@ -47,6 +47,6 @@ define bsd::network::interface::pfsync (
     ensure      => $ensure,
     description => $description,
     values      => $pfsync_values,
-    parents     => [$syncdev],
+    parents     => flatten([$syncdev]),
   }
 }

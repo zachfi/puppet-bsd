@@ -144,7 +144,7 @@ module PuppetX
               ipset = true
             end
           else
-            raise "unhandled address family"
+            raise ArgumentError("unhandled address family")
           end
         }
 

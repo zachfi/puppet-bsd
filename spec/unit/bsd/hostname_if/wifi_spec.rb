@@ -4,7 +4,7 @@ describe 'PuppetX::BSD::Hostname_if::Wifi' do
   describe 'validation' do
     it 'should fail if no config is supplied' do
       c = {}
-      expect { PuppetX::BSD::Hostname_if::Wifi.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if::Wifi.new(c).content }.to raise_error(ArgumentError, /network_name.*required/)
     end
 
     it "should raise an error if missing arguments" do

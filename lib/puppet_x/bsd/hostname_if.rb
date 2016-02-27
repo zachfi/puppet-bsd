@@ -185,8 +185,8 @@ module PuppetX
                   puts line
                   puts "line not found"
                 end
-              rescue => e
-                raise "addr is #{i} of class #{i.class}: #{e.message}"
+              rescue Exception => e
+                raise ArgumentError, "addr is #{i} of class #{i.class}: #{e.message}"
               end
             end
           }

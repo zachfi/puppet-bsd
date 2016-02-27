@@ -5,35 +5,35 @@ describe 'PuppetX::BSD::Hostname_if' do
   describe "validation" do
     it "should fail if no config is supplied" do
       c = {}
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError)
     end
 
     it "should fail when an unknown option is supplied" do
       c = {
         :foo => {}
       }
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError)
     end
 
     it "should fail if description is not a String" do
       c = {
         :desc => ["an","item","or","two"]
       }
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError)
     end
 
     it "should fail if values is not a String or an Array" do
       c = {
         :values => { "not" => "hash" }
       }
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError)
     end
 
     it "should fail if options is not a String or an Array" do
       c = {
         :options => { "not" => "hash" }
       }
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError)
     end
 
     it "should fail when garbage is passed in" do
@@ -42,7 +42,7 @@ describe 'PuppetX::BSD::Hostname_if' do
           'what is this junk?',
         ]
       }
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError)
     end
   end
 
@@ -284,7 +284,7 @@ describe 'PuppetX::BSD::Hostname_if' do
           'up',
         ]
       }
-      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error
+      expect { PuppetX::BSD::Hostname_if.new(c).content }.to raise_error(ArgumentError, /interface.*must be.*String/)
     end
 
     it "should support the gre interface type" do
