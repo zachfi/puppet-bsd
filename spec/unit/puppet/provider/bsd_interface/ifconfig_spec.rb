@@ -1,162 +1,65 @@
 require 'spec_helper'
 require 'puppet/provider/bsd_interface/ifconfig'
 
-type_class = Puppet::Type.type(:bsd_interface)
-provider_class = Puppet::Type.type(:bsd_interface).provider(:ifconfig)
-
-describe provider_class do
+describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
   let(:ifconfig) { 'ifconfig' }
 
-  let(:vlan_interface) do
-    Puppet::Type.type(:bsd_interface).new(:name => 'vlan0', :provider => 'ifconfig')
-  end
-
   let(:em_interface) do
-    Puppet::Type.type(:bsd_interface).new(:name => 'em0', :provider => 'ifconfig')
+    Puppet::Type.type(:bsd_interface).new(
+      :name => 'em0',
+      :provider => em_provider)
   end
+  let(:em_provider) { described_class.new(:name => 'em0') }
 
-  let (:provider) { resource.provider }
+  let(:vlan_interface) do
+    Puppet::Type.type(:bsd_interface).new(
+      :name => 'vlan0',
+      :provider => vlan_provider)
+  end
+  let(:vlan_provider) { described_class.new(:name => 'vlan0') }
 
   context "#instances" do
     let(:output) { File.read("spec/fixtures/ifconfig_openbsd.full") }
 
     before do
-      expect(provider_class).to receive(:ifconfig) { output }
+      expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], {:failonfail=>false, :combine=>true}) { 'vlan pflog' }
+      expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], {:failonfail=>false, :combine=>true}) { output }
+    end
+
+    it 'should return some instances' do
+      expect(described_class.instances.size).to eq(15)
     end
 
     it "should return an array of interfaces" do
-      expect(provider_class.instances.class).to be(Array)
+      expect(described_class.instances.class).to be(Array)
+    end
+
+    it 'should return the resource dc=bar,dc=com' do
+      expect(described_class.instances[1].instance_variable_get("@property_hash")).to eq(
+        {:ensure => :present, :provider=>:bsd_interface, :name=>"em0", :flags=>["UP", "BROADCAST", "RUNNING", "SIMPLEX", "MULTICAST"], :mtu=>1500, :destroyable=>:false, :state => :up}
+      )
     end
 
     it "should return all interfaces names" do
-      expect(provider_class.instances.map(&:name).sort).to eq(["bridge0", "bridge1", "em0", "em1", "em2", "em3", "em4", "em5", "em6", "em7", "lo0", "pflog0", "vether0", "vether1", "vlan88"])
+      expect(described_class.instances.map(&:name).sort).to eq(["bridge0", "bridge1", "em0", "em1", "em2", "em3", "em4", "em5", "em6", "em7", "lo0", "pflog0", "vether0", "vether1", "vlan88"])
     end
   end
 
   [:up, :down, :create, :destroy].each {|m| it { should respond_to(m) } }
 
-  context "#exists?" do
-    states = ['present','up','absent','down']
+  context "#flush" do
+    states = ['up','absent','down']
+    ensure_states = ['present','up','absent','down']
     if_types = ['pseudo', 'real']
     platforms = ['OpenBSD','FreeBSD']
-
     platforms.each do |platform|
       context "on #{platform}" do
         states.each do |state|
           context "when interface state is #{state}" do
             if_types.each do |if_type|
               context "on a #{if_type} interface" do
-
                 p = platform.downcase
 
-                case if_type
-                when 'real'
-                  ifname = 'em0'
-                  case state
-                  when 'present'
-                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.em.up"
-                  else
-                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.em.#{state}"
-                  end
-                when 'pseudo'
-                  ifname = 'vlan0'
-                  case state
-                  when 'present'
-                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.vlan.up"
-                  else
-                    ifconfig_fixture = "spec/fixtures/ifconfig_#{p}.vlan.#{state}"
-                  end
-                end
-
-                let!(:info) { File.read(ifconfig_fixture) }
-
-                let!(:interface) { Puppet::Type.type(:bsd_interface).new(
-                  :name => ifname,
-                  :provider => 'ifconfig',
-                  :ensure => state,
-                ) }
-
-                before do
-                  expect(interface.provider).to receive(:pseudo_devices) { ['vlan', 'pflog'] }
-                  expect(interface.provider).to receive(:get_state) { info }
-                end
-
-                case state
-                when 'up', 'present'
-                  it "should be present" do
-                    expect(interface.provider.exists?).to eq(true)
-                  end
-                when 'absent'
-                  it "should be absent" do
-                    expect(interface.provider.exists?).to eq(false)
-                  end
-                when 'down'
-                  case if_type
-                  when 'real'
-                    it "should be absent" do
-                      expect(interface.provider.exists?).to eq(false)
-                    end
-                  when 'pseudo'
-                    it "should be present" do
-                      expect(interface.provider.exists?).to eq(true)
-                    end
-                  end
-                end
-
-              end
-            end
-
-          end
-        end
-      end
-    end
-  end
-
-  context "#state" do
-    platforms = ['FreeBSD', 'OpenBSD']
-    states = ['up','down']
-    if_type = 'em'
-
-    case if_type
-    when 'pseudo'
-      ifname = 'vlan0'
-    when 'real'
-      ifname = 'em0'
-    end
-
-    platforms.each do |platform|
-      context "on #{platform}" do
-        states.each do |state|
-
-
-          case state
-          when 'up','down'
-            it "should detect interface state when #{state}" do
-              p = platform.downcase
-              info = File.read("spec/fixtures/ifconfig_#{p}.#{if_type}.#{state}")
-
-              expect(em_interface.provider).to receive(:get_state).and_return(info)
-              expect(em_interface.provider.state).to eq(state)
-            end
-          end
-        end
-      end
-    end
-  end
-
-  context "#create" do
-    if_types = ['pseudo', 'real']
-    states = ['absent','up']
-    platforms = ['OpenBSD']
-
-    states.each do |state|
-      context "interface state is #{state}" do
-        if_types.each do |if_type|
-
-          context "when managing #{if_type} interface" do
-            platforms.each do |platform|
-              context "on #{platform}" do
-                p = platform.downcase
                 case if_type
                 when 'real'
                   ifname = 'em0'
@@ -168,38 +71,117 @@ describe provider_class do
 
                 let(:info) { File.read(ifconfig_fixture) }
 
-                case if_type
-                when 'real'
-                  case state
-                  when 'up'
-                    it "should leave the interface state untouched" do
-                      expect(em_interface.provider).to receive(:pseudo_devices) { ['vlan', 'pflog'] }
-                      expect(em_interface.provider).to receive(:get_state) { info }
-                      expect(provider_class).to_not receive(:ifconfig).with([ifname, 'create'])
-                      expect(provider_class).to_not receive(:ifconfig).with([ifname, 'up'])
-                      em_interface.provider.create
-                    end
+                case state
+                when 'present','down','up'
+                  it 'should return a single instance' do
+                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], {:failonfail=>false, :combine=>true}) { 'vlan pflog' }
+                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], {:failonfail=>false, :combine=>true}) { info }
+                    expect(described_class.instances.size).to eq(1)
                   end
-                when 'pseudo'
-                  case state
-                  when 'absent'
-                    it "should create the interface" do
-                      expect(vlan_interface.provider).to receive(:pseudo_devices) { ['vlan', 'pflog'] }
-                      expect(vlan_interface.provider).to receive(:get_state) { info }
-                      expect(provider_class).to receive(:ifconfig).with([ifname, 'create'])
-                      expect(provider_class).to receive(:ifconfig).with([ifname, 'up'])
-                      vlan_interface.provider.create
+                when 'absent'
+                  it 'should return zero instances' do
+                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], {:failonfail=>false, :combine=>true}) { 'vlan pflog' }
+                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], {:failonfail=>false, :combine=>true}) { info }
+                    expect(described_class.instances.size).to eq(0)
+                  end
+                end
+
+                ensure_states.each do |ensure_state|
+                  context "when ensure is #{ensure_state}" do
+                    let!(:provider) { described_class.new(
+                      :name => ifname,
+                      :ensure => ensure_state
+                    ) }
+
+                    let!(:interface) { Puppet::Type.type(:bsd_interface).new(
+                      :name => ifname,
+                      :provider => provider,
+                      :ensure => state,
+                    ) }
+
+                    # We only call instances on these states, which we expect to call ifconfig twice.
+                    if ['present', 'up', 'down'].include? state
+                      before do
+                        expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], {:failonfail=>false, :combine=>true}) { 'vlan pflog' }
+                        expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], {:failonfail=>false, :combine=>true}) { info }
+                      end
                     end
-                  when 'up'
-                    it "should leave the interface state untouched" do
-                      expect(vlan_interface.provider).to receive(:pseudo_devices) { ['vlan', 'pflog'] }
-                      expect(vlan_interface.provider).to receive(:get_state) { info }
-                      expect(provider_class).to_not receive(:ifconfig).with([ifname, 'create'])
-                      expect(provider_class).to_not receive(:ifconfig).with([ifname, 'up'])
-                      vlan_interface.provider.create
+
+                    case state
+                    when 'up'
+                      it 'instances should detect up' do
+                        expect(described_class.instances[0].state).to eq(:up)
+                      end
+
+                      case ensure_state
+                      when 'up'
+                        it 'leave the interface untouched' do
+                          i = described_class.instances[0]
+                          if if_type == 'pseudo'
+                            expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], {:failonfail=>false, :combine=>true})
+                          end
+                          expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], {:failonfail=>false, :combine=>true})
+                          i.up
+                          i.flush
+                        end
+                      when 'present'
+                        it 'leave the interface untouched' do
+                          i = described_class.instances[0]
+                          if if_type == 'pseudo'
+                            expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], {:failonfail=>false, :combine=>true})
+                          end
+                          expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], {:failonfail=>false, :combine=>true})
+                          i.flush
+                        end
+                      when 'down'
+                        it 'should bring the interface down' do
+                          i = described_class.instances[0]
+                          if if_type == 'pseudo'
+                            expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], {:failonfail=>false, :combine=>true})
+                            expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'destroy'], {:failonfail=>false, :combine=>true})
+                          end
+                          expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], {:failonfail=>false, :combine=>true})
+                          i.down
+                          i.flush
+                        end
+                      when 'absent'
+                        it 'should bring down and destroy the interface when necessary' do
+                          i = described_class.instances[0]
+                          expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], {:failonfail=>false, :combine=>true})
+                          if if_type == 'pseudo'
+                            expect(i).to_not receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], {:failonfail=>false, :combine=>true})
+                            expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'destroy'], {:failonfail=>false, :combine=>true})
+                          end
+                          i.destroy
+                          i.flush
+                        end
+                      end
+
+                    when 'down'
+                      it 'instances should detect down' do
+                        expect(described_class.instances[0].state).to eq(:down)
+                      end
+
+                      case ensure_state
+                      when 'up'
+                        it 'should bring up the interface' do
+                          i = described_class.instances[0]
+                          i.up
+                          expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], {:failonfail=>false, :combine=>true})
+                          i.flush
+                        end
+                      when 'present'
+                      when 'down'
+                      when 'absent'
+                      end
+                    when 'absent'
+                      it 'should be absent' do
+                        expect(provider.state).to eq(:absent)
+                      end
                     end
                   end
                 end
+
               end
             end
           end
@@ -207,4 +189,5 @@ describe provider_class do
       end
     end
   end
+
 end

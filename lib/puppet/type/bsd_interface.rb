@@ -48,9 +48,24 @@ Puppet::Type.newtype(:bsd_interface) do
   end
 
   newproperty(:state) do
+    desc "The state of the interface"
     newvalue(:up)
     newvalue(:down)
     newvalue(:absent)
+  end
+
+  newproperty(:destroyable) do
+    desc "Booleana representing if the interface is a pseudo interface"
+    newvalue(:true)
+    newvalue(:false)
+  end
+
+  newproperty(:flags) do
+    desc "Interface flags from ifconfig(8)"
+  end
+
+  newproperty(:mtu) do
+    desc "Running MTU of the interface"
   end
 
   def refresh

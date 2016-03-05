@@ -1,6 +1,6 @@
 require 'puppet_x/bsd/ifconfig'
 
-describe 'PUppetX::BSD::Ifconfig' do
+describe 'PuppetX::BSD::Ifconfig' do
   context "on OpenBSD" do
     context '#parse' do
       it "should return the desired hash for a single interface" do
