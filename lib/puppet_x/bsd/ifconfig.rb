@@ -20,7 +20,6 @@ module PuppetX
 
       def parse_interface_lines(output)
         curint = nil
-        intlines = {}
         output.lines {|line|
           line.chomp!
 
@@ -33,7 +32,6 @@ module PuppetX
               yield Hash({curint => t})
             }
           end
-
 
           if curint
             parse_interface_tokens(line.strip) {|t|
