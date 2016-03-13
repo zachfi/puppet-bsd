@@ -29,13 +29,13 @@ module PuppetX
             lineparts = line.split(/ /, 2)
             curint = /(^\S+\d+):/.match(lineparts[0])[1].to_sym
             parse_interface_tokens(lineparts[1]) {|t|
-              yield Hash({curint => t})
+              yield ({curint => t})
             }
           end
 
           if curint
             parse_interface_tokens(line.strip) {|t|
-              yield Hash({curint => t})
+              yield ({curint => t})
             }
           end
         }
@@ -48,21 +48,21 @@ module PuppetX
           flagstring, remain = tokenstring.split(/ /, 2)
           flags = /<(.*)>/.match(flagstring)[1].split(',')
           if flags.size > 0
-            yield Hash(:flags => flags)
+            yield ({:flags => flags})
           end
           if remain
             parse_interface_tokens(remain) {|t|
-              yield t
+              yield (t)
             }
             remain = nil
           end
         when /^mtu\s+\d+/
           mtu = /mtu\s+(\d+)/.match(tokenstring)[1]
-          yield Hash(:mtu => mtu)
+          yield ({:mtu => mtu})
         when /^inet6\s+/
           address = /inet6\s+([0-9a-fA-F:]+)%?/.match(tokenstring)[1]
           prefix = /prefixlen\s+(\d+)/.match(tokenstring)[1]
-          yield Hash(:inet6 => address + '/' + prefix)
+          yield ({:inet6 => address + '/' + prefix})
         when /^inet\s+/
           address = /inet\s+((?:\d{1,3}\.){3}\d{1,3})%?/.match(tokenstring)[1]
           octnetmask = /netmask\s+0x([0-9a-fA-F]{8})/.match(tokenstring)[1]
@@ -71,7 +71,7 @@ module PuppetX
             masklist <<  Integer("0x#{i.join()}")
           }
           netmask = masklist.join('.')
-          yield Hash(:inet => address + '/' + netmask)
+          yield ({:inet => address + '/' + netmask})
         end
 
       end
