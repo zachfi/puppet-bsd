@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/hostname_if/carp'
+require_relative '../../../puppet_x/bsd/hostname_if/carp'
 
 module Puppet::Parser::Functions
   newfunction(:get_hostname_if_carp,

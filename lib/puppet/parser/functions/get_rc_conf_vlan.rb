@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/rc_conf/vlan'
+require_relative '../../../puppet_x/bsd/rc_conf/vlan'
 
 module Puppet::Parser::Functions
   newfunction(:get_rc_conf_vlan,

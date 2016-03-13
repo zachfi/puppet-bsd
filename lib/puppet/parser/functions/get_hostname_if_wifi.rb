@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/hostname_if/wifi'
+require_relative '../../../puppet_x/bsd/hostname_if/wifi'
 
 module Puppet::Parser::Functions
   newfunction(:get_hostname_if_wifi,

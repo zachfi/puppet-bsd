@@ -1,5 +1,6 @@
 require 'puppet/util/package'
-require 'puppet_x/bsd/hostname_if/inet'
+require_relative '../../puppet_x/bsd/hostname_if/inet'
+
 begin
   require 'ipaddress'
 rescue => e

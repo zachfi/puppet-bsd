@@ -2,8 +2,8 @@
 #
 # Responsible for processing the bridge(4) interfaces for hostname_if(5)
 #
-require 'puppet_x/bsd/util'
-require 'puppet_x/bsd/hostname_if/inet'
+require_relative '../../../puppet_x/bsd/util'
+require_relative '../../../puppet_x/bsd/hostname_if/inet'
 
 module PuppetX
   module BSD

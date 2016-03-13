@@ -2,7 +2,7 @@
 #
 # Responsible for processing the vlan(4) interfaces for rc.conf(5)
 #
-require 'puppet_x/bsd/util'
+require_relative '../../../puppet_x/bsd/util'
 
 module PuppetX
   module BSD
