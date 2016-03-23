@@ -8,8 +8,7 @@ rvm:
   - 2.1.0
 script: bundle exec rake test
 env:
-  - PUPPET_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
   - PUPPET_VERSION="~> 3.8.3" STRICT_VARIABLES=yes
-  - PUPPET_VERSION="~> 4.2.3" STRICT_VARIABLES=yes
-  - PUPPET_VERSION="~> 4.3.2" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 4.2.3"
+  - PUPPET_VERSION="~> 4.3.2"
 sudo: false
