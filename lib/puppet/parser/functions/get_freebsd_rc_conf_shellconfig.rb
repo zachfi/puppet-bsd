@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/rc_conf'
+require_relative '../../../puppet_x/bsd/rc_conf'
 
 module Puppet::Parser::Functions
   newfunction(:get_freebsd_rc_conf_shellconfig,

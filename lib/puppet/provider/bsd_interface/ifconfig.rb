@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/ifconfig'
+require_relative '../../../puppet_x/bsd/ifconfig'
 
 Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   desc "Manage a BSD network interface state"

@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/hostname_if/pfsync'
+require_relative '../../../puppet_x/bsd/hostname_if/pfsync'
 
 module Puppet::Parser::Functions
   newfunction(:get_hostname_if_pfsync,

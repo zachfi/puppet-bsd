@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/hostname_if'
+require_relative '../../../puppet_x/bsd/hostname_if'
 
 module Puppet::Parser::Functions
   newfunction(:get_openbsd_hostname_if_content,
