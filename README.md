@@ -1,6 +1,6 @@
 # Puppet BSD
 
-[![Build Status](https://travis-ci.org/xaque208/puppet-bsd.svg?branch=master)](https://travis-ci.org/xaque208/puppet-bsd)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/zleslie/bsd.svg)]() [![Build Status](https://travis-ci.org/xaque208/puppet-bsd.svg?branch=master)](https://travis-ci.org/xaque208/puppet-bsd)
 
 A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD
 and OpenBSD.  In here will be various facts, functions and classes for tuning
