@@ -59,60 +59,52 @@ class bsd::network (
       }
     }
     'freebsd': {
-      Shell_config { file => '/etc/rc.conf' }
+      Shellvar { target => '/etc/rc.conf' }
 
       # Should we enable IPv4 forwarding?
       if $v4forwarding {
-        shell_config { 'gateway_enable':
-          key   => 'gateway_enable',
+        shellvar { 'gateway_enable':
           value => 'YES',
         }
       } else {
-        shell_config { 'gateway_enable':
+        shellvar { 'gateway_enable':
           ensure => absent,
-          key    => 'gateway_enable',
           value  => 'YES',
         }
       }
 
       # Should we enable IPv6 forwarding?
       if $v6forwarding {
-        shell_config { 'ipv6_gateway_enable':
-          key   => 'ipv6_gateway_enable',
+        shellvar { 'ipv6_gateway_enable':
           value => 'YES',
         }
       } else {
-        shell_config { 'ipv6_gateway_enable':
+        shellvar { 'ipv6_gateway_enable':
           ensure => absent,
-          key    => 'ipv6_gateway_enable',
           value  => 'YES',
         }
       }
 
       # What is our IPv4 default router?
       if $v4gateway != '' {
-        shell_config { 'defaultrouter':
-          key   => 'defaultrouter',
+        shellvar { 'defaultrouter':
           value => $v4gateway,
         }
       } else {
-        shell_config { 'defaultrouter':
+        shellvar { 'defaultrouter':
           ensure => absent,
-          key    => 'defaultrouter',
           value  => $v4gateway,
         }
       }
 
       # What is our IPv6 default router?
       if $v6gateway != '' {
-        shell_config { 'ipv6_defaultrouter':
-          key   => 'ipv6_defaultrouter',
+        shellvar { 'ipv6_defaultrouter':
           value => $v6gateway,
         }
       } else {
-        shell_config { 'ipv6_defaultrouter':
+        shellvar { 'ipv6_defaultrouter':
           ensure => absent,
-          key    => 'ipv6_defaultrouter',
           value  => $v6gateway,
         }
       }

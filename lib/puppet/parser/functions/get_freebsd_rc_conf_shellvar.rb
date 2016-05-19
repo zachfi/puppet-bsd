@@ -1,7 +1,7 @@
 require_relative '../../../puppet_x/bsd/rc_conf'
 
 module Puppet::Parser::Functions
-  newfunction(:get_freebsd_rc_conf_shellconfig,
+  newfunction(:get_freebsd_rc_conf_shellvar,
               :type => :rvalue) do |args|
 
     config = args.shift

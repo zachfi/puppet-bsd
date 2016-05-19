@@ -136,23 +136,18 @@ describe 'PuppetX::BSD::Rc_conf' do
       it 'should convert the hash for create_resources()' do
         hash = {
           'ifconfig_re0' => {
-            'key'   => 'ifconfig_re0',
             'value' => 'inet 10.0.1.12/24 mtu 9000',
           },
           'ifconfig_re0_alias0' => {
-            'key'   => 'ifconfig_re0_alias0',
             'value' => 'inet 10.0.1.13/24',
           },
           'ifconfig_re0_alias1' => {
-            'key'   => 'ifconfig_re0_alias1',
             'value' => 'inet 10.0.1.14/24',
           },
           'ifconfig_re0_ipv6' => {
-            'key'   => 'ifconfig_re0_ipv6',
             'value' => 'inet6 fc00::123/64',
           },
           'ifconfig_re0_alias2' => {
-            'key'   => 'ifconfig_re0_alias2',
             'value' => 'inet6 fc00::124/64',
           },
         }
@@ -179,7 +174,6 @@ describe 'PuppetX::BSD::Rc_conf' do
       it 'should convert the hash for create_resources()' do
         hash = {
           'ifconfig_vlan100' => {
-            'key'   => 'ifconfig_vlan100',
             'value' => 'vlan 100 vlandev re0',
           }
         }

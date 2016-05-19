@@ -13,5 +13,7 @@ fixtures:
       repo: 'git://github.com/duritong/puppet-sysctl'
       ref: '0.0.5'
   forge_modules:
-    shell_config: 'csail/shell_config'
+    augeasproviders: 'herculesteam/augeasproviders'
+    augeasproviders_core: 'herculesteam/augeasproviders_core'
+    augeasproviders_shellvar: 'herculesteam/augeasproviders_shellvar'
 
