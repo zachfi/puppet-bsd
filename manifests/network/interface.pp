@@ -86,15 +86,15 @@ define bsd::network::interface (
       }
     }
     'FreeBSD': {
-      $rec_hash = get_freebsd_rc_conf_shellconfig($config)
+      $rec_hash = get_freebsd_rc_conf_shellvar($config)
 
-      Shell_config {
+      Shellvar {
         ensure => $file_ensure,
-        file   => '/etc/rc.conf',
+        target => '/etc/rc.conf',
         notify => Bsd_interface[$if_name],
       }
 
-      create_resources('shell_config', $rec_hash)
+      create_resources('shellvar', $rec_hash)
 
       if $state == 'up' {
         $action = 'start'
@@ -105,7 +105,7 @@ define bsd::network::interface (
       bsd_interface { $if_name:
         ensure  => $ensure,
         parents => $parents,
-        require => Shell_config["ifconfig_${if_name}"],
+        require => Shellvar["ifconfig_${if_name}"],
       }
     }
     default: {

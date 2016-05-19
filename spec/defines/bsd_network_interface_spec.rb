@@ -82,13 +82,13 @@ describe "bsd::network::interface" do
       let(:params) { {:values => ['10.0.0.1/24'], :description => 'simple' } }
 
       it do
-        should contain_shell_config('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
+        should contain_shellvar('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
       end
       it do
-        should contain_shell_config('ifconfig_igb0').that_notifies('Bsd_interface[igb0]')
+        should contain_shellvar('ifconfig_igb0').that_notifies('Bsd_interface[igb0]')
       end
       it do
-        should contain_bsd_interface('igb0').that_requires('Shell_config[ifconfig_igb0]')
+        should contain_bsd_interface('igb0').that_requires('Shellvar[ifconfig_igb0]')
       end
     end
 
@@ -97,16 +97,16 @@ describe "bsd::network::interface" do
       let(:params) { {:values => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
 
       it do
-        should contain_shell_config('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
+        should contain_shellvar('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
       end
       it do
-        should contain_shell_config('ifconfig_vlan1').with_ensure('present')
+        should contain_shellvar('ifconfig_vlan1').with_ensure('present')
       end
       it do
-        should contain_shell_config('ifconfig_vlan1').that_notifies('Bsd_interface[vlan1]')
+        should contain_shellvar('ifconfig_vlan1').that_notifies('Bsd_interface[vlan1]')
       end
       it do
-        should contain_bsd_interface('vlan1').that_requires('Shell_config[ifconfig_vlan1]')
+        should contain_bsd_interface('vlan1').that_requires('Shellvar[ifconfig_vlan1]')
       end
     end
   end

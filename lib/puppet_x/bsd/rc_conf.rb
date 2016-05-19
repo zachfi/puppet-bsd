@@ -63,7 +63,7 @@ module PuppetX
       end
 
       # Return a hash formatted for the create_resources() function
-      # in puppet see shell_config resource
+      # in puppet see shellvar resource
       def to_create_resources
         resources = {}
 
@@ -83,14 +83,12 @@ module PuppetX
                   key = "ifconfig_#{ifname}"
                 end
                 resources[key] = {
-                  "key"   => key,
                   "value" => i,
                 }
               }
             else
               key = "ifconfig_#{ifname}"
               resources[key] = {
-                "key"   => key,
                 "value" => @data[topkey][:addrs],
               }
             end
@@ -100,7 +98,6 @@ module PuppetX
             @data[topkey][:aliases].each_with_index {|a,i|
               key = "ifconfig_#{ifname}_alias#{i}"
               resources[key] = {
-                "key"   => key,
                 "value" => a,
               }
             }
