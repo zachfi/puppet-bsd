@@ -38,7 +38,7 @@ class bsd::network (
   if $v6forwarding {
     sysctl { 'net.inet6.ip6.forwarding':
       ensure => present,
-      value  => '0',
+      value  => '1',
     }
   } else {
     sysctl { 'net.inet6.ip6.forwarding':
