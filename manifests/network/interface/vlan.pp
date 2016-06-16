@@ -55,5 +55,8 @@ define bsd::network::interface::vlan (
         parents     => flatten([$device]),
       }
     }
+    default: {
+      fail('unhandled BSD, please help add support')
+    }
   }
 }

@@ -47,6 +47,9 @@ define bsd::network::interface (
     'absent': {
       $file_ensure = 'absent'
     }
+    default: {
+      fail('Incorrect file presence set')
+    }
   }
 
   # Set the interface state variable
@@ -56,6 +59,9 @@ define bsd::network::interface (
     }
     'absent','down': {
       $state = 'down'
+    }
+    default: {
+      fail('Incorrect state variable set')
     }
   }
 

@@ -10,20 +10,38 @@ class bsd::network::gre (
 ) {
 
   if $allowed == true {
-    sysctl::value { 'net.inet.gre.allow': value => '1' }
+    sysctl { 'net.inet.gre.allow':
+      ensure => present,
+      value  => '1',
+    }
   } else {
-    sysctl::value { 'net.inet.gre.allow': value => '0' }
+    sysctl { 'net.inet.gre.allow':
+      ensure => present,
+      value  => '0',
+    }
   }
 
   if $wccp == true {
-    sysctl::value { 'net.inet.gre.wccp': value => '1' }
+    sysctl { 'net.inet.gre.wccp':
+      ensure => present,
+      value  => '1',
+    }
   } else {
-    sysctl::value { 'net.inet.gre.wccp': value => '0' }
+    sysctl { 'net.inet.gre.wccp':
+      ensure => present,
+      value  => '0',
+    }
   }
 
   if $mobileip == true {
-    sysctl::value { 'net.inet.mobileip.allow': value => '1' }
+    sysctl { 'net.inet.mobileip.allow':
+      ensure => present,
+      value  => '1',
+    }
   } else {
-    sysctl::value { 'net.inet.mobileip.allow': value => '0' }
+    sysctl { 'net.inet.mobileip.allow':
+      ensure => present,
+      value  => '0',
+    }
   }
 }

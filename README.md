@@ -168,6 +168,7 @@ bsd::network::interface::pfsync { "pfsync0":
   maxupd      => 128,
   defer       => false,
 }
+```
 
 #### lagg(4) and trunk(4)
 ```Puppet

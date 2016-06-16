@@ -33,6 +33,9 @@ define bsd::network::interface::trunk (
     'OpenBSD': {
       $trunk_ifconfig = get_hostname_if_trunk($config)
     }
+    default: {
+      fail('unhandled BSD, please help add support')
+    }
   }
 
   if $values {
