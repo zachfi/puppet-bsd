@@ -35,6 +35,9 @@ define bsd::network::interface::pfsync (
     'OpenBSD': {
       $pfsync_ifconfig = get_hostname_if_pfsync($config)
     }
+    default: {
+      fail('unhandled BSD, please help add support')
+    }
   }
 
   if $values {

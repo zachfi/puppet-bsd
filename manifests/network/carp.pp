@@ -8,14 +8,26 @@ class bsd::network::carp (
 ) {
 
   if $allowed == true {
-    sysctl::value { 'net.inet.carp.allow': value => '1' }
+    sysctl { 'net.inet.carp.allow':
+      ensure => present,
+      value  => '1',
+    }
   } else {
-    sysctl::value { 'net.inet.carp.allow': value => '0' }
+    sysctl { 'net.inet.carp.allow':
+      ensure => present,
+      value  => '0',
+    }
   }
 
   if $preempt == true {
-    sysctl::value { 'net.inet.carp.preempt': value => '1' }
+    sysctl { 'net.inet.carp.preempt':
+      ensure => present,
+      value  => '1',
+    }
   } else {
-    sysctl::value { 'net.inet.carp.preempt': value => '0' }
+    sysctl { 'net.inet.carp.preempt':
+      ensure => present,
+      value  => '0',
+    }
   }
 }

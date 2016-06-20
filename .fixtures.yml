@@ -10,10 +10,11 @@ fixtures:
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
       ref: '4.4.0'
     sysctl:
-      repo: 'git://github.com/duritong/puppet-sysctl'
-      ref: '0.0.5'
+      repo: 'https://github.com/hercules-team/augeasproviders_sysctl.git'
+      ref: '2.0.2'
   forge_modules:
     augeasproviders: 'herculesteam/augeasproviders'
     augeasproviders_core: 'herculesteam/augeasproviders_core'
     augeasproviders_shellvar: 'herculesteam/augeasproviders_shellvar'
+    augeasproviders_sysctl: 'herculesteam/augeasproviders_sysctl'
 
