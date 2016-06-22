@@ -13,7 +13,9 @@ describe "bsd::network::interface::vlan" do
         }
       }
       it do
+        should contain_bsd__network__interface__vlan('vlan0')
         should contain_bsd__network__interface('vlan0').with_parents(['em0'])
+        should contain_bsd_interface('vlan0')
       end
       it do
         should contain_file('/etc/hostname.vlan0').with_content(/vlan 1 vlandev em0\ninet 10.0.0.1 255.255.255.0 NONE\nup\n/)

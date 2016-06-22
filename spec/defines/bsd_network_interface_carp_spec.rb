@@ -16,7 +16,9 @@ describe "bsd::network::interface::carp" do
         }
       }
       it do
+        should contain_bsd__network__interface__carp('carp0')
         should contain_bsd__network__interface('carp0').with_parents(['em0'])
+        should contain_bsd_interface('carp0')
       end
       it do
         should contain_file('/etc/hostname.carp0').with_content(/vhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\ninet 10.0.0.1 255.255.255.0 NONE\nup\n/)

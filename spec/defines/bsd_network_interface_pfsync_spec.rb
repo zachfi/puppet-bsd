@@ -6,7 +6,9 @@ describe "bsd::network::interface::pfsync" do
     let(:title) { 'pfsync0' }
     context "an example with all default values" do
       it do
+        should contain_bsd__network__interface__pfsync('pfsync0')
         should contain_bsd__network__interface('pfsync0')
+        should contain_bsd_interface('pfsync0')
       end
       it do
         should contain_file('/etc/hostname.pfsync0').with_content(/-syncdev -syncpeer maxupd 128 -defer\nup\n/)

@@ -48,7 +48,7 @@ class bsd::network (
   }
 
   case $::osfamily {
-    'openbsd': {
+    'OpenBSD': {
       # TODO Manage the live state of the route table
 
       # Manage the /etc/mygate file
@@ -70,7 +70,7 @@ class bsd::network (
         }
       }
     }
-    'freebsd': {
+    'FreeBSD': {
       Shellvar { target => '/etc/rc.conf' }
 
       # Should we enable IPv4 forwarding?
