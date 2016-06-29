@@ -9,6 +9,9 @@ describe "bsd::network::interface::wifi" do
 
     it do
       should contain_file('/etc/hostname.athn0').with_content(/nwid myssid wpakey mysecretkey\nup/)
+      should contain_bsd__network__interface__wifi('athn0')
+      should contain_bsd__network__interface('athn0')
+      should contain_bsd_interface('athn0')
     end
   end
 

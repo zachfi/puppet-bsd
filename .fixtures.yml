@@ -9,7 +9,7 @@ fixtures:
     stdlib:
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
       ref: '4.4.0'
-    sysctl:
+    augeasproviders_sysctl:
       repo: 'https://github.com/hercules-team/augeasproviders_sysctl.git'
       ref: '2.0.2'
   forge_modules:

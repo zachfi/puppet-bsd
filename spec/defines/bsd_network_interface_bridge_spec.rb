@@ -11,7 +11,9 @@ describe "bsd::network::interface::bridge" do
         }
       }
       it do
+        should contain_bsd__network__interface__bridge('bridge0')
         should contain_bsd__network__interface('bridge0').with_parents(['em0', 'em1'])
+        should contain_bsd_interface('bridge0')
       end
       it do
         should contain_file('/etc/hostname.bridge0').with_content(/add em0\nadd em1\nup\n/)
