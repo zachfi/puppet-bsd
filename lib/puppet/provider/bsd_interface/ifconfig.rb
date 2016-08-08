@@ -7,6 +7,11 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   commands :ifconfig => '/sbin/ifconfig'
   mk_resource_methods
 
+  def initialize(value={})
+    super(value)
+    @property_flush = {}
+  end
+
   def self.prefetch(resources)
     instances.each do |prov|
       if resource = resources[prov.name]
@@ -100,6 +105,10 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
     ifconfig('create')
   end
 
+  def mtu=(value)
+    @property_flush[:mtu] = value
+  end
+
   def flush
     # Determine destroyability.  This is detected in self.instances if the
     # current resources already exists, but for new resources we need to make
@@ -144,6 +153,12 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
       end
       if @property_hash[:state] == :up
         ifdown
+      end
+    end
+
+    if [:up, :present].include? @property_hash[:ensure]
+      if @property_flush[:mtu]
+        ifconfig("mtu #{@property_flush[:mtu]}")
       end
     end
 

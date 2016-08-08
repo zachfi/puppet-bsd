@@ -12,6 +12,7 @@ module Puppet::Parser::Functions
     c[:addresses] = config["addresses"] if config["addresses"]
     c[:values]    = config["values"] if config["values"]
     c[:options]   = config["options"] if config["options"]
+    c[:mtu]       = config["mtu"] if config["mtu"]
 
     return PuppetX::BSD::Hostname_if.new(c).content
   end

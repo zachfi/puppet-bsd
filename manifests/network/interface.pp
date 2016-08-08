@@ -18,6 +18,7 @@ define bsd::network::interface (
   $values        = undef,
   $options       = undef,
   $parents       = undef,
+  $mtu           = undef,
 ) {
 
   $if_name        = $name
@@ -37,6 +38,7 @@ define bsd::network::interface (
     'addresses'   => $addresses,
     'values'      => $values,
     'options'     => $options,
+    'mtu'         => $mtu,
   }
 
   # Set a more common ensure value in a variable
@@ -88,6 +90,7 @@ define bsd::network::interface (
       bsd_interface { $if_name:
         ensure  => $ensure,
         parents => $parents,
+        mtu     => $mtu,
         require => File["/etc/hostname.${if_name}"],
       }
     }
@@ -111,6 +114,7 @@ define bsd::network::interface (
       bsd_interface { $if_name:
         ensure  => $ensure,
         parents => $parents,
+        mtu     => $mtu,
         require => Shellvar["ifconfig_${if_name}"],
       }
     }

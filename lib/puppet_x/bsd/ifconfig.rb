@@ -56,9 +56,24 @@ module PuppetX
             }
             remain = nil
           end
+        when /^metric\s+\d+/
+          metric, remain = /metric\s+(\d+)\s*(.*)/.match(tokenstring)[1,2]
+          yield ({:metric => metric})
+          if remain
+            parse_interface_tokens(remain) {|t|
+              yield (t)
+            }
+            remain = nil
+          end
         when /^mtu\s+\d+/
-          mtu = /mtu\s+(\d+)/.match(tokenstring)[1]
+          mtu, remain = /mtu\s+(\d+)\s*(.*)/.match(tokenstring)[1,2]
           yield ({:mtu => mtu})
+          if remain
+            parse_interface_tokens(remain) {|t|
+              yield (t)
+            }
+            remain = nil
+          end
         when /^inet6\s+/
           address = /inet6\s+([0-9a-fA-F:]+)%?/.match(tokenstring)[1]
           prefix = /prefixlen\s+(\d+)/.match(tokenstring)[1]

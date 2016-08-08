@@ -20,6 +20,7 @@ module PuppetX
           :addresses,
           :options,
           :values,
+          :mtu,
         ]
 
         required_config_items = [
@@ -40,7 +41,6 @@ module PuppetX
           end
           Puppet.warning('Using the "values" parameter is deprecated, use "addresses" parameter instead')
         end
-
 
         # Ugly junk
         @name      = @config[:name]

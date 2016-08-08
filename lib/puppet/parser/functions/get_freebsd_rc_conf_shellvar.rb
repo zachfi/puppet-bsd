@@ -12,6 +12,7 @@ module Puppet::Parser::Functions
     c[:addresses] = config["addresses"] if config["addresses"]
     c[:options]   = config["options"] if config["options"]
     c[:values]    = config["values"] if config["values"]
+    c[:mtu]       = config["mtu"] if config["mtu"]
 
     return PuppetX::BSD::Rc_conf.new(c).to_create_resources
   end
