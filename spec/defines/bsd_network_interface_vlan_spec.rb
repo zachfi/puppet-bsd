@@ -9,7 +9,7 @@ describe "bsd::network::interface::vlan" do
         {
           :id      => '1',
           :device  => 'em0',
-          :address => '10.0.0.1/24',
+          :address => ['10.0.0.1/24'],
         }
       }
       it do
@@ -39,10 +39,10 @@ describe "bsd::network::interface::vlan" do
     context " a bit more extensive example with values set" do
       let(:params) {
         {
-          :id      => '1',
-          :device  => 'em0',
-          :address => '10.0.0.1/24',
-          :values  => '!route add -net 10.10.10.0/24 10.0.0.254',
+          :id         => '1',
+          :device     => 'em0',
+          :address    => ['10.0.0.1/24'],
+          :raw_values => ['!route add -net 10.10.10.0/24 10.0.0.254'],
         }
       }
       it do
@@ -61,7 +61,7 @@ describe "bsd::network::interface::vlan" do
       {
         :id      => '1',
         :device  => 'em0',
-        :address => '10.0.0.1/24',
+        :address => ['10.0.0.1/24'],
       }
     }
     it do
@@ -79,7 +79,7 @@ describe "bsd::network::interface::vlan" do
         {
           :id      => '1',
           :device  => 'em0',
-          :address => '10.0.0.1/24',
+          :address => ['10.0.0.1/24'],
         }
       }
       it do
@@ -89,7 +89,7 @@ describe "bsd::network::interface::vlan" do
         should contain_bsd__network__interface('vlan0').with_options(['vlan 1', 'vlandev em0'])
       end
       it do
-        should contain_bsd__network__interface('vlan0').with_values(['10.0.0.1/24'])
+        should contain_bsd__network__interface('vlan0').with_raw_values(['10.0.0.1/24'])
       end
     end
   end

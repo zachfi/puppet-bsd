@@ -51,7 +51,7 @@ describe "bsd::network::interface::wifi" do
                       'mode 11g',
                       'mediaopt hostap',
                     ],
-                    :values  => '!route add -net 10.10.10.0/24 10.0.0.254',
+                    :raw_values  => '!route add -net 10.10.10.0/24 10.0.0.254',
       }
     }
     it do

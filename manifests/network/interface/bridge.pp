@@ -3,10 +3,10 @@
 # Handle the creation and configuration of bridge(4) interfaces.
 #
 define bsd::network::interface::bridge (
-  $interface,
+  Array $interface,
   $ensure      = 'present',
   $description = undef,
-  $values      = undef,
+  $raw_values  = undef,
 ) {
 
   $if_name = $name
@@ -24,8 +24,8 @@ define bsd::network::interface::bridge (
 
   $bridge_ifconfig = get_hostname_if_bridge($config)
 
-  if $values {
-    $bridge_values = concat([$bridge_ifconfig], $values)
+  if $raw_values {
+    $bridge_values = concat([$bridge_ifconfig], $raw_values)
   } else {
     $bridge_values = [$bridge_ifconfig]
   }
@@ -33,7 +33,7 @@ define bsd::network::interface::bridge (
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => $bridge_values,
-    parents     => flatten([$interface]),
+    raw_values  => $bridge_values,
+    parents     => $interface,
   }
 }

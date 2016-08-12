@@ -38,8 +38,8 @@ describe "bsd::network::interface::bridge" do
     context " a bit more extensive example with values set" do
       let(:params) {
         {
-          :interface => ['em0', 'em1'],
-          :values    => '!route add -net 10.10.10.0/24 10.0.0.254',
+          :interface  => ['em0', 'em1'],
+          :raw_values => '!route add -net 10.10.10.0/24 10.0.0.254',
         }
       }
       it do

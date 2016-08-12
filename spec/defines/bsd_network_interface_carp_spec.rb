@@ -28,13 +28,13 @@ describe "bsd::network::interface::carp" do
     context " a bit more extensive example with values set" do
       let(:params) {
         {
-          :id      => '1',
-          :device  => 'em0',
-          :address => '10.0.0.1/24',
-          :advbase => '1',
-          :advskew => '0',
-          :pass    => 'TopSecret',
-          :values  => '!route add -net 10.10.10.0/24 10.0.0.254',
+          :id         => '1',
+          :device     => 'em0',
+          :address    => '10.0.0.1/24',
+          :advbase    => '1',
+          :advskew    => '0',
+          :pass       => 'TopSecret',
+          :raw_values => '!route add -net 10.10.10.0/24 10.0.0.254',
         }
       }
       it do
@@ -48,13 +48,13 @@ describe "bsd::network::interface::carp" do
     context " a bit more extensive example with multiple values set" do
       let(:params) {
         {
-          :id      => '1',
-          :device  => 'em0',
-          :address => '10.0.0.1/24',
-          :advbase => '1',
-          :advskew => '0',
-          :pass    => 'TopSecret',
-          :values  => [ '!route add -net 10.10.10.0/24 10.0.0.254', '!route add -net 10.20.10.0/24 10.0.0.254', ],
+          :id         => '1',
+          :device     => 'em0',
+          :address    => '10.0.0.1/24',
+          :advbase    => '1',
+          :advskew    => '0',
+          :pass       => 'TopSecret',
+          :raw_values => [ '!route add -net 10.10.10.0/24 10.0.0.254', '!route add -net 10.20.10.0/24 10.0.0.254', ],
         }
       }
       it do

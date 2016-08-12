@@ -7,13 +7,13 @@ module Puppet::Parser::Functions
     config       = args.shift
 
     c = {}
-    c[:type]      = config["type"]
-    c[:desc]      = config["description"] if config["description"]
-    c[:addresses] = config["addresses"] if config["addresses"]
-    c[:values]    = config["values"] if config["values"]
-    c[:options]   = config["options"] if config["options"]
-    c[:mtu]       = config["mtu"] if config["mtu"]
+    c[:type]       = config["type"]
+    c[:desc]       = config["description"] if config["description"]
+    c[:addresses]  = config["addresses"] if config["addresses"]
+    c[:raw_values] = config["raw_values"] if config["raw_values"]
+    c[:options]    = config["options"] if config["options"]
+    c[:mtu]        = config["mtu"] if config["mtu"]
 
-    return PuppetX::BSD::Hostname_if.new(c).content
+    return Hostname_if.new(c).content
   end
 end

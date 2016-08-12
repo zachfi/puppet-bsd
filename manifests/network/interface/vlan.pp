@@ -5,11 +5,11 @@
 define bsd::network::interface::vlan (
   $id,
   $device,
-  $ensure      = 'present',
-  $address     = [],
-  $state       = 'up',
-  $description = undef,
-  $values      = undef,
+  $ensure                       = 'present',
+  Array $address                = [],
+  $state                        = 'up',
+  Optional[String] $description = undef,
+  Optional[Array] $raw_values   = undef,
 ) {
 
   $if_name = $name
@@ -34,7 +34,7 @@ define bsd::network::interface::vlan (
       bsd::network::interface { $if_name:
         ensure      => $ensure,
         description => $description,
-        values      => $address,
+        raw_values  => $address,
         options     => $vlan_options,
         parents     => flatten([$device]),
       }
@@ -42,8 +42,8 @@ define bsd::network::interface::vlan (
     'OpenBSD': {
       $vlan_ifconfig = get_hostname_if_vlan($config)
 
-      if $values {
-        $vlan_values = concat([$vlan_ifconfig], $values)
+      if $raw_values {
+        $vlan_values = concat([$vlan_ifconfig], $raw_values)
       } else {
         $vlan_values = [$vlan_ifconfig]
       }
@@ -51,7 +51,7 @@ define bsd::network::interface::vlan (
       bsd::network::interface { $if_name:
         ensure      => $ensure,
         description => $description,
-        values      => $vlan_values,
+        raw_values  => $vlan_values,
         parents     => flatten([$device]),
       }
     }

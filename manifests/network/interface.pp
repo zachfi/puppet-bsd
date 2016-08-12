@@ -12,13 +12,13 @@
 # available.
 #
 define bsd::network::interface (
-  $ensure        = 'present',
-  $description   = undef,
-  $addresses     = undef,
-  $values        = undef,
-  $options       = undef,
-  $parents       = undef,
-  $mtu           = undef,
+  $ensure                       = 'present',
+  Optional[String] $description = undef,
+  Optional[Array]$addresses     = undef,
+  Optional[Array]$raw_values    = undef,
+  Optional[Array] $options      = undef,
+  $parents                      = undef,
+  $mtu                          = undef,
 ) {
 
   $if_name        = $name
@@ -36,7 +36,7 @@ define bsd::network::interface (
     'type'        => $if_type[0],
     'description' => $description,
     'addresses'   => $addresses,
-    'values'      => $values,
+    'raw_values'  => $raw_values,
     'options'     => $options,
     'mtu'         => $mtu,
   }

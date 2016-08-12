@@ -14,7 +14,7 @@ describe 'get_freebsd_rc_conf_shellvar' do
   full = {
     "name"        => 're0',
     "description" => "Uplink",
-    "values"      => [
+    "addresses"      => [
       '10.0.1.12/24',
       '10.0.1.13/24',
       '10.0.1.14/24',

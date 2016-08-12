@@ -9,7 +9,7 @@ define bsd::network::interface::pfsync (
   $maxupd      = undef,
   $defer       = undef,
   $description = undef,
-  $values      = undef,
+  $raw_values  = undef,
 ) {
 
   $if_name = $name
@@ -40,8 +40,8 @@ define bsd::network::interface::pfsync (
     }
   }
 
-  if $values {
-    $pfsync_values = concat([$pfsync_ifconfig], $values)
+  if $raw_values {
+    $pfsync_values = concat([$pfsync_ifconfig], $raw_values)
   } else {
     $pfsync_values = [$pfsync_ifconfig]
   }
@@ -49,7 +49,7 @@ define bsd::network::interface::pfsync (
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => $pfsync_values,
+    raw_values  => $pfsync_values,
     parents     => flatten([$syncdev]),
   }
 }

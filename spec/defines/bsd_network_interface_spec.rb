@@ -5,7 +5,7 @@ describe "bsd::network::interface" do
     let(:facts) { {:kernel => 'OpenBSD'} }
     context "a basic configuration" do
       let(:title) { 'tun0' }
-      let(:params) { {:values => ['just a test', 'up'], :description => 'simple' } }
+      let(:params) { {:raw_values => ['just a test', 'up'], :description => 'simple' } }
 
       it do
         should contain_file('/etc/hostname.tun0').with_content(/description "simple"\njust a test\nup\n/)
@@ -16,7 +16,7 @@ describe "bsd::network::interface" do
 
     context "a tun device" do
       let(:title) { 'tun0' }
-      let(:params) { {:values => ['up','!/usr/local/bin/openvpn'] } }
+      let(:params) { {:raw_values => ['up','!/usr/local/bin/openvpn'] } }
 
       it do
         should contain_file('/etc/hostname.tun0').with_content(/up\n!\/usr\/local\/bin\/openvpn/)
@@ -36,7 +36,7 @@ describe "bsd::network::interface" do
           '172.16.0.1/27',
           'fc01::/7',
           '2001:100:fed:beef::/64', ],
-        :values => [ 'up', ]
+        :raw_values => [ 'up', ]
         }
       }
 
@@ -53,7 +53,7 @@ describe "bsd::network::interface" do
     context "a vether device using values parameter only" do
       let(:title) { 'vether0' }
       let(:params) { {
-        :values => [ '123.123.123.123/29',
+        :raw_values => [ '123.123.123.123/29',
           '172.16.0.1/27',
           'fc01::/7',
           '2001:100:fed:beef::/64',
@@ -77,7 +77,7 @@ describe "bsd::network::interface" do
     let(:facts) { {:kernel => 'FreeBSD'} }
     context "a basic configuration" do
       let(:title) { 'igb0' }
-      let(:params) { {:values => ['10.0.0.1/24'], :description => 'simple' } }
+      let(:params) { {:addresses => ['10.0.0.1/24'], :description => 'simple' } }
 
       it do
         should contain_shellvar('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
@@ -89,7 +89,7 @@ describe "bsd::network::interface" do
 
     context "when processing a vlan interface with one address" do
       let(:title) { 'vlan1' }
-      let(:params) { {:values => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
+      let(:params) { {:addresses => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
 
       it do
         should contain_shellvar('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)

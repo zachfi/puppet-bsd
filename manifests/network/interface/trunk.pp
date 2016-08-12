@@ -8,7 +8,7 @@ define bsd::network::interface::trunk (
   $proto       = 'lacp',
   $address     = undef,
   $description = undef,
-  $values      = undef,
+  $raw_values  = undef,
 ) {
 
   $if_name = $name
@@ -38,8 +38,8 @@ define bsd::network::interface::trunk (
     }
   }
 
-  if $values {
-    $trunk_values = concat([$trunk_ifconfig], $values)
+  if $raw_values {
+    $trunk_values = concat([$trunk_ifconfig], $raw_values)
   } else {
     $trunk_values = [$trunk_ifconfig]
   }
@@ -47,7 +47,7 @@ define bsd::network::interface::trunk (
   bsd::network::interface { $if_name:
     ensure      => $ensure,
     description => $description,
-    values      => $trunk_values,
+    raw_values  => $trunk_values,
     parents     => flatten([$interface]),
   }
 }

@@ -2,41 +2,22 @@
 #
 # Responsible for processing the bridge(4) interfaces for hostname_if(5)
 #
-require_relative '../../../puppet_x/bsd/util'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
+require_relative '../../../puppet_x/bsd'
+require_relative '../../../puppet_x/bsd/puppet_interface'
 
-module PuppetX
-  module BSD
-    class Hostname_if
-      class Bridge
+class PuppetX::BSD::Hostname_if::Bridge < PuppetX::BSD::PuppetInterface
 
-        attr_reader :content
+  attr_reader :content
 
-        def initialize(config)
-          @config = config
-          ::PuppetX::BSD::Util.normalize_config(@config)
-          required_config_items = [
-            :interface,
-          ]
+  def initialize(config)
+    validation :interface
+    multiopts :interface
 
-          optional_config_items = [
-          ]
+    configure(config)
+  end
 
-          ::PuppetX::BSD::Util.validate_config(
-            @config,
-            required_config_items,
-            optional_config_items
-          )
-        end
-
-        def content
-          data = []
-          Array(@config[:interface]).flatten.each {|i|
-            data << "add #{i}"
-          }
-          return data
-        end
-      end
-    end
+  def content
+    @config[:interface].map {|i| "add #{i}" }
   end
 end

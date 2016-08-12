@@ -1,7 +1,16 @@
 require 'puppet_x/bsd/rc_conf'
 
-describe 'PuppetX::BSD::Rc_conf' do
-  subject(:rc) { PuppetX::BSD::Rc_conf }
+describe 'Rc_conf' do
+  subject(:rc) { Rc_conf }
+
+  describe 'initialize' do
+    context 'when minimal configuration is passed' do
+      it 'should not error' do
+        expect { rc.new({name: 'em0'}) }.to_not raise_error
+      end
+    end
+
+  end
 
   describe '#validate_config' do
     context "when config is not present" do
