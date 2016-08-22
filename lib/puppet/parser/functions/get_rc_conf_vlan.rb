@@ -11,6 +11,6 @@ module Puppet::Parser::Functions
     c[:device]  = config["device"] if config["device"]
     c[:address] = config["address"] if config["address"]
 
-    return PuppetX::BSD::Rc_conf::Vlan.new(c).values
+    return Vlan.new(c).vlan_values
   end
 end

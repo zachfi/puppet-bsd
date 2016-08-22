@@ -36,6 +36,10 @@ class PuppetX::BSD::PuppetInterface
       @config_validation_exclusive = []
     end
 
+    unless @config_booleans
+      @config_booleans = []
+    end
+
     @config = validate(reject_undef(config))
   end
 
@@ -96,6 +100,14 @@ class PuppetX::BSD::PuppetInterface
     @config_validation_exclusive = require_exclusive_array
   end
 
+  def booleans(*boolean_options)
+    unless boolean_options.is_a? Array
+      raise ArgumentError, "Array required for boolean options"
+    end
+
+    @config_booleans = boolean_options
+  end
+
   def validate(config)
     # Check for required configurations
     if @config_validation
@@ -113,12 +125,14 @@ class PuppetX::BSD::PuppetInterface
           raise ArgumentError, "unknown configuration item found: #{k}"
         end
       end
+
     elsif @config_validation
       config.each do |k,v|
         unless @config_validation.include? k
           raise ArgumentError, "unknown configuration item found: #{k}"
         end
       end
+
     elsif @config_options
       config.each do |k,v|
         unless @config_options.include? k
@@ -131,14 +145,22 @@ class PuppetX::BSD::PuppetInterface
     @config_multiopts.each {|i|
       if config.keys.include? i
         unless config[i].is_a? Array
-          raise ArgumentError, "Multi-opt #{i} is not a list"
+          raise ArgumentError, "Multi-opt #{i} is not an array"
+        end
+      end
+    }
+
+    @config_booleans.each {|i|
+      if config.keys.include? i
+        unless config[i].class == true.class or config[i].class == false.class
+          raise ArgumentError, "Boolean-opt #{i} is not a bool"
         end
       end
     }
 
     # Config values not in multopts should be a string
     config.each {|k,v|
-      if not @config_multiopts.include? k
+      if not @config_multiopts.include? k and not @config_booleans.include? k
         if not v.is_a? String
           raise ArgumentError, "Config option #{k} must be a String"
         end

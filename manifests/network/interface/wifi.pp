@@ -4,12 +4,12 @@
 #
 define bsd::network::interface::wifi (
   $network_name,
-  $ensure        = 'present',
-  $network_key   = undef,
-  $address       = undef,
-  $description   = undef,
-  $options       = undef,
-  $raw_values    = undef,
+  $ensure                  = 'present',
+  $wpa_key                 = undef,
+  Optional[Array] $address = undef,
+  $description             = undef,
+  $options                 = undef,
+  $raw_values              = undef,
 ) {
 
   $if_name = $name
@@ -22,7 +22,7 @@ define bsd::network::interface::wifi (
 
   $config = {
     network_name => $network_name,
-    network_key  => $network_key,
+    wpa_key      => $wpa_key,
     address      => $address,
   }
 

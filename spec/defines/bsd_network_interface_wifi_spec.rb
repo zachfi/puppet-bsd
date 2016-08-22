@@ -5,7 +5,7 @@ describe "bsd::network::interface::wifi" do
   let(:title) { 'athn0' }
 
   context "with minimal parameters" do
-    let(:params) { {:network_name => 'myssid', :network_key => 'mysecretkey'} }
+    let(:params) { {:network_name => 'myssid', :wpa_key => 'mysecretkey'} }
 
     it do
       should contain_file('/etc/hostname.athn0').with_content(/nwid myssid wpakey mysecretkey\nup/)
@@ -17,7 +17,7 @@ describe "bsd::network::interface::wifi" do
 
   context "with more parameters" do
     let(:params) { {:network_name => 'myssid',
-                    :network_key => 'mysecretkey',
+                    :wpa_key => 'mysecretkey',
                     :description => 'something good',
                     :address => [
                       '10.23.4.56/16',
@@ -39,7 +39,7 @@ describe "bsd::network::interface::wifi" do
 
   context " a bit more extensive example with values set" do
     let(:params) { {:network_name => 'myssid',
-                    :network_key => 'mysecretkey',
+                    :wpa_key => 'mysecretkey',
                     :description => 'something good',
                     :address => [
                       '10.23.4.56/16',

@@ -16,7 +16,7 @@ describe "bsd::network::interface::pfsync" do
     end
 
     context "a minimal example" do
-      let(:params) { {:syncdev => ['em0']} }
+      let(:params) { {:syncdev => 'em0'} }
       it do
         should contain_bsd__network__interface('pfsync0').with_parents(['em0'])
       end
@@ -26,7 +26,7 @@ describe "bsd::network::interface::pfsync" do
     end
 
     context "a medium example" do
-      let(:params) { {:syncdev => ['em0'], :description => "TestNet"} }
+      let(:params) { {:syncdev => 'em0', :description => "TestNet"} }
       it do
         should contain_bsd__network__interface('pfsync0').with_parents(['em0'])
       end
@@ -37,7 +37,7 @@ describe "bsd::network::interface::pfsync" do
 
     context "an example with syncpeer" do
       let(:params) { {
-          :syncdev => ['em0'],
+          :syncdev => 'em0',
           :syncpeer => '10.0.0.222',
       } }
       it do
@@ -51,7 +51,7 @@ describe "bsd::network::interface::pfsync" do
 
     context "an example with non-default maxupd and defer" do
       let(:params) { {
-          :syncdev  => ['em0'],
+          :syncdev  => 'em0',
           :syncpeer => '10.0.0.222',
           :maxupd   => '156',
           :defer    => true,
@@ -70,7 +70,7 @@ describe "bsd::network::interface::pfsync" do
     let(:facts) { {:kernel => 'OpenBSD'} }
     let(:title) { 'notcorrect0' }
     let(:params) { {
-        :syncdev => ['em0'],
+        :syncdev => 'em0',
         :description => "TestNet"
     } }
     it do

@@ -4,64 +4,49 @@
 #
 
 require_relative '../../../puppet_x/bsd/util'
+require_relative '../../../puppet_x/bsd/hostname_if'
+require_relative '../../../puppet_x/bsd/puppet_interface'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
 
-module PuppetX
-  module BSD
-    class Hostname_if
-      class Vlan
+class Hostname_if::Vlan < PuppetX::BSD::PuppetInterface
+  attr_reader :content
 
-        attr_reader :content
+  def initialize(config)
+    validation :id,
+      :device
 
-        def initialize(config)
-          @config = config
-          ::PuppetX::BSD::Util.normalize_config(@config)
+    options :address
+    multiopts :address
 
-          required_config_items = [
-            :id,
-            :device,
-          ]
+    configure(config)
+  end
 
-          optional_config_items = [
-            :address,
-          ]
-
-          ::PuppetX::BSD::Util.validate_config(
-            @config,
-            required_config_items,
-            optional_config_items
-          )
-        end
-
-        # Return an array of values to place on each line
-        def values
-          inet  = []
-          if @config[:address]
-            PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
-              inet << i
-            }
-          end
-
-          data = []
-          data << vlan_string
-          data << inet if inet
-          data.flatten
-        end
-
-        def content
-          values.join("\n")
-        end
-
-        def vlan_string
-          vlanstring = []
-          if @config[:id].to_i < 1 or @config[:id].to_i > 4094
-            raise ArgumentError, "invalid vlan ID: #{@config[:id]}"
-          end
-          vlanstring << 'vlan' << @config[:id]
-          vlanstring << 'vlandev' << @config[:device]
-          vlanstring.join(' ')
-        end
-      end
+  # Return an array of values to place on each line
+  def values
+    inet= []
+    if @config[:address]
+      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+        inet << i
+      }
     end
+
+    data = []
+    data << vlan_string
+    data << inet if inet
+    data.flatten
+  end
+
+  def content
+    values.join("\n")
+  end
+
+  def vlan_string
+    vlanstring = []
+    if @config[:id].to_i < 1 or @config[:id].to_i > 4094
+      raise ArgumentError, "invalid vlan ID: #{@config[:id]}"
+    end
+    vlanstring << 'vlan' << @config[:id]
+    vlanstring << 'vlandev' << @config[:device]
+    vlanstring.join(' ')
   end
 end

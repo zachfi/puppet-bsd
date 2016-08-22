@@ -2,58 +2,41 @@
 #
 # Responsible for processing the Wifi interfaces for hostname_if(5)
 #
-require_relative '../../../puppet_x/bsd/util'
+require_relative '../../../puppet_x/bsd/hostname_if'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
+require_relative '../../../puppet_x/bsd/puppet_interface'
 
-module PuppetX
-  module BSD
-    class Hostname_if
-      class Wifi
+class Hostname_if::Wifi < PuppetX::BSD::PuppetInterface
+  attr_reader :content
 
-        attr_reader :content
+  def initialize(config)
+    validation :network_name
+    options :address,
+      :wpa_key
+    multiopts :address
 
-        def initialize(config)
-          @config = config
-          ::PuppetX::BSD::Util.normalize_config(@config)
+    configure(config)
+  end
 
-          required_config_items = [
-            :network_name,
-          ]
+  def content
+    data = []
 
-          optional_config_items = [
-            :address,
-            :network_key,
-          ]
-
-          ::PuppetX::BSD::Util.validate_config(
-            @config,
-            required_config_items,
-            optional_config_items
-          )
-        end
-
-        def content
-          data = []
-
-          if @config[:address]
-            inet = []
-            PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
-              inet << i
-            }
-            data << inet
-          end
-
-          data << wifi_string()
-          data.join("\n")
-        end
-
-        def wifi_string
-          wifistring = []
-          wifistring << 'nwid' << @config[:network_name]
-          wifistring << 'wpakey' << @config[:network_key] if @config[:network_key]
-          wifistring.join(' ')
-        end
-      end
+    if @config[:address]
+      inet = []
+      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+        inet << i
+      }
+      data << inet
     end
+
+    data << wifi_string()
+    data.join("\n")
+  end
+
+  def wifi_string
+    wifistring = []
+    wifistring << 'nwid' << @config[:network_name]
+    wifistring << 'wpakey' << @config[:wpa_key] if @config[:wpa_key]
+    wifistring.join(' ')
   end
 end

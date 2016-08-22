@@ -1,12 +1,15 @@
 require 'puppet_x/bsd/rc_conf/vlan'
 
-describe 'PuppetX::BSD::Rc_conf::Vlan' do
+
+describe 'Vlan' do
+  subject(:vlan) { Vlan }
+
   describe 'validation' do
     context 'when the config is invalid' do
       it 'should fail if no config is supplied' do
         c = {}
         expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
+          vlan.new(c).content
         }.to raise_error(ArgumentError)
       end
 
@@ -15,8 +18,8 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
           :id     => '1',
         }
         expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
-        }.to raise_error(ArgumentError, /device.*required/)
+          vlan.new(c).content
+        }.to raise_error(ArgumentError, /required configuration item not found: device/)
       end
 
       it "should not raise an error if address is missing" do
@@ -25,7 +28,7 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
           :device => 'em0',
         }
         expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
+          vlan.new(c).content
         }.not_to raise_error
       end
 
@@ -36,7 +39,7 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
           :address => [],
         }
         expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
+          vlan.new(c).content
         }.not_to raise_error
       end
 
@@ -44,10 +47,10 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
         c = {
           :id      => '1',
           :device  => 'em0',
-          :address => '10.0.0.0/24',
+          :address => ['10.0.0.0/24'],
         }
         expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
+          vlan.new(c).content
         }.not_to raise_error
       end
 
@@ -55,23 +58,12 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
         c = {
           :id      => '1',
           :device  => 'em0',
-          :address => '10.0.0.0/24',
+          :address => ['10.0.0.0/24'],
           :random  => '1',
         }
         expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
+          vlan.new(c).content
         }.to raise_error(ArgumentError, /unknown configuration item/)
-      end
-
-      it "should not raise an error if the id is an integer" do
-        c = {
-          :id      => 1,
-          :device  => 'em0',
-          :address => '10.0.0.0/24',
-        }
-        expect {
-          PuppetX::BSD::Rc_conf::Vlan.new(c).content
-        }.not_to raise_error
       end
     end
   end
@@ -86,7 +78,7 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
         wanted = [
         'vlan 1 vlandev em0',
         ]
-        expect(PuppetX::BSD::Rc_conf::Vlan.new(c).content).to match(wanted.join('\n'))
+        expect(vlan.new(c).content).to match(wanted.join('\n'))
       end
     end
 
@@ -100,7 +92,7 @@ describe 'PuppetX::BSD::Rc_conf::Vlan' do
         wanted = [
           'vlan 1 vlandev em0',
         ]
-        expect(PuppetX::BSD::Rc_conf::Vlan.new(c).content).to match(wanted.join('\n'))
+        expect(vlan.new(c).content).to match(wanted.join('\n'))
       end
     end
   end

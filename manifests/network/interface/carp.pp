@@ -4,7 +4,7 @@
 #
 define bsd::network::interface::carp (
   $id,
-  $address,
+  Array $address,
   $device,
   $ensure      = 'present',
   $advbase     = undef,

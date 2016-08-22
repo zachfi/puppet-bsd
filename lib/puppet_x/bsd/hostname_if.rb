@@ -5,14 +5,11 @@ rescue => e
   puts e.backtrace.inspect
 end
 
-require 'puppet/util/package'
 require_relative '../../puppet_x/bsd/hostname_if/inet'
 require_relative '../../puppet_x/bsd/puppet_interface'
 
 class Hostname_if < PuppetX::BSD::PuppetInterface
   attr_reader :content
-
-  include Puppet::Util::Package
 
   def initialize(config)
     options :desc,
@@ -22,8 +19,15 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       :raw_values,
       :mtu
 
-    multiopts :addresses, :options, :raw_values
-    oneof :addresses, :raw_values, :options, :desc
+    multiopts :addresses,
+      :options,
+      :raw_values
+
+    oneof :addresses,
+      :raw_values,
+      :options,
+      :desc
+
     #exclusive :addresses, :raw_values
 
     configure(config)

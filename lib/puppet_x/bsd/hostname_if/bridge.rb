@@ -1,12 +1,11 @@
 # Module: PuppetX::Hostname_if::Bridge
 #
 # Responsible for processing the bridge(4) interfaces for hostname_if(5)
+# on OpenBSD.
 #
-require_relative '../../../puppet_x/bsd/hostname_if/inet'
-require_relative '../../../puppet_x/bsd'
 require_relative '../../../puppet_x/bsd/puppet_interface'
 
-class PuppetX::BSD::Hostname_if::Bridge < PuppetX::BSD::PuppetInterface
+class Hostname_if::Bridge < PuppetX::BSD::PuppetInterface
 
   attr_reader :content
 

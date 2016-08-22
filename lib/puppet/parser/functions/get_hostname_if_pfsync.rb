@@ -12,6 +12,6 @@ module Puppet::Parser::Functions
     c[:maxupd]   = config["maxupd"] if config["maxupd"]
     c[:defer]    = config["defer"] if config["defer"]
 
-    return PuppetX::BSD::Hostname_if::Pfsync.new(c).content
+    return Hostname_if::Pfsync.new(c).content
   end
 end

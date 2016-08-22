@@ -12,24 +12,18 @@
 # available.
 #
 define bsd::network::interface (
-  $ensure                       = 'present',
-  Optional[String] $description = undef,
-  Optional[Array]$addresses     = undef,
-  Optional[Array]$raw_values    = undef,
-  Optional[Array] $options      = undef,
-  $parents                      = undef,
-  $mtu                          = undef,
+  Pattern[/^(up|down|present|absent)$/] $ensure = 'present',
+  Optional[String] $description                 = undef,
+  Optional[Array] $addresses                    = undef,
+  Optional[Array] $raw_values                   = undef,
+  Optional[Array] $options                      = undef,
+  $parents                                      = undef,
+  $mtu                                          = undef,
 ) {
 
   $if_name        = $name
   $interface_file = "/etc/hostname.${if_name}"
   $if_type        = split($if_name, '\d+')
-
-  validate_re(
-    $ensure,
-    '(up|down|present|absent)',
-    '$ensure can only be one of up, down, present, or absent'
-  )
 
   $config = {
     'name'        => $name,
@@ -50,7 +44,7 @@ define bsd::network::interface (
       $file_ensure = 'absent'
     }
     default: {
-      fail('Incorrect file presence set')
+      fail('Incorrect file "ensure" set')
     }
   }
 
@@ -67,7 +61,7 @@ define bsd::network::interface (
     }
   }
 
-  case $::kernel {
+  case $facts['kernel'] {
     'OpenBSD': {
       if $file_ensure == 'present' {
         $content = get_openbsd_hostname_if_content($config)
@@ -88,7 +82,7 @@ define bsd::network::interface (
       }
 
       bsd_interface { $if_name:
-        ensure  => $ensure,
+        ensure  => $state,
         parents => $parents,
         mtu     => $mtu,
         require => File["/etc/hostname.${if_name}"],
@@ -112,14 +106,14 @@ define bsd::network::interface (
       }
 
       bsd_interface { $if_name:
-        ensure  => $ensure,
+        ensure  => $state,
         parents => $parents,
         mtu     => $mtu,
         require => Shellvar["ifconfig_${if_name}"],
       }
     }
     default: {
-      fail('unhandled BSD, please help add support')
+      fail('unhandled BSD, please help add support!')
     }
   }
 }

@@ -100,7 +100,7 @@ describe 'PuppetX::BSD::PuppetInterface' do
         config = {
           one: 'string'
         }
-        expect{ c.configure(config) }.to raise_error(ArgumentError, /Multi-opt one is not a list/)
+        expect{ c.configure(config) }.to raise_error(ArgumentError, /Multi-opt one is not an array/)
       end
 
       it 'should configure when option values are an array' do

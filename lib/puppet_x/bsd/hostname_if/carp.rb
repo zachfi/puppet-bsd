@@ -2,62 +2,47 @@
 #
 # Responsible for processing the carp(4) interfaces for hostname_if(5)
 #
-require_relative '../../../puppet_x/bsd/util'
+require_relative '../../../puppet_x/bsd/hostname_if'
+require_relative '../../../puppet_x/bsd/puppet_interface'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
 
-module PuppetX
-  module BSD
-    class Hostname_if
-      class Carp
+class Hostname_if::Carp < PuppetX::BSD::PuppetInterface
+  attr_reader :content
 
-        attr_reader :content
+  def initialize(config)
+    validation :id,
+      :address,
+      :device
 
-        def initialize(config)
-          @config = config
-          ::PuppetX::BSD::Util.normalize_config(@config)
+    multiopts :address
 
-          required_config_items = [
-            :id,
-            :address,
-            :device,
-          ]
+    options :advbase,
+      :advskew,
+      :carpdev,
+      :pass
 
-          optional_config_items = [
-            :advbase,
-            :advskew,
-            :carpdev,
-            :pass,
-          ]
+    configure(config)
+  end
 
-          ::PuppetX::BSD::Util.validate_config(
-            @config,
-            required_config_items,
-            optional_config_items
-          )
-        end
+  def content
+    inet = []
+    PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+      inet << i
+    }
 
-        def content
-          inet  = []
-          PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
-            inet << i
-          }
+    data = []
+    data << carp_string()
+    data << inet if inet
+    data.join("\n")
+  end
 
-          data = []
-          data << carp_string()
-          data << inet if inet
-          data.join("\n")
-        end
-
-        def carp_string
-          carpstring = []
-          carpstring << 'vhid' << @config[:id]
-          carpstring << 'pass' << @config[:pass] if @config[:pass]
-          carpstring << 'carpdev' << @config[:device]
-          carpstring << 'advbase' << @config[:advbase] if @config[:advbase]
-          carpstring << 'advskew' << @config[:advskew] if @config[:advskew]
-          carpstring.join(' ')
-        end
-      end
-    end
+  def carp_string
+    carpstring = []
+    carpstring << 'vhid' << @config[:id]
+    carpstring << 'pass' << @config[:pass] if @config[:pass]
+    carpstring << 'carpdev' << @config[:device]
+    carpstring << 'advbase' << @config[:advbase] if @config[:advbase]
+    carpstring << 'advskew' << @config[:advskew] if @config[:advskew]
+    carpstring.join(' ')
   end
 end

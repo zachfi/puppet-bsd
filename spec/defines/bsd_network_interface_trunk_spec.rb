@@ -30,7 +30,7 @@ describe "bsd::network::interface::trunk" do
       let(:params) { {
           :interface => ['em0', 'em1'],
           :description => "TestNet",
-          :address => 'fc01::/64'
+          :address => ['fc01::/64']
       } }
       it do
         should contain_bsd__network__interface('trunk0').with_parents(['em0', 'em1'])

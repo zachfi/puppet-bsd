@@ -9,7 +9,7 @@ describe "bsd::network::interface::carp" do
         {
           :id      => '1',
           :device  => 'em0',
-          :address => '10.0.0.1/24',
+          :address => ['10.0.0.1/24'],
           :advbase => '1',
           :advskew => '0',
           :pass    => 'TopSecret',
@@ -30,7 +30,7 @@ describe "bsd::network::interface::carp" do
         {
           :id         => '1',
           :device     => 'em0',
-          :address    => '10.0.0.1/24',
+          :address    => ['10.0.0.1/24'],
           :advbase    => '1',
           :advskew    => '0',
           :pass       => 'TopSecret',
@@ -50,7 +50,7 @@ describe "bsd::network::interface::carp" do
         {
           :id         => '1',
           :device     => 'em0',
-          :address    => '10.0.0.1/24',
+          :address    => ['10.0.0.1/24'],
           :advbase    => '1',
           :advskew    => '0',
           :pass       => 'TopSecret',
@@ -92,7 +92,7 @@ describe "bsd::network::interface::carp" do
       {
         :id      => '1',
         :device  => 'em0',
-        :address => '10.0.0.1/24',
+        :address => ['10.0.0.1/24'],
         :advbase => '1',
         :advskew => '0',
         :pass    => 'TopSecret',

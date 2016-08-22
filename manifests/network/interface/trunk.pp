@@ -4,11 +4,11 @@
 #
 define bsd::network::interface::trunk (
   $interface,
-  $ensure      = 'present',
-  $proto       = 'lacp',
-  $address     = undef,
-  $description = undef,
-  $raw_values  = undef,
+  $ensure                  = 'present',
+  $proto                   = 'lacp',
+  Optional[Array] $address = undef,
+  $description             = undef,
+  $raw_values              = undef,
 ) {
 
   $if_name = $name
