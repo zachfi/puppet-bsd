@@ -115,10 +115,10 @@ like the following.
 
 ```Puppet
 bsd::network::interface::vlan { 'vlan100':
-  id      => '100',
-  device  => 'em0',
-  address => '10.0.0.1/24',
-  values  => ['!/sbin/route add -net 10.10.10.0/24 10.10.0.254',],
+  id         => '100',
+  device     => 'em0',
+  address    => ['10.0.0.1/24'],
+  raw_values => ['!/sbin/route add -net 10.10.10.0/24 10.10.0.254',],
 }
 ```
 
@@ -147,7 +147,7 @@ class { 'bsd::network::carp':
 
 bsd::network::interface::carp { "carp0":
   id      => '1',
-  address => '10.0.0.1/24',
+  address => ['10.0.0.1/24'],
   carpdev => 'em0',
   pass    => 'TopSecret',
   values  => ['!/sbin/route add -net 10.10.10.0/24 10.0.0.254',],
@@ -174,7 +174,7 @@ bsd::network::interface::pfsync { "pfsync0":
 ```Puppet
 bsd::network::interface::trunk { "trunk0":
   interface => ['em0','em1],
-  address   => '10.0.0.1/24',
+  address   => ['10.0.0.1/24'],
 }
 ```
 
@@ -191,13 +191,13 @@ bsd::network::interface::trunk { "trunk0":
 
 bsd::network::interface::vlan { "vlan10":
   id      => '10',
-  address => '10.0.10.1/24',
+  address => ['10.0.10.1/24'],
   device  => 'trunk0',
 }
 
 bsd::network::interface::vlan { "vlan11":
   id      => '11',
-  address => '10.0.11.1/24',
+  address => ['10.0.11.1/24'],
   device  => 'trunk0',
   values  => ['!/sbin/route add -net 10.10.10.0/24 10.0.11.254',],
 }
