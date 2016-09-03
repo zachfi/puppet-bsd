@@ -16,10 +16,10 @@
 # Copyright 2013 Puppet Labs
 #
 class bsd::network (
-  $v4gateway    = '',
-  $v6gateway    = '',
-  $v4forwarding = false,
-  $v6forwarding = false,
+  Optional[IP::Address::V4] $v4gateway = undef,
+  Optional[IP::Address::V6] $v6gateway = undef,
+  Boolean $v4forwarding                = false,
+  Boolean $v6forwarding                = false,
 ) {
 
   # Options common to both FreeBSD and OpenBSD
@@ -53,21 +53,21 @@ class bsd::network (
 
       # Manage the /etc/mygate file
       # TODO Sanitize input here
-      if $v4gateway != '' and $v6gateway != '' {
+      if $v4gateway and $v6gateway {
         $mygate = [$v4gateway,$v6gateway]
-      } elsif $v4gateway != '' {
+      } elsif $v4gateway {
         $mygate = [$v4gateway]
-      } elsif $v6gateway != '' {
+      } elsif $v6gateway {
         $mygate = [$v6gateway]
+      } else {
+        $mygate = []
       }
 
-      if $v4gateway != '' or $v6gateway != '' {
-        file { '/etc/mygate':
-          owner   => 'root',
-          group   => '0',
-          mode    => '0644',
-          content => inline_template("<%= @mygate.join(\"\n\") + \"\n\" %>"),
-        }
+      file { '/etc/mygate':
+        owner   => 'root',
+        group   => '0',
+        mode    => '0644',
+        content => inline_template("<%= @mygate.join(\"\n\") + \"\n\" %>"),
       }
     }
     'FreeBSD': {
@@ -98,7 +98,7 @@ class bsd::network (
       }
 
       # What is our IPv4 default router?
-      if $v4gateway != '' {
+      if $v4gateway {
         shellvar { 'defaultrouter':
           value => $v4gateway,
         }
@@ -110,7 +110,7 @@ class bsd::network (
       }
 
       # What is our IPv6 default router?
-      if $v6gateway != '' {
+      if $v6gateway {
         shellvar { 'ipv6_defaultrouter':
           value => $v6gateway,
         }

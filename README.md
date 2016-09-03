@@ -154,8 +154,6 @@ bsd::network::interface::carp { "carp0":
 }
 ```
 
-
-
 #### pfsync(4)
 Closely related to carp(4) interfaces are the pfsync(4) interfaces.
 They are supported by `bsd::network::interface::pfsync` defined type.

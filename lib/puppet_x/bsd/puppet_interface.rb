@@ -40,6 +40,10 @@ class PuppetX::BSD::PuppetInterface
       @config_booleans = []
     end
 
+    unless @config_integers
+      @config_integers = []
+    end
+
     @config = validate(reject_undef(config))
   end
 
@@ -68,7 +72,7 @@ class PuppetX::BSD::PuppetInterface
   end
 
   def validation(*required_array)
-    # an array of requirements to validate
+    # an array of required items to validate
     unless required_array.is_a? Array
       raise ArgumentError, "Array of names to validate required"
     end
@@ -108,8 +112,18 @@ class PuppetX::BSD::PuppetInterface
     @config_booleans = boolean_options
   end
 
+  def integers(*integer_options)
+    unless integer_options.is_a? Array
+      raise ArgumentError, "Array required for integer options"
+    end
+
+    @config_integers = integer_options
+  end
+
+
   def validate(config)
-    # Check for required configurations
+    # Check requirements for all options
+
     if @config_validation
       @config_validation.each do |k,v|
         unless config.keys.include? k
@@ -158,12 +172,22 @@ class PuppetX::BSD::PuppetInterface
       end
     }
 
+    @config_integers.each {|i|
+      if config.keys.include? i
+        unless config[i].is_a? Fixnum
+          raise ArgumentError, "Integer-option #{i} must be an Integer, is: #{i.class}"
+        end
+      end
+    }
+
     # Config values not in multopts should be a string
     config.each {|k,v|
-      if not @config_multiopts.include? k and not @config_booleans.include? k
-        if not v.is_a? String
-          raise ArgumentError, "Config option #{k} must be a String"
-        end
+      next if @config_multiopts.include? k
+      next if @config_booleans.include? k
+      next if @config_integers.include? k
+
+      if not v.is_a? String
+        raise ArgumentError, "Config option #{k} must be a String"
       end
     }
 

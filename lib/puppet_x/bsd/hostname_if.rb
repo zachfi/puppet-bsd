@@ -12,23 +12,9 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
   attr_reader :content
 
   def initialize(config)
-    options :desc,
-      :type,
-      :options,
-      :addresses,
-      :raw_values,
-      :mtu
-
-    multiopts :addresses,
-      :options,
-      :raw_values
-
-    oneof :addresses,
-      :raw_values,
-      :options,
-      :desc
-
-    #exclusive :addresses, :raw_values
+    options :desc, :type, :options, :addresses, :raw_values, :mtu
+    multiopts :addresses, :options, :raw_values
+    oneof :addresses, :raw_values, :options, :desc
 
     configure(config)
 

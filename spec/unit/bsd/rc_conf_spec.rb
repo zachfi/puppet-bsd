@@ -12,24 +12,6 @@ describe 'Rc_conf' do
 
   end
 
-  describe '#validate_config' do
-    context "when config is not present" do
-      it "should raise an error" do
-        expect { rc.new() }.to raise_error(ArgumentError)
-      end
-    end
-
-    context "when minimal config is supplied" do
-      it "should not raise an error" do
-        c = {
-          :name   => 're0',
-          :desc   => "Uplink",
-        }
-        expect { rc.new(c) }.to_not raise_error(ArgumentError)
-      end
-    end
-  end
-
   describe '#get_hash' do
     context 'with a dynamic v4-only config' do
       it "should return a valid config" do
@@ -131,9 +113,7 @@ describe 'Rc_conf' do
             'fc00::124/64',
             'fc00::125/64',
           ],
-          :options => [
-            'mtu 9000',
-          ]
+          :mtu => 9000,
         }
         expect(rc.new(c).get_hash).to eq(hash)
       end
@@ -141,6 +121,23 @@ describe 'Rc_conf' do
   end
 
   describe '#to_create_resources' do
+    context 'when only mtu is spplied' do
+      it {
+        hash = {
+          'ifconfig_re0' => {
+            'value' => 'mtu 9000',
+          },
+        }
+
+        c = {
+          :name   => 're0',
+          :mtu   => 9000,
+        }
+        expect(rc.new(c).to_create_resources).to eq(hash)
+      }
+    end
+
+
     context 'when a full interface config is supplied' do
       it 'should convert the hash for create_resources()' do
         hash = {

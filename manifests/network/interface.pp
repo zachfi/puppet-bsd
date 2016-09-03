@@ -11,14 +11,22 @@
 # carp, trunk, and it is recommended to use the more specific classes when
 # available.
 #
+# @param state One of up, down, present or absent
+# @param description A short description of the interface
+# @param addresses An array of IPv4 or IPv6, or the keywords
+# @param raw_values An array values to pass directly to the interface configuration
+# @param options An array of option values to set
+# @param parents An array of interface names to which this interface belongs
+# @param mtu An integer representing the Maxium Transmition unit
+#
 define bsd::network::interface (
   Pattern[/^(up|down|present|absent)$/] $ensure = 'present',
   Optional[String] $description                 = undef,
   Optional[Array] $addresses                    = undef,
   Optional[Array] $raw_values                   = undef,
   Optional[Array] $options                      = undef,
-  $parents                                      = undef,
-  $mtu                                          = undef,
+  Optional[Array] $parents                      = undef,
+  Optional[Integer] $mtu                        = undef,
 ) {
 
   $if_name        = $name
@@ -91,13 +99,14 @@ define bsd::network::interface (
     'FreeBSD': {
       $rec_hash = get_freebsd_rc_conf_shellvar($config)
 
-      Shellvar {
+      $shellvar_defaults = {
         ensure => $file_ensure,
         target => '/etc/rc.conf',
+        before => Bsd_interface[$if_name],
         notify => Bsd_interface[$if_name],
       }
 
-      create_resources('shellvar', $rec_hash)
+      create_resources('shellvar', $rec_hash, $shellvar_defaults)
 
       if $state == 'up' {
         $action = 'start'
@@ -109,7 +118,6 @@ define bsd::network::interface (
         ensure  => $state,
         parents => $parents,
         mtu     => $mtu,
-        require => Shellvar["ifconfig_${if_name}"],
       }
     }
     default: {

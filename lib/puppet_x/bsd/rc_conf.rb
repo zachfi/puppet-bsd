@@ -11,13 +11,9 @@ require_relative '../../puppet_x/bsd/puppet_interface'
 class Rc_conf < PuppetX::BSD::PuppetInterface
 
   def initialize(config)
-    options :desc,
-      :addresses,
-      :options,
-      :raw_values,
-      :mtu
-
     validation :name
+    options :desc, :addresses, :options, :raw_values, :mtu
+    integers :mtu
     multiopts :addresses, :options, :raw_values
     oneof :name, :desc
 
@@ -36,7 +32,13 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
   end
 
   def options_string
-    @options.join(' ')
+    result = ''
+
+    if @options and @options.size > 0
+      result = @options.join(' ')
+    end
+    result = result.to_s + "mtu #{@config[:mtu]}" if @config.keys.include? :mtu
+    result
   end
 
   def get_hash
@@ -63,6 +65,8 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
             else
               key = "ifconfig_#{ifname}"
             end
+
+            # Set the value property on the resource
             resources[key] = {
               "value" => i,
             }
@@ -127,14 +131,16 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
     }
 
     # append the options to the first address
+    opts = options_string()
+
     if addrs.size > 0
       ifconfig[:addrs] = addrs
 
-      if @options.size > 0
-        ifconfig[:addrs][0] = [ifconfig[:addrs][0],options_string()].join(' ')
+      if opts and opts.size > 0
+        ifconfig[:addrs][0] = [ifconfig[:addrs][0],opts].join(' ')
       end
     else
-      if @options.size > 0
+      if opts and opts.size > 0
         ifconfig[:addrs] = options_string()
       end
     end

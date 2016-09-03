@@ -31,19 +31,12 @@ Puppet::Type.newtype(:bsd_interface) do
   newparam :parents do
     desc "a String or Array of parent interfaces"
     validate do |value|
-      if value.is_a? Array
-        value.each { |v|
-          if ! v.match(/[[:alpha:]]+[[:digit:]]+/)
-            raise ArgumentError, "got illegal parent interface: '#{v}' for '#{resource[:name]}'"
-          end
-        }
-      elsif value.is_a? String
-        if ! value.match(/[[:alpha:]]+[[:digit:]]+/)
-          raise ArgumentError, "got illegal parent interface: '#{value}' for '#{resource[:name]}'"
+      raise ArgumentError, "param parents must be an Array, is: #{value.class}" unless value.is_a? Array
+      value.each { |v|
+        if ! v.match(/[[:alpha:]]+[[:digit:]]+/)
+          raise ArgumentError, "got illegal parent interface name: '#{v}' for '#{resource[:name]}'"
         end
-      else
-        raise ArgumentError, "parents can only be a String or an Array, is: #{value.class}"
-      end
+      }
     end
   end
 

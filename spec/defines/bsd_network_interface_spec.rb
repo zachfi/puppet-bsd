@@ -1,6 +1,82 @@
 require 'spec_helper'
 
 describe "bsd::network::interface" do
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) { facts }
+
+      context "a basic configuration" do
+        let(:title) { 'igb0' }
+        let(:params) { {:ensure => 'up'} }
+
+        case facts[:osfamily]
+        when 'FreeBSD'
+          it {
+            should contain_bsd__network__interface('igb0').with_ensure('up')
+            should contain_bsd__network__interface('igb0').with_mtu(nil)
+            should contain_bsd__network__interface('igb0').with_parents(nil)
+            should contain_bsd_interface('igb0').with_ensure('up')
+            should contain_bsd_interface('igb0').with_mtu(nil)
+            should contain_bsd_interface('igb0').with_parents(nil)
+          }
+        end
+      end
+
+      context "a basic configuration with an address" do
+        let(:title) { 'igb0' }
+        let(:params) { {:addresses => ['10.0.0.1/24'], :description => 'simple' } }
+
+        case facts[:osfamily]
+        when 'FreeBSD'
+          it {
+            should contain_shellvar('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
+            should contain_shellvar('ifconfig_igb0').with_target('/etc/rc.conf')
+            should contain_shellvar('ifconfig_igb0').that_notifies('Bsd_interface[igb0]')
+            should contain_bsd_interface('igb0').with_ensure('up')
+            should contain_bsd_interface('igb0').with_mtu(nil)
+            should contain_bsd_interface('igb0').with_parents(nil)
+          }
+        end
+      end
+
+      context "a basic configuration with mtu" do
+        let(:title) { 'igb0' }
+        let(:params) { {:mtu => 9000, :description => 'simple mtu' } }
+
+        case facts[:osfamily]
+        when 'FreeBSD'
+          it {
+            should contain_shellvar('ifconfig_igb0').with_value(/mtu 9000/)
+            should contain_shellvar('ifconfig_igb0').with_target('/etc/rc.conf')
+            should contain_bsd_interface('igb0').with_ensure('up')
+            should contain_bsd_interface('igb0').with_mtu(9000)
+            should contain_bsd_interface('igb0').with_parents(nil)
+          }
+        end
+      end
+
+      context "a basic vlan interface with an address" do
+        let(:title) { 'vlan1' }
+        let(:params) { {:addresses => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
+
+        case facts[:osfamily]
+        when 'FreeBSD'
+          it do
+            should contain_shellvar('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
+            should contain_shellvar('ifconfig_vlan1').with_ensure('present')
+            should contain_shellvar('ifconfig_vlan1').that_notifies('Bsd_interface[vlan1]')
+            should contain_bsd_interface('vlan1').that_requires('Shellvar[ifconfig_vlan1]')
+            should contain_bsd__network__interface('vlan1')
+
+            should contain_bsd_interface('vlan1').with_ensure('up')
+            should contain_bsd_interface('vlan1').with_mtu(nil)
+            should contain_bsd_interface('vlan1').with_parents(nil)
+          end
+        end
+      end
+    end
+  end
+
   context "on OpenBSD" do
     let(:facts) { {:kernel => 'OpenBSD'} }
     context "a basic configuration" do
@@ -73,31 +149,4 @@ describe "bsd::network::interface" do
     end
   end
 
-  context "on FreeBSD" do
-    let(:facts) { {:kernel => 'FreeBSD'} }
-    context "a basic configuration" do
-      let(:title) { 'igb0' }
-      let(:params) { {:addresses => ['10.0.0.1/24'], :description => 'simple' } }
-
-      it do
-        should contain_shellvar('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
-        should contain_shellvar('ifconfig_igb0').that_notifies('Bsd_interface[igb0]')
-        should contain_bsd_interface('igb0').that_requires('Shellvar[ifconfig_igb0]')
-        should contain_bsd__network__interface('igb0')
-      end
-    end
-
-    context "when processing a vlan interface with one address" do
-      let(:title) { 'vlan1' }
-      let(:params) { {:addresses => ['10.0.0.1/24'], :options => ['vlan 1', 'vlandev em0'] } }
-
-      it do
-        should contain_shellvar('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
-        should contain_shellvar('ifconfig_vlan1').with_ensure('present')
-        should contain_shellvar('ifconfig_vlan1').that_notifies('Bsd_interface[vlan1]')
-        should contain_bsd_interface('vlan1').that_requires('Shellvar[ifconfig_vlan1]')
-        should contain_bsd__network__interface('vlan1')
-      end
-    end
-  end
 end

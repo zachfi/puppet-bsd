@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'bsd::network' do
   on_supported_os.each do |os, facts|
-    let(:facts) { facts }
     context "on #{os}" do
+      let(:facts) { facts }
       context 'with default params' do
         it {
           should contain_class('bsd::network')
@@ -35,6 +35,7 @@ describe 'bsd::network' do
         it {
           should contain_class('bsd::network')
         }
+
         case facts[:osfamily]
         when 'FreeBSD'
           it {
