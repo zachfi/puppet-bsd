@@ -7,7 +7,7 @@ module Puppet::Parser::Functions
     config       = args.shift
 
     c = {}
-    c[:type]       = config["type"]
+    c[:type]       = config["type"] if config["type"]
     c[:desc]       = config["description"] if config["description"]
     c[:addresses]  = config["addresses"] if config["addresses"]
     c[:raw_values] = config["raw_values"] if config["raw_values"]

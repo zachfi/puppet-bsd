@@ -14,17 +14,21 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
   def initialize(config)
     options :desc, :type, :options, :addresses, :raw_values, :mtu
     multiopts :addresses, :options, :raw_values
-    oneof :addresses, :raw_values, :options, :desc
+    oneof :addresses, :raw_values, :options, :desc, :mtu
     integers :mtu
 
     configure(config)
 
-    @desc = @config[:desc]
-    @type = @config[:type]
+    #@desc = @config[:desc]
+    @iftype = @config[:type]
 
     @addresses = [@config[:addresses]].flatten
     @items     = [@config[:raw_values]].flatten
     @options   = [@config[:options]].flatten
+
+    if @config.keys.include? :mtu
+      @options << "mtu #{@config[:mtu]}"
+    end
 
     @addresses.reject!{ |i| i == nil or i == :undef }
     @items.reject!{ |i| i == nil or i == :undef }
@@ -177,8 +181,8 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       options_string = @options.join(' ')
     end
 
-    if has_description?
-      description_string = "description \"#{@desc}\""
+    if @config.keys.include? :desc
+      description_string = "description \"#{@config[:desc]}\""
     end
 
     # Set the interface options
@@ -196,7 +200,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     # line in the absense of interface options.  In the presense of
     # interface options, we append the description to the end of the first
     # line.
-    if has_description?
+    if @config.keys.include? :desc
       if has_options?
         tmp = lines.shift
         lines.unshift([tmp, description_string].join(' '))
@@ -210,6 +214,6 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
 
   # Format the lines[] array as content for a file.
   def content
-    lines().join("\n")
+    lines.uniq.join("\n").lstrip
   end
 end
