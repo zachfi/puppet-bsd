@@ -15,6 +15,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     options :desc, :type, :options, :addresses, :raw_values, :mtu
     multiopts :addresses, :options, :raw_values
     oneof :addresses, :raw_values, :options, :desc
+    integers :mtu
 
     configure(config)
 
