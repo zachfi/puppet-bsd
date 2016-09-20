@@ -17,6 +17,7 @@ class Hostname_if::Vlan < PuppetX::BSD::PuppetInterface
 
     options :address
     multiopts :address
+    integers :id
 
     configure(config)
   end
