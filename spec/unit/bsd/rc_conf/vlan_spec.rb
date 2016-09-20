@@ -15,7 +15,7 @@ describe 'Vlan' do
 
       it "should raise an error if device is missing" do
         c = {
-          :id     => '1',
+          :id     => 1,
         }
         expect {
           vlan.new(c).content
@@ -24,7 +24,7 @@ describe 'Vlan' do
 
       it "should not raise an error if address is missing" do
         c = {
-          :id     => '1',
+          :id     => 1,
           :device => 'em0',
         }
         expect {
@@ -34,7 +34,7 @@ describe 'Vlan' do
 
       it "should not raise an error if address is an empty array" do
         c = {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => [],
         }
@@ -45,7 +45,7 @@ describe 'Vlan' do
 
       it "should not raise an error if address is present" do
         c = {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => ['10.0.0.0/24'],
         }
@@ -56,7 +56,7 @@ describe 'Vlan' do
 
       it "should raise an error when an invalid option is received" do
         c = {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => ['10.0.0.0/24'],
           :random  => '1',
@@ -72,7 +72,7 @@ describe 'Vlan' do
     context 'when only a device and a vlan are supplied' do
       it 'should return the ifconfig string' do
         c = {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
         }
         wanted = [
@@ -85,7 +85,7 @@ describe 'Vlan' do
     context 'when a single address is passed' do
       it 'should return only the vlan string' do
         c = {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => ['10.0.0.1/24'],
         }

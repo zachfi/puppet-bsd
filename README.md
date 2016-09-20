@@ -1,6 +1,6 @@
 # Puppet BSD
 
-[![Puppet Forge](https://img.shields.io/puppetforge/v/zleslie/bsd.svg)]() [![Build Status](https://travis-ci.org/xaque208/puppet-bsd.svg?branch=master)](https://travis-ci.org/xaque208/puppet-bsd)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/zleslie/bsd.svg)](https://forge.puppet.com/zleslie/bsd) [![Build Status](https://travis-ci.org/xaque208/puppet-bsd.svg?branch=master)](https://travis-ci.org/xaque208/puppet-bsd)
 
 A Puppet module for managing aspects of BSD.  Currently supported are FreeBSD
 and OpenBSD.  In here will be various facts, functions and classes for tuning
@@ -115,7 +115,7 @@ like the following.
 
 ```Puppet
 bsd::network::interface::vlan { 'vlan100':
-  id         => '100',
+  id         => 100,
   device     => 'em0',
   address    => ['10.0.0.1/24'],
   raw_values => ['!/sbin/route add -net 10.10.10.0/24 10.10.0.254',],
@@ -128,7 +128,7 @@ specify the VLAN ID and the device to attach the VLAN to.
 
 ```Puppet
 bsd::network::interface::vlan { 'vlan100':
-  id      => '100',
+  id      => 100,
   device  => 'em0',
 }
 ```
@@ -146,11 +146,11 @@ class { 'bsd::network::carp':
 }
 
 bsd::network::interface::carp { "carp0":
-  id      => '1',
-  address => ['10.0.0.1/24'],
-  carpdev => 'em0',
-  pass    => 'TopSecret',
-  values  => ['!/sbin/route add -net 10.10.10.0/24 10.0.0.254',],
+  id         => 1,
+  address    => ['10.0.0.1/24'],
+  carpdev    => 'em0',
+  pass       => 'TopSecret',
+  raw_values => ['!/sbin/route add -net 10.10.10.0/24 10.0.0.254',],
 }
 ```
 
@@ -188,16 +188,16 @@ bsd::network::interface::trunk { "trunk0":
 }
 
 bsd::network::interface::vlan { "vlan10":
-  id      => '10',
+  id      => 10,
   address => ['10.0.10.1/24'],
   device  => 'trunk0',
 }
 
 bsd::network::interface::vlan { "vlan11":
-  id      => '11',
-  address => ['10.0.11.1/24'],
-  device  => 'trunk0',
-  values  => ['!/sbin/route add -net 10.10.10.0/24 10.0.11.254',],
+  id         => 11,
+  address    => ['10.0.11.1/24'],
+  device     => 'trunk0',
+  raw_values => ['!/sbin/route add -net 10.10.10.0/24 10.0.11.254',],
 }
 ```
 
@@ -208,7 +208,7 @@ defined type.
 
 ```Puppet
 bsd::network::interface { 'tun0':
-  values => [
+  raw_values => [
     'up',
     '!/usr/local/bin/openvpn --daemon'
   ]
@@ -224,7 +224,7 @@ defined type. I.e. an IPv6 via IPv4 tunnel could look like:
 bsd::network::interface { 'gif0':
   description => 'IPv6 in IPv4 tunnel',
   parents     => 'em0',
-  values      => [
+  raw_values  => [
     'tunnel 1.2.3.4 5.6.7.8',
     'inet6 alias 2001:470:6c:bbb::2 2001:470:6c:bbb::1 prefixlen 128',
     '!/sbin/route -n add -inet6 default 2001:470:6c:bbb::1',
@@ -251,7 +251,7 @@ class { 'bsd::network::gre':
 bsd::network::interface { 'gre0':
   description => 'Tunnel interface',
   parents     => 'em0',
-  values      => [
+  raw_values  => [
     '172.16.0.1 172.16.0.2 netmask 0xffffffff link0 up',
     'tunnel 1.2.3.4 5.6.7.8',
   ],
@@ -266,7 +266,7 @@ defined type.
 bsd::network::interface { 'pflow0':
   description => 'Pflow to collector',
   parents     => 'em0',
-  values      => [
+  raw_values  => [
     'flowsrc 1.2.3.4 flowdst 5.6.7.8:1234',
     'pflowproto 10',
   ],

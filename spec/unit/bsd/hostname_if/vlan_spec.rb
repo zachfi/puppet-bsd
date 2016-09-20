@@ -6,7 +6,7 @@ describe 'Vlan' do
   describe 'content' do
     it 'should support a full example' do
       c = {
-        :id      => '1',
+        :id      => 1,
         :device  => 'em0',
         :address => ['10.0.0.1/24'],
       }
@@ -19,7 +19,7 @@ describe 'Vlan' do
 
     it 'should support a partial example' do
       c = {
-        :id      => '1',
+        :id      => 1,
         :device  => 'em0',
         :address => ['10.0.0.1/24'],
       }
@@ -33,7 +33,7 @@ describe 'Vlan' do
 
     it 'should support a allow an array of addresses' do
       c = {
-        :id      => '1',
+        :id      => 1,
         :device  => 'em0',
         :address => [
           '10.0.0.1/24',
@@ -57,7 +57,7 @@ describe 'Vlan' do
   describe '#values' do
     it 'should return a list of values for a full example' do
       c = {
-        :id      => '1',
+        :id      => 1,
         :device  => 'em0',
         :address => [
           '10.0.0.1/24',
