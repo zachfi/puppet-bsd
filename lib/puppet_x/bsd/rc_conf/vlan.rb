@@ -7,9 +7,12 @@ require_relative '../../../puppet_x/bsd/rc_conf'
 class Vlan < Rc_conf
 
   def initialize(config)
+    validation :device,
+      :id
+
     options :address
     multiopts :address
-    validation :device, :id
+    integers :id
 
     configure(config)
   end

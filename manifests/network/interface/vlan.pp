@@ -3,7 +3,7 @@
 # Handle the creation and configuration of vlan(4) interfaces.
 #
 define bsd::network::interface::vlan (
-  $id,
+  Integer $id,
   $device,
   $ensure                       = 'present',
   Array $address                = [],

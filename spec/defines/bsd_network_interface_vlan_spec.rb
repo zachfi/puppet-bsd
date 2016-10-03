@@ -7,7 +7,7 @@ describe "bsd::network::interface::vlan" do
     context " a minimal example" do
       let(:params) {
         {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => ['10.0.0.1/24'],
         }
@@ -24,7 +24,7 @@ describe "bsd::network::interface::vlan" do
     context " a minimal example with multiple addresses" do
       let(:params) {
         {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => [ '10.0.0.1/24', '10.0.0.2/32', ],
         }
@@ -39,7 +39,7 @@ describe "bsd::network::interface::vlan" do
     context " a bit more extensive example with values set" do
       let(:params) {
         {
-          :id         => '1',
+          :id         => 1,
           :device     => 'em0',
           :address    => ['10.0.0.1/24'],
           :raw_values => ['!route add -net 10.10.10.0/24 10.0.0.254'],
@@ -59,7 +59,7 @@ describe "bsd::network::interface::vlan" do
     let(:title) { 'notcorrect0' }
     let(:params) {
       {
-        :id      => '1',
+        :id      => 1,
         :device  => 'em0',
         :address => ['10.0.0.1/24'],
       }
@@ -77,7 +77,7 @@ describe "bsd::network::interface::vlan" do
     context " a minimal example" do
       let(:params) {
         {
-          :id      => '1',
+          :id      => 1,
           :device  => 'em0',
           :address => ['10.0.0.1/24'],
         }
