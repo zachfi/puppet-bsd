@@ -1,6 +1,7 @@
 ## Unreleased
  - VLAN ids are now integers
  - Address specifications are now arrays
+ - network_key is now wpa_key on wifi interfaces
 
 ##  2016-06-29 1.2.0
 ### Summary
