@@ -1,5 +1,6 @@
 ## Unreleased
- - 
+ - VLAN ids are now integers
+ - Address specifications are now arrays
 
 ##  2016-06-29 1.2.0
 ### Summary
