@@ -1,7 +1,30 @@
 ## Unreleased
- - VLAN ids are now integers
- - Address specifications are now arrays
- - network_key is now wpa_key on wifi interfaces
+ -
+
+## 2016-11-10 2.0.0
+### Summary
+This release contains contains backwards incompatible parameter name and data
+type changes.  Also here, is native Puppet 4 support, dropping Puppet 3
+support, and lots of plumbing changes to make configuration validation a bit
+cleaner.
+
+#### Features
+  - Drop Puppet 3.x support, leveraging native Puppet 4.x type validation
+    - Validation change, VLAN IDs are now integers.
+    - Validation change, address parameters are arrays.
+  - The old 'values' param has been renamed to 'raw_values' to make it clear
+    that the items will be written unmodified.
+  - Library code has been much improved, centralizing the configuration
+    validation between the BSDs to allow for easier addition of interface
+    types, or future configuration changes.  The PuppetX::BSD::PuppetInterface
+    parent class is now used to create a new interface type and provide the
+    necessary validation.  This reduces the interface type specific code
+    considerably.
+  - 'network_key' has been renamed to 'wpa_key' on wifi interfaces
+  - Add support for managing interface MTU
+
+#### Bugfixes
+  - Fix an issue where MTU is not properly read from the output of ifconfig
 
 ##  2016-06-29 1.2.0
 ### Summary
