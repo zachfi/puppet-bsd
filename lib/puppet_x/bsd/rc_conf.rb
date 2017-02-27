@@ -9,7 +9,6 @@ require_relative '../../puppet_x/bsd'
 require_relative '../../puppet_x/bsd/puppet_interface'
 
 class Rc_conf < PuppetX::BSD::PuppetInterface
-
   def initialize(config)
     validation :name
     options :desc, :addresses, :options, :raw_values, :mtu
@@ -24,19 +23,17 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
     @desc      = @config[:desc]
     @addresses = [@config[:addresses]].flatten
     @options   = [@config[:options]].flatten
-    @addresses.reject!{ |i| i == nil or i == :undef }
-    @options.reject!{ |i| i == nil or i == :undef }
+    @addresses.reject! { |i| i.nil? || (i == :undef) }
+    @options.reject! { |i| i.nil? || (i == :undef) }
 
     # The blob
-    @data = load_hash()
+    @data = load_hash
   end
 
   def options_string
     result = ''
 
-    if @options and @options.size > 0
-      result = @options.join(' ')
-    end
+    result = @options.join(' ') if @options && !@options.empty?
     result = result.to_s + "mtu #{@config[:mtu]}" if @config.keys.include? :mtu
     result
   end
@@ -50,44 +47,42 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
   def to_create_resources
     resources = {}
 
-    @data.each_key {|topkey|
-
+    @data.each_key do |topkey|
       # The top level key is the interface name
       ifname = topkey.to_sym
 
       if @data[topkey][:addrs]
         if @data[topkey][:addrs].is_a? Array
-          @data[topkey][:addrs].each {|i|
-            if i =~ /inet6 /
-              key = "ifconfig_#{ifname}_ipv6"
-            elsif i =~ /inet /
-              key = "ifconfig_#{ifname}"
-            else
-              key = "ifconfig_#{ifname}"
-            end
+          @data[topkey][:addrs].each do |i|
+            key = if i =~ /inet6 /
+                    "ifconfig_#{ifname}_ipv6"
+                  elsif i =~ /inet /
+                    "ifconfig_#{ifname}"
+                  else
+                    "ifconfig_#{ifname}"
+                  end
 
             # Set the value property on the resource
             resources[key] = {
-              "value" => i,
+              'value' => i
             }
-          }
+          end
         else
           key = "ifconfig_#{ifname}"
           resources[key] = {
-            "value" => @data[topkey][:addrs],
+            'value' => @data[topkey][:addrs]
           }
         end
       end
 
-      if @data[topkey][:aliases] and @data[topkey][:aliases].is_a? Array
-        @data[topkey][:aliases].each_with_index {|a,i|
-          key = "ifconfig_#{ifname}_alias#{i}"
-          resources[key] = {
-            "value" => a,
-          }
+      next unless @data[topkey][:aliases] && @data[topkey][:aliases].is_a?(Array)
+      @data[topkey][:aliases].each_with_index do |a, i|
+        key = "ifconfig_#{ifname}_alias#{i}"
+        resources[key] = {
+          'value' => a
         }
       end
-    }
+    end
 
     Puppet.debug("Returning resources: #{resources}")
 
@@ -108,7 +103,7 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
     ip6set   = false
     ipset    = false
 
-    process_addresses(@addresses) {|addr|
+    process_addresses(@addresses) do |addr|
       if addr =~ /DHCP/
         addrs << addr
       elsif addr =~ /inet6 /
@@ -126,34 +121,30 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
           ipset = true
         end
       else
-        raise ArgumentError("unhandled address family")
+        raise ArgumentError('unhandled address family')
       end
-    }
+    end
 
     # append the options to the first address
-    opts = options_string()
+    opts = options_string
 
-    if addrs.size > 0
+    if !addrs.empty?
       ifconfig[:addrs] = addrs
 
-      if opts and opts.size > 0
-        ifconfig[:addrs][0] = [ifconfig[:addrs][0],opts].join(' ')
+      if opts && !opts.empty?
+        ifconfig[:addrs][0] = [ifconfig[:addrs][0], opts].join(' ')
       end
     else
-      if opts and opts.size > 0
-        ifconfig[:addrs] = options_string()
-      end
+      ifconfig[:addrs] = options_string if opts && !opts.empty?
     end
 
-    if aliases.size > 0
-      ifconfig[:aliases] = aliases
-    end
+    ifconfig[:aliases] = aliases unless aliases.empty?
 
-    {@name.to_sym => ifconfig}
+    { @name.to_sym => ifconfig }
   end
 
   def process_addresses(addresses)
-    addresses.each {|a|
+    addresses.each do |a|
       if a =~ /^(DHCP|dhcp)/
         yield 'DHCP'
       else
@@ -169,12 +160,12 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
           if value
             yield value.join(' ')
           else
-            raise "Value not found"
+            raise 'Value not found'
           end
         rescue Exception => e
           raise "addr is #{a} of class #{a.class}: #{e.message}"
         end
       end
-    }
+    end
   end
 end

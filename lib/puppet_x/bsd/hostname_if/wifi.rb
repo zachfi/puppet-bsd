@@ -12,7 +12,7 @@ class Hostname_if::Wifi < PuppetX::BSD::PuppetInterface
   def initialize(config)
     validation :network_name
     options :address,
-      :wpa_key
+            :wpa_key
     multiopts :address
 
     configure(config)
@@ -23,13 +23,13 @@ class Hostname_if::Wifi < PuppetX::BSD::PuppetInterface
 
     if @config[:address]
       inet = []
-      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
         inet << i
-      }
+      end
       data << inet
     end
 
-    data << wifi_string()
+    data << wifi_string
     data.join("\n")
   end
 

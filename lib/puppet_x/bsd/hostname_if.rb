@@ -19,33 +19,31 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
 
     configure(config)
 
-    #@desc = @config[:desc]
+    # @desc = @config[:desc]
     @iftype = @config[:type]
 
     @addresses = [@config[:addresses]].flatten
     @items     = [@config[:raw_values]].flatten
     @options   = [@config[:options]].flatten
 
-    if @config.keys.include? :mtu
-      @options << "mtu #{@config[:mtu]}"
-    end
+    @options << "mtu #{@config[:mtu]}" if @config.keys.include? :mtu
 
-    @addresses.reject!{ |i| i == nil or i == :undef }
-    @items.reject!{ |i| i == nil or i == :undef }
-    @options.reject!{ |i| i == nil or i == :undef }
+    @addresses.reject! { |i| i.nil? || (i == :undef) }
+    @items.reject! { |i| i.nil? || (i == :undef) }
+    @options.reject! { |i| i.nil? || (i == :undef) }
   end
 
   # Check to see if we have a description
   def has_description?
-    @desc and @desc.is_a? String and @desc.length > 0
+    @desc && @desc.is_a?(String) && !@desc.empty?
   end
 
   def has_addresses?
-    @addresses and @addresses.is_a? Array and @addresses.size > 0
+    @addresses && @addresses.is_a?(Array) && !@addresses.empty?
   end
 
   def has_options?
-    @options and @options.is_a? Array and @options.size > 0
+    @options && @options.is_a?(Array) && !@options.empty?
   end
 
   # Receives array of strings that match an inet or inet6 configuration
@@ -62,14 +60,14 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       ip6set = false
 
       # Process each one of the line items
-      items.each {|i|
+      items.each do |i|
         # Return the dynamic address assignemnt if found
         if i =~ /^(dhcp)$/
           yield i
         elsif i =~ /^(rtsol|inet6 autoconf)$/
           yield i
         # yield up/down if found
-        elsif i  =~ /^(up|down)$/
+        elsif i =~ /^(up|down)$/
           yield i
         # Yield the command string in full
         elsif i =~ /^!/
@@ -95,7 +93,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
               yield line.join(' ')
             else
               puts line
-              puts "line not found"
+              puts 'line not found'
             end
           rescue ArgumentError
             # In the case we have received something we don't know how to
@@ -104,9 +102,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
             yield i
           end
         end
-      }
-    else
-      nil
+      end
     end
   end
 
@@ -115,15 +111,15 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
   def lines
     lines = []
 
-    supported_wifi_devices = [
-      'ath',
-      'athn',
-      'iwn',
-      'ral',
-      'rum',
-      'wi',
-      'wpi',
-    ]
+    supported_wifi_devices = %w(
+      ath
+      athn
+      iwn
+      ral
+      rum
+      wi
+      wpi
+    )
 
     supported_virtual_devices = [
       'bridge',
@@ -136,8 +132,8 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       'pfsync',
       'trunk',
       'tun',
-      #'vether',
-      'vlan',
+      # 'vether',
+      'vlan'
     ]
 
     # please_help_add_support_for = [
@@ -151,9 +147,9 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     # ]
 
     if has_addresses?
-      PuppetX::BSD::Hostname_if::Inet.new(@addresses).process {|i|
+      PuppetX::BSD::Hostname_if::Inet.new(@addresses).process do |i|
         lines << i
-      }
+      end
     end
 
     # Supported interfaces return the already processed lines.
@@ -164,22 +160,20 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     else
       Puppet.info @iftype
 
-      process_items(@addresses) {|line|
+      process_items(@addresses) do |line|
         lines.push(*line)
-      }
+      end
 
       # The process_items method is only used for items to ensure that
       # options who need to be on their own line are yieled as such.  A
       # failure to process a line as a a known option or an IP address will
       # result in the complete item being sent back.
-      process_items(@items) {|line|
+      process_items(@items) do |line|
         lines.push(*line)
-      }
+      end
     end
 
-    if has_options?
-      options_string = @options.join(' ')
-    end
+    options_string = @options.join(' ') if has_options?
 
     if @config.keys.include? :desc
       description_string = "description \"#{@config[:desc]}\""

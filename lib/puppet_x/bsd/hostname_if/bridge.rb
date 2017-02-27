@@ -6,7 +6,6 @@
 require_relative '../../../puppet_x/bsd/puppet_interface'
 
 class Hostname_if::Bridge < PuppetX::BSD::PuppetInterface
-
   attr_reader :content
 
   def initialize(config)
@@ -17,6 +16,6 @@ class Hostname_if::Bridge < PuppetX::BSD::PuppetInterface
   end
 
   def content
-    @config[:interface].map {|i| "add #{i}" }
+    @config[:interface].map { |i| "add #{i}" }
   end
 end

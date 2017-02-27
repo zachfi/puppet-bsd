@@ -11,27 +11,27 @@ class Hostname_if::Carp < PuppetX::BSD::PuppetInterface
 
   def initialize(config)
     validation :id,
-      :address,
-      :device
+               :address,
+               :device
 
     multiopts :address
 
     options :advbase,
-      :advskew,
-      :carpdev,
-      :pass
+            :advskew,
+            :carpdev,
+            :pass
 
     configure(config)
   end
 
   def content
     inet = []
-    PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+    PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
       inet << i
-    }
+    end
 
     data = []
-    data << carp_string()
+    data << carp_string
     data << inet if inet
     data.join("\n")
   end
