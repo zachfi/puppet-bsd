@@ -1,65 +1,63 @@
 require 'spec_helper'
 require 'puppet_x/bsd/puppet_interface'
 
-
 describe 'PuppetX::BSD::PuppetInterface' do
-  let(:demo_class) {
+  let(:demo_class) do
     class DemoClass < PuppetX::BSD::PuppetInterface
       super
       options :one, :two, :three
       validation :name
     end
-  }
+  end
   context 'configure' do
-    it 'should fail validation when an array is received' do
+    it 'fails validation when an array is received' do
       c = PuppetX::BSD::PuppetInterface.new
 
-      expect{ c.configure([]) }.to raise_error(ArgumentError, /must be a Hash/)
+      expect { c.configure([]) }.to raise_error(ArgumentError, %r{must be a Hash})
     end
 
-    it 'should not fail when no options or validation is passed' do
+    it 'does not fail when no options or validation is passed' do
       c = PuppetX::BSD::PuppetInterface.new
 
-      expect{ c.configure({}) }.to_not raise_error
+      expect { c.configure({}) }.not_to raise_error
     end
 
     context 'when options are available' do
-      it 'should return a boring yet valid config' do
+      it 'returns a boring yet valid config' do
         c = PuppetX::BSD::PuppetInterface.new
         c.options :one, :two, :three
 
-        expect{ c.configure({}) }.to_not raise_error
+        expect { c.configure({}) }.not_to raise_error
       end
-
     end
 
     context 'when validation is required but not present' do
-      it 'should fail with an ArgumentError' do
+      it 'fails with an ArgumentError' do
         c = PuppetX::BSD::PuppetInterface.new
         c.validation :one, :two, :three
 
-        expect{ c.configure({}) }.to raise_error(ArgumentError, /required configuration item not found/)
+        expect { c.configure({}) }.to raise_error(ArgumentError, %r{required configuration item not found})
       end
     end
 
     context 'when validation is required and present' do
-      it 'should configure successfully' do
+      it 'configures successfully' do
         c = PuppetX::BSD::PuppetInterface.new
         c.validation :one, :two, :three
 
         wanted = {
           one: 'itemone',
           two: 'itemtwo',
-          three: 'itemthree',
+          three: 'itemthree'
         }
 
-        expect{ c.configure(wanted) }.to_not raise_error
+        expect { c.configure(wanted) }.not_to raise_error
         expect(c.config).to eq(wanted)
       end
     end
 
     context 'when validation is required and present with options' do
-      it 'should configure successfully with no options passed' do
+      it 'configures successfully with no options passed' do
         c = PuppetX::BSD::PuppetInterface.new
         c.validation :one, :two, :three
         c.options :four, :five
@@ -67,14 +65,14 @@ describe 'PuppetX::BSD::PuppetInterface' do
         config = {
           one: 'itemone',
           two: 'itemtwo',
-          three: 'itemthree',
+          three: 'itemthree'
         }
 
-        expect{ c.configure(config) }.to_not raise_error
+        expect { c.configure(config) }.not_to raise_error
         expect(c.config).to eq(config)
       end
 
-      it 'should include options in the config when options are passed' do
+      it 'includes options in the config when options are passed' do
         c = PuppetX::BSD::PuppetInterface.new
         c.validation :one, :two, :three
         c.options :four, :five
@@ -83,16 +81,16 @@ describe 'PuppetX::BSD::PuppetInterface' do
           one: 'itemone',
           two: 'itemtwo',
           three: 'itemthree',
-          five: 'itemfive',
+          five: 'itemfive'
         }
 
-        expect{ c.configure(config) }.to_not raise_error
+        expect { c.configure(config) }.not_to raise_error
         expect(c.config).to eq(config)
       end
     end
 
     context 'when mutliopts is set' do
-      it 'should fail when option values are not an array' do
+      it 'fails when option values are not an array' do
         c = PuppetX::BSD::PuppetInterface.new
         c.options :one, :two
         c.multiopts :one
@@ -100,32 +98,32 @@ describe 'PuppetX::BSD::PuppetInterface' do
         config = {
           one: 'string'
         }
-        expect{ c.configure(config) }.to raise_error(ArgumentError, /Multi-opt one is not an array/)
+        expect { c.configure(config) }.to raise_error(ArgumentError, %r{Multi-opt one is not an array})
       end
 
-      it 'should configure when option values are an array' do
+      it 'configures when option values are an array' do
         c = PuppetX::BSD::PuppetInterface.new
         c.options :one, :two
         c.multiopts :one
 
         config = {
-          one: ['string', 'stringagain']
+          one: %w(string stringagain)
         }
-        expect{ c.configure(config) }.to_not raise_error
+        expect { c.configure(config) }.not_to raise_error
       end
     end
 
     context 'oneof' do
-      it 'should fail when oneof config values are not present' do
+      it 'fails when oneof config values are not present' do
         c = PuppetX::BSD::PuppetInterface.new
         c.options :one, :two, :three
         c.oneof :one, :two
 
         config = {}
-        expect{ c.configure(config) }.to raise_error(ArgumentError, /At least one of.*is required/)
+        expect { c.configure(config) }.to raise_error(ArgumentError, %r{At least one of.*is required})
       end
 
-      it 'should configure when one oneof config value is present' do
+      it 'configures when one oneof config value is present' do
         c = PuppetX::BSD::PuppetInterface.new
         c.options :one, :two, :three
         c.oneof :one, :two
@@ -133,10 +131,8 @@ describe 'PuppetX::BSD::PuppetInterface' do
         config = {
           one: 'string'
         }
-        expect{ c.configure(config) }.to_not raise_error
+        expect { c.configure(config) }.not_to raise_error
       end
     end
-
   end
 end
-
