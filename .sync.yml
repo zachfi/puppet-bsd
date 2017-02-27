@@ -1,0 +1,9 @@
+Gemfile:
+  optional:
+    ':extra':
+      - gem: 'ipaddress'
+    ':testextra':
+      - gem: 'rspec-mocks'
+      - gem: 'rspec-expectations'
+spec/spec_helper.rb:
+  mock_with: ':rspec'
