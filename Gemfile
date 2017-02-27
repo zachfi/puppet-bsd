@@ -35,13 +35,21 @@ group :test do
   gem 'github_changelog_generator', '~> 1.13.0',                    :require => false if RUBY_VERSION < '2.2.2'
   gem 'rack', '~> 1.0',                                             :require => false if RUBY_VERSION < '2.2.2'
   gem 'github_changelog_generator',                                 :require => false if RUBY_VERSION >= '2.2.2'
-  gem 'ipaddress'
 end
 
 group :development do
   gem 'travis',       :require => false
   gem 'travis-lint',  :require => false
   gem 'guard-rake',   :require => false
+end
+
+group :extra do
+  gem 'ipaddress',  :require => false
+end
+
+group :testextra do
+  gem 'rspec-mocks',         :require => false
+  gem 'rspec-expectations',  :require => false
 end
 
 
