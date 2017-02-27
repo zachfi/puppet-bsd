@@ -14,7 +14,7 @@ define bsd::network::interface::carp (
   $raw_values  = undef,
 ) {
 
-  include bsd::network::carp
+  include ::bsd::network::carp
 
   $if_name = $name
   validate_re($if_name, ['carp'])
