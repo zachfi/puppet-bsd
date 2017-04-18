@@ -36,17 +36,17 @@ module PuppetX
         end
 
         def process
-          @addrs.each {|a|
+          @addrs.each do |a|
             # Return the dynamic address assignment if found
-            if a =~ /^(dhcp)$/
+            if a =~ %r{^(dhcp)$}
               yield a
-	    elsif a =~ /^(rtsol|inet6 autoconf)$/
+            elsif a =~ %r{^(rtsol|inet6 autoconf)$}
               kernelversion = Facter.value('kernelversion')
-	      if versioncmp(kernelversion, "5.6") <= 0
+              if versioncmp(kernelversion, '5.6') <= 0
                 yield 'rtsol'
-	      else
+              else
                 yield 'inet6 autoconf'
-	      end
+              end
             else
               begin
                 ip = IPAddress a
@@ -64,14 +64,12 @@ module PuppetX
                   line << 'NONE'
                   @ipset = true
                 end
-                if line
-                  yield line.join(' ')
-                end
+                yield line.join(' ') if line
               rescue => e
                 raise "addr is #{a} of class #{a.class}: #{e.message}"
               end
             end
-          }
+          end
         end
       end
     end

@@ -11,12 +11,12 @@ class Hostname_if::Trunk < PuppetX::BSD::PuppetInterface
 
   def initialize(config)
     validation :interface,
-      :proto
+               :proto
 
     options :interface,
-      :address
+            :address
     multiopts :interface,
-      :address
+              :address
 
     configure(config)
   end
@@ -24,9 +24,9 @@ class Hostname_if::Trunk < PuppetX::BSD::PuppetInterface
   def values
     inet = []
     if @config[:address]
-      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
         inet << i
-      }
+      end
     end
 
     data = []
@@ -42,20 +42,19 @@ class Hostname_if::Trunk < PuppetX::BSD::PuppetInterface
   def trunk_string
     trunkstring = []
 
-    if ! %w(broadcast failover lacp loadbalance none roundrobin).include? @config[:proto]
+    unless %w(broadcast failover lacp loadbalance none roundrobin).include? @config[:proto]
       raise ArgumentError, "invalid trunk protocol: #{@config[:proto]}"
     end
     trunkstring << 'trunkproto' << @config[:proto]
 
     if @config[:interface].is_a? Array
-      @config[:interface].each {|i|
+      @config[:interface].each do |i|
         trunkstring << 'trunkport' << i
-      }
+      end
     elsif @config[:interface].is_a? String
-        trunkstring << 'trunkport' << @config[:interface]
+      trunkstring << 'trunkport' << @config[:interface]
     end
 
     trunkstring.join(' ')
   end
 end
-

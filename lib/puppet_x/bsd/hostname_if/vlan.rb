@@ -13,7 +13,7 @@ class Hostname_if::Vlan < PuppetX::BSD::PuppetInterface
 
   def initialize(config)
     validation :id,
-      :device
+               :device
 
     options :address
     multiopts :address
@@ -24,11 +24,11 @@ class Hostname_if::Vlan < PuppetX::BSD::PuppetInterface
 
   # Return an array of values to place on each line
   def values
-    inet= []
+    inet = []
     if @config[:address]
-      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process {|i|
+      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
         inet << i
-      }
+      end
     end
 
     data = []
@@ -43,7 +43,7 @@ class Hostname_if::Vlan < PuppetX::BSD::PuppetInterface
 
   def vlan_string
     vlanstring = []
-    if @config[:id].to_i < 1 or @config[:id].to_i > 4094
+    if @config[:id].to_i < 1 || @config[:id].to_i > 4094
       raise ArgumentError, "invalid vlan ID: #{@config[:id]}"
     end
     vlanstring << 'vlan' << @config[:id]

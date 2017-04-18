@@ -1,13 +1,13 @@
 require_relative '../../../puppet_x/bsd/ifconfig'
 
 Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
-  desc "Manage a BSD network interface state"
+  desc 'Manage a BSD network interface state'
 
-  confine :kernel => [:openbsd, :freebsd]
-  commands :ifconfig => '/sbin/ifconfig'
+  confine kernel: [:openbsd, :freebsd]
+  commands ifconfig: '/sbin/ifconfig'
   mk_resource_methods
 
-  def initialize(value={})
+  def initialize(value = {})
     super(value)
     @property_flush = {}
   end
@@ -21,35 +21,35 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def self.instances
-    iflist = Array.new()
+    iflist = []
     begin
-      destroyable_interfaces = self.destroyables()
-      output = execute(['/sbin/ifconfig'], :failonfail => false, :combine => true)
-      PuppetX::BSD::Ifconfig.new(output).parse.each {|k,v|
+      destroyable_interfaces = destroyables
+      output = execute(['/sbin/ifconfig'], failonfail: false, combine: true)
+      PuppetX::BSD::Ifconfig.new(output).parse.each do |k, v|
         if_properties = {
-          :ensure => :present,
-          :provider => :bsd_interface,
-          :name => k.to_s,
-          :flags => v[:flags],
-          :mtu => v[:mtu].to_i
+          ensure: :present,
+          provider: :bsd_interface,
+          name: k.to_s,
+          flags: v[:flags],
+          mtu: v[:mtu].to_i
         }
 
-        if destroyable_interfaces.select {|i| k =~ /^#{i}/ }.size > 0
-          if_properties[:destroyable] = :true
-        else
-          if_properties[:destroyable] = :false
-        end
+        if_properties[:destroyable] = if !destroyable_interfaces.select { |i| k =~ %r{^#{i}} }.empty?
+                                        :true
+                                      else
+                                        :false
+                                      end
 
         if v[:flags]
-          if v[:flags].include? 'UP'
-            if_properties[:state] = :up
-          else
-            if_properties[:state] = :down
-          end
+          if_properties[:state] = if v[:flags].include? 'UP'
+                                    :up
+                                  else
+                                    :down
+                                  end
         end
 
         iflist << new(if_properties)
-      }
+      end
       return iflist
     rescue Puppet::ExecutionFailure
       nil
@@ -57,7 +57,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def self.destroyables
-      execute(['/sbin/ifconfig', '-C'], :failonfail => false, :combine => true).split(' ')
+    execute(['/sbin/ifconfig', '-C'], failonfail: false, combine: true).split(' ')
   end
 
   def up
@@ -86,7 +86,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   end
 
   def ifconfig(value)
-    execute(['/sbin/ifconfig', @property_hash[:name], value], :failonfail => false, :combine => true)
+    execute(['/sbin/ifconfig', @property_hash[:name], value], failonfail: false, combine: true)
   end
 
   def ifup
@@ -114,53 +114,38 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
     # current resources already exists, but for new resources we need to make
     # the call to ifconfig to determine which resources are available for
     # creation/destruction.
-    if @property_hash[:destroyable]
-      if @property_hash[:destroyable] == :true
-        destroyable = true
-      else
-        destroyable = false
-      end
-    else
-      if self.class.destroyables.select {|i| @property_hash[:name] =~ /^#{i}/ }.size > 0
-        destroyable = true
-      else
-        destroyable = false
-      end
-    end
+    destroyable = if @property_hash[:destroyable]
+                    if @property_hash[:destroyable] == :true
+                      true
+                    else
+                      false
+                                  end
+                  else
+                    if !self.class.destroyables.select { |i| @property_hash[:name] =~ %r{^#{i}} }.empty?
+                      true
+                    else
+                      false
+                                  end
+                  end
 
     case @property_hash[:ensure]
     when :absent
-      if @property_hash[:state] == :up
-        ifdown
-      end
-      if destroyable
-        ifdestroy
-      end
+      ifdown if @property_hash[:state] == :up
+      ifdestroy if destroyable
     when :present
-      if destroyable and @property_hash[:state] == :absent
-        ifcreate
-      end
+      ifcreate if destroyable && (@property_hash[:state] == :absent)
     when :up
       if [:down, :absent].include? @property_hash[:state]
-        if destroyable and @property_hash[:state] == :absent
-          ifcreate
-        end
+        ifcreate if destroyable && (@property_hash[:state] == :absent)
         ifup
       end
     when :down
-      if destroyable and @property_hash[:state] == :absent
-        ifcreate
-      end
-      if @property_hash[:state] == :up
-        ifdown
-      end
+      ifcreate if destroyable && (@property_hash[:state] == :absent)
+      ifdown if @property_hash[:state] == :up
     end
 
     if [:up, :present].include? @property_hash[:ensure]
-      if @property_flush[:mtu]
-        ifconfig("mtu #{@property_flush[:mtu]}")
-      end
+      ifconfig("mtu #{@property_flush[:mtu]}") if @property_flush[:mtu]
     end
-
   end
 end

@@ -10,9 +10,9 @@ class Hostname_if::Pfsync < PuppetX::BSD::PuppetInterface
 
   def initialize(config)
     options :syncdev,
-      :syncpeer,
-      :maxupd,
-      :defer
+            :syncpeer,
+            :maxupd,
+            :defer
 
     booleans :defer
 
@@ -44,7 +44,7 @@ class Hostname_if::Pfsync < PuppetX::BSD::PuppetInterface
     end
 
     if @config[:maxupd]
-      if @config[:maxupd].to_i < 0 or @config[:maxupd].to_i > 255
+      if @config[:maxupd].to_i < 0 || @config[:maxupd].to_i > 255
         raise ArgumentError, 'value of maxupd has to be in the range of 0 and 255'
       end
       pfsyncstring << 'maxupd' << @config[:maxupd]
@@ -52,13 +52,12 @@ class Hostname_if::Pfsync < PuppetX::BSD::PuppetInterface
       pfsyncstring << 'maxupd' << '128'
     end
 
-    if @config[:defer] == true
-      pfsyncstring << 'defer'
-    else
-      pfsyncstring << '-defer'
-    end
+    pfsyncstring << if @config[:defer] == true
+                      'defer'
+                    else
+                      '-defer'
+                    end
 
     pfsyncstring.join(' ')
   end
 end
-
