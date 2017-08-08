@@ -162,8 +162,6 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     elsif supported_wifi_devices.include?(@iftype)
       lines.push(*@items)
     else
-      Puppet.info @iftype
-
       process_items(@addresses) {|line|
         lines.push(*line)
       }
