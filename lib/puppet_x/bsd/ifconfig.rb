@@ -1,4 +1,4 @@
-require 'puppet_x/bsd/util'
+require_relative 'util'
 
 module PuppetX
   module BSD
