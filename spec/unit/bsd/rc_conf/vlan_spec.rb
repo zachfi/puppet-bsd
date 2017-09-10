@@ -1,4 +1,5 @@
 require 'puppet_x/bsd/rc_conf/vlan'
+require 'spec_helper'
 
 describe 'Vlan' do
   subject(:vlan) { Vlan }

@@ -119,6 +119,7 @@ define bsd::network::interface (
         parents => $parents,
         mtu     => $mtu,
       }
+
     }
     default: {
       fail('unhandled BSD, please help add support!')

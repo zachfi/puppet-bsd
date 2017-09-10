@@ -84,12 +84,9 @@ describe 'bsd::network::interface::vlan' do
       end
       it do
         is_expected.to contain_bsd__network__interface('vlan0').with_parents(['em0'])
-      end
-      it do
         is_expected.to contain_bsd__network__interface('vlan0').with_options(['vlan 1', 'vlandev em0'])
-      end
-      it do
-        is_expected.to contain_bsd__network__interface('vlan0').with_raw_values(['10.0.0.1/24'])
+        is_expected.to contain_bsd__network__interface('vlan0').with_addresses(['10.0.0.1/24'])
+        is_expected.to contain_shellvar('ifconfig_vlan0').with_value(%r{inet 10.0.0.1/24 vlan 1 vlandev em0})
       end
     end
   end

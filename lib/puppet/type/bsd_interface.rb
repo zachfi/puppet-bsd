@@ -29,7 +29,7 @@ Puppet::Type.newtype(:bsd_interface) do
   end
 
   newparam :parents do
-    desc 'a String or Array of parent interfaces'
+    desc 'a String or Array of parent interfaces to ensure correct ordering'
     validate do |value|
       raise ArgumentError, "param parents must be an Array, is: #{value.class}" unless value.is_a? Array
       value.each do |v|

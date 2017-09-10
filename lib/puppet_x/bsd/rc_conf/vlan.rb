@@ -2,7 +2,7 @@
 #
 # Responsible for processing the vlan(4) interfaces for rc.conf(5)
 #
-require_relative '../../../puppet_x/bsd/rc_conf'
+require_relative '../rc_conf'
 
 class Vlan < Rc_conf
   def initialize(config)
@@ -18,10 +18,9 @@ class Vlan < Rc_conf
 
   # Return an array of parsed vlan values
 
-  # NOTE: the addresses are not processed here due to the
-  # calling function and define for
-  # bsd::network::interface::vlan passnig 'address' directly to
-  # the bsd::network::interface define.
+  # NOTE: the addresses are not processed here due to the calling function and
+  # define for bsd::network::interface::vlan passing 'address' directly to the
+  # bsd::network::interface define.
   def vlan_values
     data = []
     data << 'vlan ' + @config[:id].to_s

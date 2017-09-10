@@ -29,7 +29,7 @@ describe 'bsd::network::interface' do
         case facts[:osfamily]
         when 'FreeBSD'
           it do
-            is_expected.to contain_shellvar('ifconfig_igb0').with_value(/inet 10.0.0.1\/24/)
+            is_expected.to contain_shellvar('ifconfig_igb0').with_value(%r{inet 10.0.0.1/24})
             is_expected.to contain_shellvar('ifconfig_igb0').with_target('/etc/rc.conf')
             is_expected.to contain_shellvar('ifconfig_igb0').that_notifies('Bsd_interface[igb0]')
             is_expected.to contain_bsd_interface('igb0').with_ensure('up')
@@ -62,7 +62,7 @@ describe 'bsd::network::interface' do
         case facts[:osfamily]
         when 'FreeBSD'
           it do
-            is_expected.to contain_shellvar('ifconfig_vlan1').with_value(/inet 10.0.0.1\/24 vlan 1 vlandev em0/)
+            is_expected.to contain_shellvar('ifconfig_vlan1').with_value(%r{inet 10.0.0.1/24 vlan 1 vlandev em0})
             is_expected.to contain_shellvar('ifconfig_vlan1').with_ensure('present')
             is_expected.to contain_shellvar('ifconfig_vlan1').that_notifies('Bsd_interface[vlan1]')
             is_expected.to contain_bsd_interface('vlan1').that_requires('Shellvar[ifconfig_vlan1]')
@@ -95,7 +95,7 @@ describe 'bsd::network::interface' do
       let(:params) { { raw_values: ['up', '!/usr/local/bin/openvpn'] } }
 
       it do
-        is_expected.to contain_file('/etc/hostname.tun0').with_content(/up\n!\/usr\/local\/bin\/openvpn/)
+        is_expected.to contain_file('/etc/hostname.tun0').with_content(%r{up\n!/usr/local/bin/openvpn})
       end
       it do
         is_expected.to contain_file('/etc/hostname.tun0').that_notifies('Bsd_interface[tun0]')

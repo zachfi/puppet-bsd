@@ -12,7 +12,15 @@ define bsd::network::interface::trunk (
 ) {
 
   $if_name = $name
-  validate_re($if_name, ['trunk'])
+  case $::kernel {
+    'FreeBSD': {
+      validate_re($if_name, ['lagg'])
+    }
+    'OpenBSD': {
+      validate_re($if_name, ['trunk'])
+    }
+    default: {}
+  }
 
   validate_re(
     $ensure,
@@ -28,26 +36,39 @@ define bsd::network::interface::trunk (
 
   case $::kernel {
     'FreeBSD': {
-      fail('trunk interfaces not implemented on FreeBSD')
+      $trunk_options = get_rc_conf_trunk($config)
+
+      bsd::network::interface { $if_name:
+        ensure      => $ensure,
+        description => $description,
+        addresses   => $address,
+        options     => $trunk_options,
+        parents     => flatten([$interface]),
+      }
+
+      bsd::network::interface::cloned { $if_name:
+        ensure => $ensure,
+      }
     }
     'OpenBSD': {
       $trunk_ifconfig = get_hostname_if_trunk($config)
+
+      if $raw_values {
+        $trunk_values = concat([$trunk_ifconfig], $raw_values)
+      } else {
+        $trunk_values = [$trunk_ifconfig]
+      }
+
+      bsd::network::interface { $if_name:
+        ensure      => $ensure,
+        description => $description,
+        raw_values  => $trunk_values,
+        parents     => flatten([$interface]),
+      }
     }
     default: {
       fail('unhandled BSD, please help add support')
     }
   }
 
-  if $raw_values {
-    $trunk_values = concat([$trunk_ifconfig], $raw_values)
-  } else {
-    $trunk_values = [$trunk_ifconfig]
-  }
-
-  bsd::network::interface { $if_name:
-    ensure      => $ensure,
-    description => $description,
-    raw_values  => $trunk_values,
-    parents     => flatten([$interface]),
-  }
 }

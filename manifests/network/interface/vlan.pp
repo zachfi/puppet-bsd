@@ -34,9 +34,13 @@ define bsd::network::interface::vlan (
       bsd::network::interface { $if_name:
         ensure      => $ensure,
         description => $description,
-        raw_values  => $address,
+        addresses   => $address,
         options     => $vlan_options,
         parents     => flatten([$device]),
+      }
+
+      bsd::network::interface::cloned { $if_name:
+        ensure => $ensure,
       }
     }
     'OpenBSD': {
