@@ -71,7 +71,10 @@ class bsd::network (
       }
     }
     'FreeBSD': {
-      Shellvar { target => '/etc/rc.conf' }
+      Shellvar {
+        target => '/etc/rc.conf',
+        notify => Service['routing'],
+      }
 
       # Should we enable IPv4 forwarding?
       if $v4forwarding {
@@ -120,6 +123,8 @@ class bsd::network (
           value  => $v6gateway,
         }
       }
+
+      service { 'routing': }
     }
     default: {
       notify { 'Not supported': }
