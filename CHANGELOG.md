@@ -1,6 +1,12 @@
 ## Unreleased
  -
 
+## 2017-09-30 2.1.0
+### Summary
+This release contains improvements to FreeBSD support to include lagg(4)
+support through the trunk classes, and fixes addressing issues on the vlan
+interfaces for FreeBSD.
+
 ## 2016-11-10 2.0.0
 ### Summary
 This release contains contains backwards incompatible parameter name and data
