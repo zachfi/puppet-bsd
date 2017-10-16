@@ -38,10 +38,6 @@ define bsd::network::interface::vlan (
         options     => $vlan_options,
         parents     => flatten([$device]),
       }
-
-      bsd::network::interface::cloned { $if_name:
-        ensure => $ensure,
-      }
     }
     'OpenBSD': {
       $vlan_ifconfig = get_hostname_if_vlan($config)

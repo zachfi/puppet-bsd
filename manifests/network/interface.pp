@@ -120,6 +120,9 @@ define bsd::network::interface (
         mtu     => $mtu,
       }
 
+      bsd::network::interface::cloned { $if_name:
+        ensure => $ensure,
+      }
     }
     default: {
       fail('unhandled BSD, please help add support!')

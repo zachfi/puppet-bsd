@@ -45,10 +45,6 @@ define bsd::network::interface::trunk (
         options     => $trunk_options,
         parents     => flatten([$interface]),
       }
-
-      bsd::network::interface::cloned { $if_name:
-        ensure => $ensure,
-      }
     }
     'OpenBSD': {
       $trunk_ifconfig = get_hostname_if_trunk($config)
