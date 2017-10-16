@@ -1,5 +1,9 @@
 ## Unreleased
  -
+## 2017-10-15 2.1.1
+### Summary
+This release contains fixes to cloned_interfaces to ensure proper detection of
+those interfaces that need to be created at boot.
 
 ## 2017-09-30 2.1.0
 ### Summary
