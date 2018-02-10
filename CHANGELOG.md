@@ -1,5 +1,11 @@
 ## Unreleased
  -
+## 2018-02-10 2.2.0
+### Summary
+
+This release contains adjustments to dependencies and new files to support
+pushing released versions to the forge.
+
 ## 2017-10-15 2.1.1
 ### Summary
 This release contains fixes to cloned_interfaces to ensure proper detection of
