@@ -194,6 +194,25 @@ describe 'Rc_conf' do
         expect(rc.new(c).to_create_resources).to eq(hash)
       end
     end
+
+    context 'when raw_values are supplied' do
+      it 'the raw_values appear in the hash for create_resources()' do
+        hash = {
+          'ifconfig_gre2' => {
+            'value' => '192.168.1.1 netmask 255.255.255.252 tunnel 192.168.2.1 up'
+          }
+        }
+
+        c = {
+          name: 'gre2',
+          desc: 'Uplink',
+          raw_values: [
+            '192.168.1.1 netmask 255.255.255.252 tunnel 192.168.2.1 up'
+          ]
+        }
+        expect(rc.new(c).to_create_resources).to eq(hash)
+      end
+    end
   end
 
   describe '#options_string' do
@@ -211,4 +230,5 @@ describe 'Rc_conf' do
       end
     end
   end
+
 end

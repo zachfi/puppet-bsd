@@ -19,12 +19,14 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
     configure(config)
 
     # Ugly junk
-    @name      = @config[:name]
-    @desc      = @config[:desc]
-    @addresses = [@config[:addresses]].flatten
-    @options   = [@config[:options]].flatten
+    @name       = @config[:name]
+    @desc       = @config[:desc]
+    @addresses  = [@config[:addresses]].flatten
+    @raw_values = @config[:raw_values]
+    @options    = [@config[:options]].flatten
     @addresses.reject! { |i| i.nil? || (i == :undef) }
     @options.reject! { |i| i.nil? || (i == :undef) }
+    Puppet.debug("Config is: #{@config}")
 
     # The blob
     @data = load_hash
@@ -46,6 +48,7 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
   # in puppet see shellvar resource
   def to_create_resources
     resources = {}
+    Puppet.debug("Data is: #{@data}")
 
     @data.each_key do |topkey|
       # The top level key is the interface name
@@ -73,6 +76,12 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
             'value' => @data[topkey][:addrs]
           }
         end
+
+      elsif @raw_values
+        key = "ifconfig_#{ifname}"
+        resources[key] = {
+          'value' => @raw_values.join(' '),
+        }
       end
 
       next unless @data[topkey][:aliases] && @data[topkey][:aliases].is_a?(Array)
@@ -91,7 +100,7 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
 
   private
 
-  # Load the ifconfig has that will contain all addresses (v4 and v6), and
+  # Load the ifconfig hash that will contain all addresses (v4 and v6), including
   # alias addresses.
   def load_hash
     ifconfig = {}
