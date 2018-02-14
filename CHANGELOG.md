@@ -1,5 +1,11 @@
 ## Unreleased
  -
+
+## 2018-02-10 2.2.1
+### Summary
+
+Fixes to usage of raw_values for interfaces on FreeBSD.
+
 ## 2018-02-10 2.2.0
 ### Summary
 
