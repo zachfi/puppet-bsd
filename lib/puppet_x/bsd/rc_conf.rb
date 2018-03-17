@@ -36,7 +36,7 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
     result = ''
 
     result = @options.join(' ') if @options && !@options.empty?
-    result = result.to_s + "mtu #{@config[:mtu]}" if @config.keys.include? :mtu
+    result = result.to_s + " mtu #{@config[:mtu]}" if @config.keys.include? :mtu
     result
   end
 
