@@ -4,7 +4,7 @@
 # hostname_if(5) format found on OpenBSD.
 #
 # Argument passed to #new must be a String of an IP address or an Array of IP
-# addresses, or strings of dynamic addressing methods (rtsol, inet6 autoconf or dhcp).
+# addresses, or strings of dynamic addressing methods (inet6 autoconf or dhcp).
 #
 
 require 'puppet/util/package'
@@ -38,15 +38,8 @@ module PuppetX
         def process
           @addrs.each do |a|
             # Return the dynamic address assignment if found
-            if a =~ %r{^(dhcp)$}
+            if a =~ %r{^(dhcp|inet6 autoconf)$}
               yield a
-            elsif a =~ %r{^(rtsol|inet6 autoconf)$}
-              kernelversion = Facter.value('kernelversion')
-              if versioncmp(kernelversion, '5.6') <= 0
-                yield 'rtsol'
-              else
-                yield 'inet6 autoconf'
-              end
             else
               begin
                 ip = IPAddress a

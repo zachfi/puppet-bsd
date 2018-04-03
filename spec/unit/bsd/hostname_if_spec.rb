@@ -50,16 +50,16 @@ describe 'Hostname_if' do
       expect(hif.new(c).content).to match(%r{^dhcp})
     end
 
-    context 'with rtsol given for IPv6' do
-      it 'sets the the dynamic property of the interface is specified for all AF setting inet6 autoconf for rtsol' do
+    context 'with inet6 autoconf given for IPv6' do
+      it 'sets the the dynamic property of the interface is specified for all AF setting inet6 autoconf' do
         c = {
-          raw_values: %w(
-            dhcp
-            rtsol
-          )
+          raw_values: [
+            'dhcp',
+            'inet6 autoconf'
+          ]
         }
-        expect(hif.new(c).content).to match(%r{^dhcp})
-        expect(hif.new(c).content).to match(%r{^rtsol})
+        expect(hif.new(c).content).to match(%r{^dhcp$})
+        expect(hif.new(c).content).to match(%r{^inet6 autoconf$})
       end
     end
 

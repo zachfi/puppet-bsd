@@ -62,9 +62,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       # Process each one of the line items
       items.each do |i|
         # Return the dynamic address assignemnt if found
-        if i =~ %r{^(dhcp)$}
-          yield i
-        elsif i =~ %r{^(rtsol|inet6 autoconf)$}
+        if i =~ %r{^(dhcp|inet6 autoconf)$}
           yield i
         # yield up/down if found
         elsif i =~ %r{^(up|down)$}
@@ -109,7 +107,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
   # Return an array, each element containing a line of text to match the
   # hostname_if(5) configuration style.
   def lines
-    lines = []
+    line_list = []
 
     supported_wifi_devices = %w(
       ath
@@ -148,18 +146,18 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
 
     if has_addresses?
       PuppetX::BSD::Hostname_if::Inet.new(@addresses).process do |i|
-        lines << i
+        line_list << i
       end
     end
 
     # Supported interfaces return the already processed lines.
     if supported_virtual_devices.include?(@iftype)
-      lines.push(*@items)
+      line_list.push(*@items)
     elsif supported_wifi_devices.include?(@iftype)
-      lines.push(*@items)
+      line_list.push(*@items)
     else
       process_items(@addresses) do |line|
-        lines.push(*line)
+        line_list.push(*line)
       end
 
       # The process_items method is only used for items to ensure that
@@ -167,7 +165,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       # failure to process a line as a a known option or an IP address will
       # result in the complete item being sent back.
       process_items(@items) do |line|
-        lines.push(*line)
+        line_list.push(*line)
       end
     end
 
@@ -182,8 +180,8 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     # If we have received interface options, append it to the content of
     # the first line.
     if has_options?
-      tmp = lines.shift
-      lines.unshift([tmp, options_string].join(' '))
+      tmp = line_list.shift
+      line_list.unshift([tmp, options_string].join(' '))
     end
 
     # Include the description string
@@ -194,14 +192,14 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     # line.
     if @config.keys.include? :desc
       if has_options?
-        tmp = lines.shift
-        lines.unshift([tmp, description_string].join(' '))
+        tmp = line_list.shift
+        line_list.unshift([tmp, description_string].join(' '))
       else
-        lines.unshift(description_string)
+        line_list.unshift(description_string)
       end
     end
 
-    lines
+    line_list
   end
 
   # Format the lines[] array as content for a file.
