@@ -17,7 +17,12 @@ define bsd::network::interface::carp (
   include ::bsd::network::carp
 
   $if_name = $name
-  validate_re($if_name, ['carp'])
+
+  # beginning in FreeBSD 10.0, carp IPs are assigned as aliases of the
+  # physical interfaces instead of to their own devices
+  unless $::osfamily == 'FreeBSD' and $::kernelmajversion >= 10 {
+    validate_re($if_name, ['carp'])
+  }
 
   validate_re(
     $ensure,
