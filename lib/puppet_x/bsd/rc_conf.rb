@@ -35,8 +35,19 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
   def options_string
     result = ''
 
-    result = @options.join(' ') if @options && !@options.empty?
-    result = result.to_s + "mtu #{@config[:mtu]}" if @config.keys.include? :mtu
+    opts = []
+    if !@options.empty?
+      @options.each do |o|
+        opts << o.clone
+      end
+    end
+
+    if @config.keys.include? :mtu
+      opts << "mtu"
+      opts << @config[:mtu]
+    end
+
+    result = opts.join(' ')
     result
   end
 
