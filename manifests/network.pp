@@ -16,8 +16,8 @@
 # Copyright 2013 Puppet Labs
 #
 class bsd::network (
-  Optional[IP::Address::V4] $v4gateway = undef,
-  Optional[IP::Address::V6] $v6gateway = undef,
+  Optional[Stdlib::IP::Address::V4] $v4gateway = undef,
+  Optional[Stdlib::IP::Address::V6] $v6gateway = undef,
   Boolean $v4forwarding                = false,
   Boolean $v6forwarding                = false,
 ) {

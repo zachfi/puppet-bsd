@@ -8,7 +8,7 @@ fixtures:
       ref: '1.2.5'
     stdlib:
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-      ref: '4.4.0'
+      ref: '4.25.1'
     augeasproviders_sysctl:
       repo: 'https://github.com/hercules-team/augeasproviders_sysctl.git'
       ref: '2.0.2'
@@ -17,5 +17,4 @@ fixtures:
     augeasproviders_core: 'herculesteam/augeasproviders_core'
     augeasproviders_shellvar: 'herculesteam/augeasproviders_shellvar'
     augeasproviders_sysctl: 'herculesteam/augeasproviders_sysctl'
-    ip: 'thrnio/ip'
 
