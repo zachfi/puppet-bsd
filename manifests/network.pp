@@ -124,7 +124,9 @@ class bsd::network (
         }
       }
 
-      service { 'routing': }
+      service { 'routing':
+        hasstatus => false,
+      }
     }
     default: {
       notify { 'Not supported': }
