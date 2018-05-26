@@ -31,10 +31,10 @@ describe 'PuppetX::BSD::Util' do
     end
 
     it 'handles an initial hash with an array for value' do
-      h1 = { one: %w(a b) }
+      h1 = { one: %w[a b] }
       h2 = { two: { 'eh' => 'a', 'bee' => 'b' } }
 
-      wanted = { one: %w(a b), two: { 'eh' => 'a', 'bee' => 'b' } }
+      wanted = { one: %w[a b], two: { 'eh' => 'a', 'bee' => 'b' } }
 
       expect(PuppetX::BSD::Util.uber_merge(h1, h2)).to eq(wanted)
     end

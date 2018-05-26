@@ -5,14 +5,14 @@ describe 'get_rc_conf_trunk' do
     desired = [
       'laggproto lacp',
       'laggport em0',
-      'laggport em1',
+      'laggport em1'
     ]
 
     config = {
       'name'        => 'lagg0',
       'description' => 'Trees',
       'proto'       => 'lacp',
-      'interface'   => %w(em0 em1),
+      'interface'   => %w[em0 em1],
       'address'     => [
         '10.0.1.12/24'
       ]

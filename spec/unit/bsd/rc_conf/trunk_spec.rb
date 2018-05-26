@@ -6,14 +6,13 @@ describe 'Trunk' do
 
   describe '#content' do
     context 'when multiple interfaces and lacp' do
-
       it 'returns the desired output' do
         c = {
           proto: 'lacp',
-          interface: %w(
+          interface: %w[
             em0
             em1
-          )
+          ]
         }
         wanted = [
           'laggproto lacp laggport em0 laggport em1'

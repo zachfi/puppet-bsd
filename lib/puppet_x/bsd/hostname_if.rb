@@ -109,7 +109,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
   def lines
     line_list = []
 
-    supported_wifi_devices = %w(
+    supported_wifi_devices = %w[
       ath
       athn
       iwn
@@ -117,7 +117,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
       rum
       wi
       wpi
-    )
+    ]
 
     supported_virtual_devices = [
       'bridge',

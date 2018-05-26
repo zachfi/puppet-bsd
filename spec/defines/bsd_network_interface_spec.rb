@@ -79,6 +79,7 @@ describe 'bsd::network::interface' do
 
   context 'on OpenBSD' do
     let(:facts) { { kernel: 'OpenBSD' } }
+
     context 'a basic configuration' do
       let(:title) { 'tun0' }
       let(:params) { { raw_values: ['just a test', 'up'], description: 'simple' } }
