@@ -4,6 +4,7 @@ describe 'bsd::network::interface::vlan' do
   context 'on OpenBSD' do
     let(:facts) { { kernel: 'OpenBSD' } }
     let(:title) { 'vlan0' }
+
     context ' a minimal example' do
       let(:params) do
         {
@@ -12,6 +13,7 @@ describe 'bsd::network::interface::vlan' do
           address: ['10.0.0.1/24']
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface__vlan('vlan0')
         is_expected.to contain_bsd__network__interface('vlan0').with_parents(['em0'])
@@ -29,6 +31,7 @@ describe 'bsd::network::interface::vlan' do
           address: ['10.0.0.1/24', '10.0.0.2/32']
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('vlan0').with_parents(['em0'])
       end
@@ -45,6 +48,7 @@ describe 'bsd::network::interface::vlan' do
           raw_values: ['!route add -net 10.10.10.0/24 10.0.0.254']
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('vlan0').with_parents(['em0'])
       end
@@ -64,6 +68,7 @@ describe 'bsd::network::interface::vlan' do
         address: ['10.0.0.1/24']
       }
     end
+
     it do
       expect do
         is_expected.to contain_bsd__network__interface__vlan('notcorrect0')
@@ -74,6 +79,7 @@ describe 'bsd::network::interface::vlan' do
   context 'on FreeBSD' do
     let(:facts) { { kernel: 'FreeBSD' } }
     let(:title) { 'vlan0' }
+
     context ' a minimal example' do
       let(:params) do
         {
@@ -82,6 +88,7 @@ describe 'bsd::network::interface::vlan' do
           address: ['10.0.0.1/24']
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('vlan0').with_parents(['em0'])
         is_expected.to contain_bsd__network__interface('vlan0').with_options(['vlan 1', 'vlandev em0'])

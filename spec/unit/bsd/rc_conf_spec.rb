@@ -230,5 +230,4 @@ describe 'Rc_conf' do
       end
     end
   end
-
 end

@@ -31,6 +31,7 @@ describe 'bsd::network::interface::wifi' do
           'mediaopt hostap'
         ] }
     end
+
     it do
       should_content = "inet 10.23.4.56 255.255.0.0 NONE\ninet6 2001:471:4336:ff::1 64\nnwid myssid wpakey mysecretkey chan 1 media OFDM54 mode 11g mediaopt hostap description \"something good\"\nup"
       is_expected.to contain_file('/etc/hostname.athn0').with_content(%r{#{should_content}})
@@ -54,6 +55,7 @@ describe 'bsd::network::interface::wifi' do
         ],
         raw_values: '!route add -net 10.10.10.0/24 10.0.0.254' }
     end
+
     it do
       should_content = "inet 10.23.4.56 255.255.0.0 NONE\ninet6 2001:471:4336:ff::1 64\nnwid myssid wpakey mysecretkey chan 1 media OFDM54 mode 11g mediaopt hostap description \"something good\"\n!route add -net 10.10.10.0\/24 10.0.0.254\nup"
       is_expected.to contain_file('/etc/hostname.athn0').with_content(%r{#{should_content}})

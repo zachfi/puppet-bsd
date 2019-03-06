@@ -15,12 +15,12 @@ describe 'Trunk' do
     it 'supports a partial example' do
       c = {
         proto: 'lacp',
-        interface: %w(
+        interface: %w[
           em0
           em1
           em2
           em3
-        )
+        ]
       }
       expect(trunkif.new(c).content).to match(%r{trunkproto lacp trunkport em0 trunkport em1 trunkport em2 trunkport em3})
     end

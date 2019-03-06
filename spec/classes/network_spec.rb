@@ -4,6 +4,7 @@ describe 'bsd::network' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) { facts }
+
       context 'with default params' do
         it do
           is_expected.to contain_class('bsd::network')
@@ -14,6 +15,7 @@ describe 'bsd::network' do
 
       context 'with forwarding enabled' do
         let(:params) { { v4forwarding: true, v6forwarding: true } }
+
         it do
           is_expected.to contain_class('bsd::network')
           is_expected.to contain_sysctl('net.inet6.ip6.forwarding').with_value('1')
@@ -31,6 +33,7 @@ describe 'bsd::network' do
 
       context 'with gateways set' do
         let(:params) { { v4gateway: '123.123.123.123', v6gateway: '123::' } }
+
         it do
           is_expected.to contain_class('bsd::network')
         end

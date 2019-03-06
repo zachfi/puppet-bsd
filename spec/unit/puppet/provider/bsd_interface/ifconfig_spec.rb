@@ -38,22 +38,22 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
 
     it 'returns the resource dc=bar,dc=com' do
       expect(described_class.instances[1].instance_variable_get('@property_hash')).to eq(
-        ensure: :present, provider: :bsd_interface, name: 'em0', flags: %w(UP BROADCAST RUNNING SIMPLEX MULTICAST), mtu: 1500, destroyable: :false, state: :up
+        ensure: :present, provider: :bsd_interface, name: 'em0', flags: %w[UP BROADCAST RUNNING SIMPLEX MULTICAST], mtu: 1500, destroyable: :false, state: :up
       )
     end
 
     it 'returns all interfaces names' do
-      expect(described_class.instances.map(&:name).sort).to eq(%w(bridge0 bridge1 em0 em1 em2 em3 em4 em5 em6 em7 lo0 pflog0 vether0 vether1 vlan88))
+      expect(described_class.instances.map(&:name).sort).to eq(%w[bridge0 bridge1 em0 em1 em2 em3 em4 em5 em6 em7 lo0 pflog0 vether0 vether1 vlan88])
     end
   end
 
   [:up, :down, :create, :destroy].each { |m| it { is_expected.to respond_to(m) } }
 
   context '#flush' do
-    states = %w(up absent down)
-    ensure_states = %w(present up absent down)
-    if_types = %w(pseudo real)
-    platforms = %w(OpenBSD FreeBSD)
+    states = %w[up absent down]
+    ensure_states = %w[present up absent down]
+    if_types = %w[pseudo real]
+    platforms = %w[OpenBSD FreeBSD]
     platforms.each do |platform|
       context "on #{platform}" do
         states.each do |state|
@@ -106,7 +106,7 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
                     end
 
                     # We only call instances on these states, which we expect to call ifconfig twice.
-                    if %w(present up down).include? state
+                    if %w[present up down].include? state
                       before do
                         expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
                         expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }

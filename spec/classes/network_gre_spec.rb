@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'bsd::network::gre' do
   on_supported_os.each do |os, facts|
     let(:facts) { facts }
+
     context "on #{os}" do
       context 'with allowed' do
         let(:params) do
@@ -12,6 +13,7 @@ describe 'bsd::network::gre' do
             mobileip: false
           }
         end
+
         it do
           is_expected.to contain_class('bsd::network::gre')
           is_expected.to contain_sysctl('net.inet.gre.allow').with_value('1')
@@ -28,6 +30,7 @@ describe 'bsd::network::gre' do
             mobileip: false
           }
         end
+
         it do
           is_expected.to contain_class('bsd::network::gre')
           is_expected.to contain_sysctl('net.inet.gre.allow').with_value('0')
@@ -44,6 +47,7 @@ describe 'bsd::network::gre' do
             mobileip: true
           }
         end
+
         it do
           is_expected.to contain_class('bsd::network::gre')
           is_expected.to contain_sysctl('net.inet.gre.allow').with_value('0')

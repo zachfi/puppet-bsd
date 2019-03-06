@@ -9,6 +9,7 @@ describe 'PuppetX::BSD::PuppetInterface' do
       validation :name
     end
   end
+
   context 'configure' do
     it 'fails validation when an array is received' do
       c = PuppetX::BSD::PuppetInterface.new
@@ -107,7 +108,7 @@ describe 'PuppetX::BSD::PuppetInterface' do
         c.multiopts :one
 
         config = {
-          one: %w(string stringagain)
+          one: %w[string stringagain]
         }
         expect { c.configure(config) }.not_to raise_error
       end

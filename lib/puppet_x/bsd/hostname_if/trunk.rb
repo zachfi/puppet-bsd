@@ -42,7 +42,7 @@ class Hostname_if::Trunk < PuppetX::BSD::PuppetInterface
   def trunk_string
     trunkstring = []
 
-    unless %w(broadcast failover lacp loadbalance none roundrobin).include? @config[:proto]
+    unless %w[broadcast failover lacp loadbalance none roundrobin].include? @config[:proto]
       raise ArgumentError, "invalid trunk protocol: #{@config[:proto]}"
     end
     trunkstring << 'trunkproto' << @config[:proto]

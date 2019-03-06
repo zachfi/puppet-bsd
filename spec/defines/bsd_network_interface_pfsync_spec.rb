@@ -4,6 +4,7 @@ describe 'bsd::network::interface::pfsync' do
   context 'on OpenBSD' do
     let(:facts) { { kernel: 'OpenBSD' } }
     let(:title) { 'pfsync0' }
+
     context 'an example with all default values' do
       it do
         is_expected.to contain_bsd__network__interface__pfsync('pfsync0')
@@ -17,6 +18,7 @@ describe 'bsd::network::interface::pfsync' do
 
     context 'a minimal example' do
       let(:params) { { syncdev: 'em0' } }
+
       it do
         is_expected.to contain_bsd__network__interface('pfsync0').with_parents(['em0'])
       end
@@ -27,6 +29,7 @@ describe 'bsd::network::interface::pfsync' do
 
     context 'a medium example' do
       let(:params) { { syncdev: 'em0', description: 'TestNet' } }
+
       it do
         is_expected.to contain_bsd__network__interface('pfsync0').with_parents(['em0'])
       end
@@ -42,6 +45,7 @@ describe 'bsd::network::interface::pfsync' do
           syncpeer: '10.0.0.222'
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('pfsync0').with_parents(['em0'])
       end
@@ -61,6 +65,7 @@ describe 'bsd::network::interface::pfsync' do
           defer: true
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('pfsync0').with_parents(['em0'])
       end
@@ -81,6 +86,7 @@ describe 'bsd::network::interface::pfsync' do
         description: 'TestNet'
       }
     end
+
     it do
       expect do
         is_expected.to contain_bsd__network__interface__pfsync('notcorrect0')

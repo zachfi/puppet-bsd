@@ -4,6 +4,7 @@ describe 'bsd::network::interface::carp' do
   context 'on OpenBSD' do
     let(:facts) { { kernel: 'OpenBSD' } }
     let(:title) { 'carp0' }
+
     context ' a minimal example' do
       let(:params) do
         {
@@ -15,6 +16,7 @@ describe 'bsd::network::interface::carp' do
           pass: 'TopSecret'
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface__carp('carp0')
         is_expected.to contain_bsd__network__interface('carp0').with_parents(['em0'])
@@ -37,6 +39,7 @@ describe 'bsd::network::interface::carp' do
           raw_values: '!route add -net 10.10.10.0/24 10.0.0.254'
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('carp0').with_parents(['em0'])
       end
@@ -57,6 +60,7 @@ describe 'bsd::network::interface::carp' do
           raw_values: ['!route add -net 10.10.10.0/24 10.0.0.254', '!route add -net 10.20.10.0/24 10.0.0.254']
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('carp0').with_parents(['em0'])
       end
@@ -76,6 +80,7 @@ describe 'bsd::network::interface::carp' do
           pass: 'TopSecret'
         }
       end
+
       it do
         is_expected.to contain_bsd__network__interface('carp0').with_parents(['em0'])
       end
@@ -98,6 +103,7 @@ describe 'bsd::network::interface::carp' do
         pass: 'TopSecret'
       }
     end
+
     it do
       expect do
         is_expected.to contain_bsd__network__interface__carp('notcorrect0')

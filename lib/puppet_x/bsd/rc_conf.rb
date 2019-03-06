@@ -36,14 +36,14 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
     result = ''
 
     opts = []
-    if !@options.empty?
+    unless @options.empty?
       @options.each do |o|
         opts << o.clone
       end
     end
 
     if @config.keys.include? :mtu
-      opts << "mtu"
+      opts << 'mtu'
       opts << @config[:mtu]
     end
 
@@ -91,7 +91,7 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
       elsif @raw_values
         key = "ifconfig_#{ifname}"
         resources[key] = {
-          'value' => @raw_values.join(' '),
+          'value' => @raw_values.join(' ')
         }
       end
 
