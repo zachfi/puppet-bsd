@@ -1,10 +1,10 @@
-# Module: PuppetX::Rc_conf::Vlan
+# Module: PuppetX::RcConf::Vlan
 #
 # Responsible for processing the vlan(4) interfaces for rc.conf(5)
 #
 require_relative '../rc_conf'
 
-class Vlan < Rc_conf
+class Vlan < RcConf
   def initialize(config)
     validation :device,
                :id

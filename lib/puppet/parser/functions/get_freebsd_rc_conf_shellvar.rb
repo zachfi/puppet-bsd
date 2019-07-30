@@ -14,6 +14,6 @@ module Puppet::Parser::Functions
     c[:options]    = config['options'] if config['options']
     c[:mtu]        = config['mtu'] if config['mtu']
 
-    return Rc_conf.new(c).to_create_resources
+    return RcConf.new(c).to_create_resources
   end
 end

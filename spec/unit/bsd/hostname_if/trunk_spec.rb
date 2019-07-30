@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/hostname_if/trunk'
 
 describe 'Trunk' do
-  subject(:trunkif) { Hostname_if::Trunk }
+  subject(:trunkif) { HostnameIf::Trunk }
 
   describe 'content' do
     it 'supports a full example' do

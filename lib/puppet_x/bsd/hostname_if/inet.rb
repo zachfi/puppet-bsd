@@ -1,4 +1,4 @@
-# Module: PuppetX::BSD::Hostname_if::Inet
+# Module: PuppetX::BSD::HostnameIf::Inet
 #
 # Responsible for processing interface inet and inet6 addressing in the
 # hostname_if(5) format found on OpenBSD.
@@ -18,7 +18,7 @@ end
 
 module PuppetX
   module BSD
-    class Hostname_if
+    class HostnameIf
       class Inet
         include Puppet::Util::Package
 

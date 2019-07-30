@@ -1,4 +1,4 @@
-# Module: PuppetX::Hostname_if::Wifi
+# Module: PuppetX::HostnameIf::Wifi
 #
 # Responsible for processing the Wifi interfaces for hostname_if(5)
 #
@@ -6,7 +6,7 @@ require_relative '../../../puppet_x/bsd/hostname_if'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
 require_relative '../../../puppet_x/bsd/puppet_interface'
 
-class Hostname_if::Wifi < PuppetX::BSD::PuppetInterface
+class HostnameIf::Wifi < PuppetX::BSD::PuppetInterface
   attr_reader :content
 
   def initialize(config)
@@ -23,7 +23,7 @@ class Hostname_if::Wifi < PuppetX::BSD::PuppetInterface
 
     if @config[:address]
       inet = []
-      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
+      PuppetX::BSD::HostnameIf::Inet.new(@config[:address]).process do |i|
         inet << i
       end
       data << inet

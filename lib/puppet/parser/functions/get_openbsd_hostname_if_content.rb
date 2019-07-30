@@ -14,6 +14,6 @@ module Puppet::Parser::Functions
     c[:options]    = config['options'] if config['options']
     c[:mtu]        = config['mtu'] if config['mtu']
 
-    return Hostname_if.new(c).content
+    return HostnameIf.new(c).content
   end
 end

@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/hostname_if/wifi'
 
 describe 'Wifi' do
-  subject(:wifiif) { Hostname_if::Wifi }
+  subject(:wifiif) { HostnameIf::Wifi }
 
   describe 'content' do
     it 'supports a minimal example' do

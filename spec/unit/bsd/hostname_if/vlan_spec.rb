@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/hostname_if/vlan'
 
 describe 'Vlan' do
-  subject(:vlanif) { Hostname_if::Vlan }
+  subject(:vlanif) { HostnameIf::Vlan }
 
   describe 'content' do
     it 'supports a full example' do

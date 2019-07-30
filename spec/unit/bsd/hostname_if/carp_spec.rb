@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/hostname_if/carp'
 
 describe 'Carp' do
-  subject(:carpif) { Hostname_if::Carp }
+  subject(:carpif) { HostnameIf::Carp }
 
   describe 'initialize' do
     context 'when minimal configuration is passed' do

@@ -119,13 +119,11 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
                       true
                     else
                       false
-                                  end
+                    end
+                  elsif !self.class.destroyables.select { |i| @property_hash[:name] =~ %r{^#{i}} }.empty?
+                    true
                   else
-                    if !self.class.destroyables.select { |i| @property_hash[:name] =~ %r{^#{i}} }.empty?
-                      true
-                    else
-                      false
-                                  end
+                    false
                   end
 
     case @property_hash[:ensure]
