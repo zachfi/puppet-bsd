@@ -27,7 +27,7 @@ define bsd::network::interface::vlan (
     address => $address,
   }
 
-  case $::kernel {
+  case $facts['kernel'] {
     'FreeBSD': {
       $vlan_options = get_rc_conf_vlan($config)
 
