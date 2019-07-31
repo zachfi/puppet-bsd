@@ -12,7 +12,7 @@ define bsd::network::interface::trunk (
 ) {
 
   $if_name = $name
-  case $::kernel {
+  case $facts['kernel'] {
     'FreeBSD': {
       validate_re($if_name, ['lagg'])
     }
@@ -34,7 +34,7 @@ define bsd::network::interface::trunk (
     address   => $address,
   }
 
-  case $::kernel {
+  case $facts['kernel'] {
     'FreeBSD': {
       $trunk_options = get_rc_conf_trunk($config)
 

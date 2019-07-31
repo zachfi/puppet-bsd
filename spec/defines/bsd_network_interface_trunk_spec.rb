@@ -4,7 +4,7 @@ describe 'bsd::network::interface::trunk' do
   on_supported_os.each do |os, facts|
     puts os
     context "on #{os}" do
-      let(:facts) { facts }
+      let(:facts) { facts.merge(cloned_interfaces: ['lagg']) }
 
       case facts[:osfamily]
       when 'OpenBSD'
@@ -35,7 +35,14 @@ describe 'bsd::network::interface::trunk' do
             is_expected.to contain_bsd__network__interface('lagg0').with_parents(%w[em0 em1])
             is_expected.to contain_bsd__network__interface('lagg0').with_options(['laggproto lacp', 'laggport em0', 'laggport em1'])
             is_expected.to contain_bsd__network__interface('lagg0').with_addresses(['10.0.0.1/24'])
+
+            is_expected.to contain_bsd_interface('lagg0')
+
+            is_expected.to contain_bsd__network__interface__cloned('lagg0')
+
             is_expected.to contain_shellvar('ifconfig_lagg0').with_value(%r{inet 10.0.0.1/24 laggproto lacp laggport em0 laggport em1})
+            is_expected.to contain_shellvar('cloned_interfaces_lagg0').with_value('lagg0')
+            is_expected.to contain_shellvar('cloned_interfaces_lagg0').with_array_append(true)
           end
 
         end

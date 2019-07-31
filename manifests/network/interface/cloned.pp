@@ -1,3 +1,4 @@
+# Handle the FreeBSD cloned behavior for virtual interfaces.
 define bsd::network::interface::cloned (
   $ensure,
 ) {

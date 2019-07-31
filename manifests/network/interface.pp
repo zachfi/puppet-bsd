@@ -30,7 +30,6 @@ define bsd::network::interface (
 ) {
 
   $if_name        = $name
-  $interface_file = "/etc/hostname.${if_name}"
   $if_type        = split($if_name, '\d+')
 
   $config = {
