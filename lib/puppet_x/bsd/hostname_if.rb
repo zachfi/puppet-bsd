@@ -8,7 +8,7 @@ end
 require_relative '../../puppet_x/bsd/hostname_if/inet'
 require_relative '../../puppet_x/bsd/puppet_interface'
 
-class Hostname_if < PuppetX::BSD::PuppetInterface
+class HostnameIf < PuppetX::BSD::PuppetInterface
   attr_reader :content
 
   def initialize(config)
@@ -145,7 +145,7 @@ class Hostname_if < PuppetX::BSD::PuppetInterface
     # ]
 
     if has_addresses?
-      PuppetX::BSD::Hostname_if::Inet.new(@addresses).process do |i|
+      PuppetX::BSD::HostnameIf::Inet.new(@addresses).process do |i|
         line_list << i
       end
     end

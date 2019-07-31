@@ -1,4 +1,4 @@
-# Module: PuppetX::Hostname_if::Trunk
+# Module: PuppetX::HostnameIf::Trunk
 #
 # Responsible for processing the trunk(4) interfaces for hostname_if(5)
 #
@@ -6,7 +6,7 @@ require_relative '../../../puppet_x/bsd/hostname_if'
 require_relative '../../../puppet_x/bsd/puppet_interface'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
 
-class Hostname_if::Trunk < PuppetX::BSD::PuppetInterface
+class HostnameIf::Trunk < PuppetX::BSD::PuppetInterface
   attr_reader :content
 
   def initialize(config)
@@ -24,7 +24,7 @@ class Hostname_if::Trunk < PuppetX::BSD::PuppetInterface
   def values
     inet = []
     if @config[:address]
-      PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
+      PuppetX::BSD::HostnameIf::Inet.new(@config[:address]).process do |i|
         inet << i
       end
     end

@@ -1,17 +1,15 @@
 require 'puppet_x/bsd/hostname_if/inet'
 
-describe 'PuppetX::BSD::Hostname_if::Inet' do
+describe 'PuppetX::BSD::HostnameIf::Inet' do
   describe 'initialize' do
     it 'raises an error if argument is not of correct type' do
       a = { one: '1' }
-      expect { PuppetX::BSD::Hostname_if::Inet.new(a) }.to raise_error
+      expect { PuppetX::BSD::HostnameIf::Inet.new(a) }.to raise_error
     end
 
     it 'does not raise an error if argument is of correct type' do
       a = ['10.0.0.0/24']
-      expect { PuppetX::BSD::Hostname_if::Inet.new(a) }.not_to raise_error
-      b = '10.0.0.0/24'
-      expect { PuppetX::BSD::Hostname_if::Inet.new(b) }.not_to raise_error
+      expect { PuppetX::BSD::HostnameIf::Inet.new(a) }.not_to raise_error
     end
   end
 
@@ -22,7 +20,7 @@ describe 'PuppetX::BSD::Hostname_if::Inet' do
         'inet6 autoconf'
       ]
       expect do |b|
-        PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
+        PuppetX::BSD::HostnameIf::Inet.new(a).process(&b)
       end.to yield_successive_args('dhcp', 'inet6 autoconf')
     end
 
@@ -35,7 +33,7 @@ describe 'PuppetX::BSD::Hostname_if::Inet' do
       ]
 
       expect do |b|
-        PuppetX::BSD::Hostname_if::Inet.new(a).process(&b)
+        PuppetX::BSD::HostnameIf::Inet.new(a).process(&b)
       end.to yield_successive_args(
         'inet 123.123.123.123 255.255.255.248 NONE',
         'inet alias 172.16.0.1 255.255.255.224 NONE',

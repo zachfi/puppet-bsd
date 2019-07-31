@@ -90,14 +90,14 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
 
                 ensure_states.each do |ensure_state|
                   context "when ensure is #{ensure_state}" do
-                    let!(:provider) do
+                    let(:provider) do
                       described_class.new(
                         name: ifname,
                         ensure: ensure_state
                       )
                     end
 
-                    let!(:interface) do
+                    let(:interface) do
                       Puppet::Type.type(:bsd_interface).new(
                         name: ifname,
                         provider: provider,
@@ -176,9 +176,9 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
                           expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], failonfail: false, combine: true)
                           i.flush
                         end
-                      when 'present'
-                      when 'down'
-                      when 'absent'
+                        # when 'present'
+                        # when 'down'
+                        # when 'absent'
                       end
                     when 'absent'
                       it 'is absent' do

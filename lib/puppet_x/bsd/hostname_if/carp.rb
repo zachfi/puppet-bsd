@@ -1,4 +1,4 @@
-# Module: PuppetX::Hostname_if::Carp
+# Module: PuppetX::HostnameIf::Carp
 #
 # Responsible for processing the carp(4) interfaces for hostname_if(5)
 #
@@ -6,7 +6,7 @@ require_relative '../../../puppet_x/bsd/hostname_if'
 require_relative '../../../puppet_x/bsd/puppet_interface'
 require_relative '../../../puppet_x/bsd/hostname_if/inet'
 
-class Hostname_if::Carp < PuppetX::BSD::PuppetInterface
+class HostnameIf::Carp < PuppetX::BSD::PuppetInterface
   attr_reader :content
 
   def initialize(config)
@@ -26,7 +26,7 @@ class Hostname_if::Carp < PuppetX::BSD::PuppetInterface
 
   def content
     inet = []
-    PuppetX::BSD::Hostname_if::Inet.new(@config[:address]).process do |i|
+    PuppetX::BSD::HostnameIf::Inet.new(@config[:address]).process do |i|
       inet << i
     end
 

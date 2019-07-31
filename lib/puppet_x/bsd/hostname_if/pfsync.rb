@@ -1,11 +1,11 @@
-# Module: PuppetX::Hostname_if::Pfsync
+# Module: PuppetX::HostnameIf::Pfsync
 #
 # Responsible for processing the pfsync(4) interfaces for hostname_if(5)
 #
 require_relative '../../../puppet_x/bsd/hostname_if'
 require_relative '../../../puppet_x/bsd/puppet_interface'
 
-class Hostname_if::Pfsync < PuppetX::BSD::PuppetInterface
+class HostnameIf::Pfsync < PuppetX::BSD::PuppetInterface
   attr_reader :content
 
   def initialize(config)

@@ -1,10 +1,10 @@
-# Module: PuppetX::Rc_conf::Trunk
+# Module: PuppetX::RcConf::Trunk
 #
 # Responsible for processing the lagg(4) interfaces for rc.conf(5)
 #
 require_relative '../rc_conf'
 
-class Trunk < Rc_conf
+class Trunk < RcConf
   def initialize(config)
     validation :interface,
                :proto

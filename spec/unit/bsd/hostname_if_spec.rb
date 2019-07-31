@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/hostname_if'
 
-describe 'Hostname_if' do
-  subject(:hif) { Hostname_if }
+describe 'HostnameIf' do
+  subject(:hif) { HostnameIf }
 
   describe 'initialize' do
     context 'when minimal configuration is passed' do

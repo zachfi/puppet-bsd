@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/rc_conf'
 
-describe 'Rc_conf' do
-  subject(:rc) { Rc_conf }
+describe 'RcConf' do
+  subject(:rc) { RcConf }
 
   describe 'initialize' do
     context 'when minimal configuration is passed' do

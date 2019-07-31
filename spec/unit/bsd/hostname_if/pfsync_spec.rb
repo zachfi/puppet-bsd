@@ -1,7 +1,7 @@
 require 'puppet_x/bsd/hostname_if/pfsync'
 
 describe 'Pfsync' do
-  subject(:pfif) { Hostname_if::Pfsync }
+  subject(:pfif) { HostnameIf::Pfsync }
 
   describe 'content' do
     it 'supports a minimal example' do

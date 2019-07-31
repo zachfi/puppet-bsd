@@ -8,7 +8,7 @@ end
 require_relative '../../puppet_x/bsd'
 require_relative '../../puppet_x/bsd/puppet_interface'
 
-class Rc_conf < PuppetX::BSD::PuppetInterface
+class RcConf < PuppetX::BSD::PuppetInterface
   def initialize(config)
     validation :name
     options :desc, :addresses, :options, :raw_values, :mtu
@@ -154,8 +154,8 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
       if opts && !opts.empty?
         ifconfig[:addrs][0] = [ifconfig[:addrs][0], opts].join(' ')
       end
-    else
-      ifconfig[:addrs] = options_string if opts && !opts.empty?
+    elsif opts && !opts.empty?
+      ifconfig[:addrs] = options_string
     end
 
     ifconfig[:aliases] = aliases unless aliases.empty?
@@ -182,7 +182,7 @@ class Rc_conf < PuppetX::BSD::PuppetInterface
           else
             raise 'Value not found'
           end
-        rescue Exception => e
+        rescue StandardError => e
           raise "addr is #{a} of class #{a.class}: #{e.message}"
         end
       end
