@@ -295,6 +295,82 @@ bsd::network::interface::bridge { "bridge0":
 }
 ```
 
+### Storing interface data in Hiera example
+
+Now that the primitives of this module have been outlined, you may want to
+consider storing the data for your interfaces in Hiera.  Below is an outline of
+how this might easily be accomplished.
+
+First we leverage all the standard `interface` definitions from our
+`hiera_hash()` lookup to pass to `create_resources()`.
+
+
+```Puppet
+class profile::network::interfaces {
+
+  case $::osfamily {
+    /(Open|Free)BSD/: {
+      include bsd::network
+
+      # Manage physical interfaces
+      $interfaces = hiera_hash('bsd::network::interface', {})
+      create_resources('bsd::network::interface', $interfaces)
+    }
+  }
+}
+```
+
+Next we repeat the pattern for the various virtual interfaces, including the
+above class.
+
+```Puppet
+class profile::network::interfaces::trunk {
+  include profile::network::interfaces
+
+  case $::osfamily {
+    /(Open|Free)BSD/: {
+      # Setup the trunk interfaces
+      $trunk_interfaces = hiera_hash('bsd::network::interface::trunk', {})
+      create_resources('bsd::network::interface::trunk', $trunk_interfaces)
+    }
+  }
+}
+```
+
+A complete example for one users "Jail Host" role looks like the following,
+assuming the above two classes are included.
+
+```yaml
+bsd::network::v4gateway: '172.16.0.1'
+bsd::network::v6gateway: '2001:111:111:111::111'
+bsd::network::v4forwarding: true
+bsd::network::v6forwarding: true
+
+bsd::network::interface:
+  igb0:
+    description: "Router trunk member interface"
+    ensure: 'up'
+  igb1:
+    description: "Router trunk member interface"
+    ensure: 'up'
+  lo1:
+    description: "Jail service loopback"
+    ensure: 'up'
+    addresses:
+      - '2001:111:111:200::100/120'
+      - '172.16.1.0/27'
+
+bsd::network::interface::trunk:
+  lagg0:
+    interface:
+      - 'igb0'
+      - 'igb1'
+    address:
+      - '2001:111:111:111::120/120'
+      - '172.16.0.2/24'
+```
+
+
 ## Contributing
 
 Please help make this module better by sending pull requests and filing issues
