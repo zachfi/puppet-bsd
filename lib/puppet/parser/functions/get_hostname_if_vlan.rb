@@ -11,6 +11,6 @@ module Puppet::Parser::Functions
     c[:address] = config['address'] if config['address']
     c[:device]  = config['device'] if config['device']
 
-    return HostnameIf::Vlan.new(c).content
+    return Hostname_if::Vlan.new(c).content
   end
 end

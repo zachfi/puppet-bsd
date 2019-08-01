@@ -11,6 +11,6 @@ module Puppet::Parser::Functions
     c[:wpa_key]      = config['wpa_key'] if config['wpa_key']
     c[:address]      = config['address'] if config['address']
 
-    return HostnameIf::Wifi.new(c).content
+    return Hostname_if::Wifi.new(c).content
   end
 end

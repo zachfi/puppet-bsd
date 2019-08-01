@@ -9,6 +9,6 @@ module Puppet::Parser::Functions
     c = {}
     c[:interface] = config['interface']
 
-    return HostnameIf::Bridge.new(c).content
+    return Hostname_if::Bridge.new(c).content
   end
 end

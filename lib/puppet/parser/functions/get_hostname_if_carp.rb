@@ -14,6 +14,6 @@ module Puppet::Parser::Functions
     c[:advbase] = config['advbase'] if config['advbase']
     c[:advskew] = config['advskew'] if config['advskew']
 
-    return HostnameIf::Carp.new(c).content
+    return Hostname_if::Carp.new(c).content
   end
 end

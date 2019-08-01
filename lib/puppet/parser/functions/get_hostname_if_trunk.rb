@@ -11,6 +11,6 @@ module Puppet::Parser::Functions
     c[:proto]     = config['proto']
     c[:address]   = config['address'] if config['address']
 
-    return HostnameIf::Trunk.new(c).content
+    return Hostname_if::Trunk.new(c).content
   end
 end
