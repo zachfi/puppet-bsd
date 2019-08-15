@@ -17,7 +17,7 @@ define bsd::network::interface::cloned (
         }
       }
 
-      $if_type = $name.match(/^(.*)(\d+)/)[1]
+      $if_type = $name.match(/^([a-zA-Z]+)(\d+)/)[1]
       if $if_type in $facts['cloned_interfaces'] {
         shellvar { "cloned_interfaces_${name}":
           ensure       => $cloned_ensure,
