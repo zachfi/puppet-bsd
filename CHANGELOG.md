@@ -1,5 +1,8 @@
 ## Unreleased
- -
+
+## 2019-08-15 2.4.0
+ - tidy up ruby style
+ - fix issue with cloned interface detection for multi-digit interface names
 
 ## 2018-02-10 2.2.1
 ### Summary
