@@ -50,7 +50,7 @@ describe 'bsd::network::interface::bridge' do
         is_expected.to contain_bsd__network__interface('bridge0').with_parents(%w[em0 em1])
       end
       it do
-        is_expected.to contain_file('/etc/hostname.bridge0').with_content(/add em0\nadd em1\n!route add -net 10.10.10.0\/24 10.0.0.254\nup\n/)
+        is_expected.to contain_file('/etc/hostname.bridge0').with_content(%r{add em0\nadd em1\n!route add -net 10.10.10.0\/24 10.0.0.254\nup\n})
       end
     end
   end

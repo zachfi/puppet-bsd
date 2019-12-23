@@ -52,7 +52,7 @@ describe 'PuppetX::BSD::PuppetInterface' do
           three: 'itemthree'
         }
 
-        expect { c.configure(wanted) }.not_to raise_error
+        c.configure(wanted)
         expect(c.config).to eq(wanted)
       end
     end
@@ -69,7 +69,7 @@ describe 'PuppetX::BSD::PuppetInterface' do
           three: 'itemthree'
         }
 
-        expect { c.configure(config) }.not_to raise_error
+        c.configure(config)
         expect(c.config).to eq(config)
       end
 
@@ -85,7 +85,7 @@ describe 'PuppetX::BSD::PuppetInterface' do
           five: 'itemfive'
         }
 
-        expect { c.configure(config) }.not_to raise_error
+        c.configure(config)
         expect(c.config).to eq(config)
       end
     end

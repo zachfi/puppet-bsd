@@ -44,7 +44,7 @@ describe 'bsd::network::interface::carp' do
         is_expected.to contain_bsd__network__interface('carp0').with_parents(['em0'])
       end
       it do
-        is_expected.to contain_file('/etc/hostname.carp0').with_content(/vhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\ninet 10.0.0.1 255.255.255.0 NONE\n!route add -net 10.10.10.0\/24 10.0.0.254\nup\n/)
+        is_expected.to contain_file('/etc/hostname.carp0').with_content(%r{vhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\ninet 10.0.0.1 255.255.255.0 NONE\n!route add -net 10.10.10.0\/24 10.0.0.254\nup\n})
       end
     end
 
@@ -65,7 +65,7 @@ describe 'bsd::network::interface::carp' do
         is_expected.to contain_bsd__network__interface('carp0').with_parents(['em0'])
       end
       it do
-        is_expected.to contain_file('/etc/hostname.carp0').with_content(/vhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\ninet 10.0.0.1 255.255.255.0 NONE\n!route add -net 10.10.10.0\/24 10.0.0.254\n!route add -net 10.20.10.0\/24 10.0.0.254\nup\n/)
+        is_expected.to contain_file('/etc/hostname.carp0').with_content(%r{vhid 1 pass TopSecret carpdev em0 advbase 1 advskew 0\ninet 10.0.0.1 255.255.255.0 NONE\n!route add -net 10.10.10.0\/24 10.0.0.254\n!route add -net 10.20.10.0\/24 10.0.0.254\nup\n})
       end
     end
 

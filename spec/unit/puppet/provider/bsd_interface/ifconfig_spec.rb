@@ -24,8 +24,8 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
     let(:output) { File.read('spec/fixtures/ifconfig_openbsd.full') }
 
     before do
-      expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
-      expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { output }
+      allow(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
+      allow(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { output }
     end
 
     it 'returns some instances' do
@@ -76,14 +76,14 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
                 case state
                 when 'present', 'down', 'up'
                   it 'returns a single instance' do
-                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
-                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }
+                    allow(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
+                    allow(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }
                     expect(described_class.instances.size).to eq(1)
                   end
                 when 'absent'
                   it 'returns zero instances' do
-                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
-                    expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }
+                    allow(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
+                    allow(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }
                     expect(described_class.instances.size).to eq(0)
                   end
                 end
@@ -105,12 +105,9 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
                       )
                     end
 
-                    # We only call instances on these states, which we expect to call ifconfig twice.
-                    if %w[present up down].include? state
-                      before do
-                        expect(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
-                        expect(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }
-                      end
+                    before do
+                      allow(described_class).to receive(:execute).with(['/sbin/ifconfig', '-C'], failonfail: false, combine: true) { 'vlan pflog' }
+                      allow(described_class).to receive(:execute).with(['/sbin/ifconfig'], failonfail: false, combine: true) { info }
                     end
 
                     case state
@@ -123,44 +120,56 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
                       when 'up'
                         it 'leave the interface untouched' do
                           i = described_class.instances[0]
-                          if if_type == 'pseudo'
-                            expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], failonfail: false, combine: true)
-                          end
-                          expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], failonfail: false, combine: true)
+                          allow(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], failonfail: false, combine: true)
+
                           i.up
                           i.flush
+
+                          expect(i).not_to have_received(:execute)
                         end
                       when 'present'
                         it 'leave the interface untouched' do
                           i = described_class.instances[0]
-                          if if_type == 'pseudo'
-                            expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], failonfail: false, combine: true)
-                          end
-                          expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], failonfail: false, combine: true)
+                          allow(i).to receive(:execute)
+
                           i.flush
+
+                          expect(i).not_to have_received(:execute)
                         end
                       when 'down'
                         it 'brings the interface down' do
                           i = described_class.instances[0]
-                          if if_type == 'pseudo'
-                            expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], failonfail: false, combine: true)
-                            expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'destroy'], failonfail: false, combine: true)
-                          end
-                          expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], failonfail: false, combine: true)
+                          allow(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], failonfail: false, combine: true)
+
                           i.down
                           i.flush
+                          expect(i).to have_received(:execute)
                         end
                       when 'absent'
-                        it 'brings down and destroy the interface when necessary' do
-                          i = described_class.instances[0]
-                          expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], failonfail: false, combine: true)
-                          if if_type == 'pseudo'
-                            expect(i).not_to receive(:execute).with(['/sbin/ifconfig', ifname, 'create'], failonfail: false, combine: true)
-                            expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'destroy'], failonfail: false, combine: true)
+
+                        case if_type
+                        when 'pseudo'
+                          it 'brings down the interface and destroys it' do
+                            i = described_class.instances[0]
+                            allow(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], failonfail: false, combine: true)
+                            allow(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'destroy'], failonfail: false, combine: true)
+
+                            i.destroy
+                            i.flush
+
+                            expect(i).to have_received(:execute).twice
                           end
-                          i.destroy
-                          i.flush
+                        else
+                          it 'brings down the interface' do
+                            i = described_class.instances[0]
+                            allow(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'down'], failonfail: false, combine: true)
+
+                            i.destroy
+                            i.flush
+                            expect(i).to have_received(:execute)
+                          end
                         end
+
                       end
 
                     when 'down'
@@ -172,9 +181,11 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
                       when 'up'
                         it 'brings up the interface' do
                           i = described_class.instances[0]
+                          allow(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], failonfail: false, combine: true)
+
                           i.up
-                          expect(i).to receive(:execute).with(['/sbin/ifconfig', ifname, 'up'], failonfail: false, combine: true)
                           i.flush
+                          expect(i).to have_received(:execute)
                         end
                         # when 'present'
                         # when 'down'

@@ -36,9 +36,9 @@ module PuppetX
 
         h1.keys.each do |key|
           # Move more complicated keys from h2 to h1
-          if !h2.keys.include? key
-            next
-          elsif h1[key].is_a?(Hash) && h2[key].is_a?(Hash)
+          next unless h2.keys.include? key
+
+          if h1[key].is_a?(Hash) && h2[key].is_a?(Hash)
             h1[key] = uber_merge(h1[key], h2[key])
             next
           elsif h1[key].is_a? Array

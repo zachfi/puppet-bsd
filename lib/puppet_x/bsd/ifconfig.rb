@@ -19,7 +19,7 @@ module PuppetX
       end
 
       def parse_interface_lines(output)
-        curint = nil
+        curint = false
         output.lines do |line|
           line.chomp!
 
@@ -57,7 +57,7 @@ module PuppetX
             parse_interface_tokens(remain) do |t|
               yield t
             end
-            remain = nil
+            # remain = false
           end
         when %r{^metric\s+\d+}
           metric, remain = %r{metric\s+(\d+)\s*(.*)}.match(tokenstring)[1, 2]
@@ -67,7 +67,7 @@ module PuppetX
             parse_interface_tokens(remain) do |t|
               yield t
             end
-            remain = nil
+            # remain = false
           end
         when %r{^mtu\s+\d+}
           mtu, remain = %r{mtu\s+(\d+)\s*(.*)}.match(tokenstring)[1, 2]
@@ -77,7 +77,7 @@ module PuppetX
             parse_interface_tokens(remain) do |t|
               yield t
             end
-            remain = nil
+            # remain = false
           end
         when %r{^inet6\s+}
           address = %r{inet6\s+([0-9a-fA-F:]+)%?}.match(tokenstring)[1]

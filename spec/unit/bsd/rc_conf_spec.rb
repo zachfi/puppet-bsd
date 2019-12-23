@@ -11,7 +11,7 @@ describe 'RcConf' do
     end
   end
 
-  describe '#get_hash' do
+  describe '#to_hash' do
     context 'with a dynamic v4-only config' do
       it 'returns a valid config' do
         hash = {
@@ -28,7 +28,7 @@ describe 'RcConf' do
             'dhcp'
           ]
         }
-        expect(rc.new(c).get_hash).to eq(hash)
+        expect(rc.new(c).to_hash).to eq(hash)
       end
 
       context 'when an empty address set is passed' do
@@ -41,7 +41,7 @@ describe 'RcConf' do
             addresses: []
           }
 
-          expect(rc.new(c).get_hash).to eq(hash)
+          expect(rc.new(c).to_hash).to eq(hash)
         end
       end
 
@@ -57,7 +57,7 @@ describe 'RcConf' do
             ]
           }
 
-          expect(rc.new(c).get_hash).to eq(hash)
+          expect(rc.new(c).to_hash).to eq(hash)
         end
       end
       context 'when multiple addresses are passed' do
@@ -80,7 +80,7 @@ describe 'RcConf' do
             ]
           }
 
-          expect(rc.new(c).get_hash).to eq(hash)
+          expect(rc.new(c).to_hash).to eq(hash)
         end
       end
     end
@@ -115,7 +115,7 @@ describe 'RcConf' do
           ],
           mtu: 9000
         }
-        expect(rc.new(c).get_hash).to eq(hash)
+        expect(rc.new(c).to_hash).to eq(hash)
       end
     end
   end

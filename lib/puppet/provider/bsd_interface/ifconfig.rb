@@ -14,9 +14,8 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
 
   def self.prefetch(resources)
     instances.each do |prov|
-      if resource = resources[prov.name]
-        resource.provider = prov
-      end
+      resource = resources[prov.name]
+      resource && resource.provider = prov
     end
   end
 
@@ -71,9 +70,8 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
   def create
     @property_hash[:ensure] = :present
     self.class.resource_type.validproperties.each do |property|
-      if val = @resource.should(property)
-        @property_hash[property] = val
-      end
+      val = @resource.should(property)
+      val && @property_hash[property] = val
     end
   end
 
@@ -142,8 +140,9 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
       ifdown if @property_hash[:state] == :up
     end
 
-    if [:up, :present].include? @property_hash[:ensure]
-      ifconfig("mtu #{@property_flush[:mtu]}") if @property_flush[:mtu]
-    end
+    return unless [:up, :present].include? @property_hash[:ensure]
+    return unless @property_flush[:mtu]
+
+    ifconfig("mtu #{@property_flush[:mtu]}")
   end
 end

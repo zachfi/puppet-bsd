@@ -18,7 +18,6 @@ class RcConf < PuppetX::BSD::PuppetInterface
 
     configure(config)
 
-    # Ugly junk
     @name       = @config[:name]
     @desc       = @config[:desc]
     @addresses  = [@config[:addresses]].flatten
@@ -26,15 +25,12 @@ class RcConf < PuppetX::BSD::PuppetInterface
     @options    = [@config[:options]].flatten
     @addresses.reject! { |i| i.nil? || (i == :undef) }
     @options.reject! { |i| i.nil? || (i == :undef) }
-    Puppet.debug("Config is: #{@config}")
 
     # The blob
     @data = load_hash
   end
 
   def options_string
-    result = ''
-
     opts = []
     unless @options.empty?
       @options.each do |o|
@@ -51,7 +47,7 @@ class RcConf < PuppetX::BSD::PuppetInterface
     result
   end
 
-  def get_hash
+  def to_hash
     @data
   end
 
@@ -59,7 +55,6 @@ class RcConf < PuppetX::BSD::PuppetInterface
   # in puppet see shellvar resource
   def to_create_resources
     resources = {}
-    Puppet.debug("Data is: #{@data}")
 
     @data.each_key do |topkey|
       # The top level key is the interface name
@@ -103,8 +98,6 @@ class RcConf < PuppetX::BSD::PuppetInterface
         }
       end
     end
-
-    Puppet.debug("Returning resources: #{resources}")
 
     resources
   end
@@ -177,11 +170,9 @@ class RcConf < PuppetX::BSD::PuppetInterface
             value = ['inet']
             value << ip.to_string
           end
-          if value
-            yield value.join(' ')
-          else
-            raise 'Value not found'
-          end
+
+          yield value.join(' ') if value
+          raise 'Value not found' unless value
         rescue StandardError => e
           raise "addr is #{a} of class #{a.class}: #{e.message}"
         end
