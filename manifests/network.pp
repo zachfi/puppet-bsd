@@ -47,7 +47,7 @@ class bsd::network (
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'OpenBSD': {
       # TODO Manage the live state of the route table
 

@@ -1,5 +1,6 @@
 require: rubocop-rspec
 AllCops:
+# Puppet Server 5 defaults to jruby 1.7 so TargetRubyVersion must stay at 1.9 until we drop support for puppet 5
   TargetRubyVersion: 1.9
   Include:
     - ./**/*.rb
@@ -13,10 +14,6 @@ AllCops:
     - Rakefile
     - Guardfile
     - Vagrantfile
-
-Style/MessageSpies:
-  EnforcedStyle: receive
-
 Lint/ConditionPosition:
   Enabled: True
 
@@ -57,7 +54,7 @@ Lint/AmbiguousOperator:
   Enabled: True
 
 Lint/AssignmentInCondition:
-  Enabled: False
+  Enabled: True
 
 Layout/SpaceBeforeComment:
   Enabled: True
@@ -122,7 +119,7 @@ Lint/UselessAccessModifier:
   Enabled: True
 
 Lint/UselessAssignment:
-  Enabled: False
+  Enabled: True
 
 Lint/Void:
   Enabled: True
@@ -131,7 +128,7 @@ Layout/AccessModifierIndentation:
   Enabled: True
 
 Style/AccessorMethodName:
-  Enabled: False
+  Enabled: True
 
 Style/Alias:
   Enabled: True
@@ -146,7 +143,7 @@ Layout/AlignParameters:
   Enabled: True
 
 Metrics/BlockNesting:
-  Enabled: False
+  Enabled: True
 
 Style/AsciiComments:
   Enabled: True
@@ -338,7 +335,7 @@ Style/GlobalVars:
   Enabled: True
 
 Style/GuardClause:
-  Enabled: False
+  Enabled: True
 
 Style/IfUnlessModifier:
   Enabled: True
@@ -440,7 +437,7 @@ Style/PerlBackrefs:
   Enabled: True
 
 Style/PredicateName:
-  Enabled: False
+  Enabled: True
 
 Style/RedundantException:
   Enabled: True
@@ -463,7 +460,7 @@ Style/RescueModifier:
 # based on https://github.com/voxpupuli/modulesync_config/issues/168
 Style/RegexpLiteral:
   EnforcedStyle: percent_r
-  Enabled: False
+  Enabled: True
 
 Lint/UnderscorePrefixedVariableName:
   Enabled: True
@@ -500,6 +497,9 @@ Metrics/AbcSize:
 Metrics/PerceivedComplexity:
   Enabled: False
 
+Lint/UselessAssignment:
+  Enabled: True
+
 Layout/ClosingParenthesisIndentation:
   Enabled: True
 
@@ -525,14 +525,7 @@ RSpec/NamedSubject:
 RSpec/RepeatedDescription:
   Enabled: False
 
-# disabled for simpler testing on multiple platforms in case statement
-RSpec/RepeatedExample:
-  Enabled: False
-
 RSpec/NestedGroups:
-  Enabled: False
-
-RSpec/MultipleExpectations:
   Enabled: False
 
 # this is broken on ruby1.9
@@ -551,3 +544,24 @@ Style/FormatStringToken:
 # are located.
 RSpec/FilePath:
   Enabled: false
+
+RSpec/RepeatedExample:
+  Enabled: false
+Style/MessageSpies:
+  EnforcedStyle: receive
+Metrics/BlockNesting:
+  Enabled: false
+Style/AccessorMethodName:
+  Enabled: false
+Lint/UselessAssignment:
+  Enabled: false
+Lint/AssignmentInCondition:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r
+  Enabled: false
+
