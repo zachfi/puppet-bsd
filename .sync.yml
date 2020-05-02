@@ -15,4 +15,11 @@ spec/spec_helper.rb:
       Enabled: False
     Style/MessageSpies:
       EnforcedStyle: receive
-
+    Metrics/BlockNesting:
+      Enabled: False
+    Style/AccessorMethodName:
+      Enabled: False
+    Lint/UselessAssignment:
+      Enabled: False
+    Lint/AssignmentInCondition:
+      Enabled: False
