@@ -25,3 +25,8 @@ spec/spec_helper.rb:
       Enabled: False
     Style/GuardClause:
       Enabled: False
+    RSpec/MultipleExpectations:
+      Enabled: False
+    Style/RegexpLiteral:
+      EnforcedStyle: percent_r
+      Enabled: False
