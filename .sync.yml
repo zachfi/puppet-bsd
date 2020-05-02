@@ -13,3 +13,6 @@ spec/spec_helper.rb:
   extra_configs:
     RSpec/RepeatedExample:
       Enabled: False
+    Style/MessageSpies:
+      EnforcedStyle: receive
+
