@@ -23,3 +23,5 @@ spec/spec_helper.rb:
       Enabled: False
     Lint/AssignmentInCondition:
       Enabled: False
+    Style/GuardClause:
+      Enabled: False
