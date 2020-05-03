@@ -33,16 +33,11 @@ class HostnameIf < PuppetX::BSD::PuppetInterface
     @options.reject! { |i| i.nil? || (i == :undef) }
   end
 
-  # Check to see if we have a description
-  def has_description?
-    @desc && @desc.is_a?(String) && !@desc.empty?
-  end
-
-  def has_addresses?
+  def addresses?
     @addresses && @addresses.is_a?(Array) && !@addresses.empty?
   end
 
-  def has_options?
+  def options?
     @options && @options.is_a?(Array) && !@options.empty?
   end
 
@@ -144,7 +139,7 @@ class HostnameIf < PuppetX::BSD::PuppetInterface
     #   'vxlan',
     # ]
 
-    if has_addresses?
+    if addresses?
       PuppetX::BSD::HostnameIf::Inet.new(@addresses).process do |i|
         line_list << i
       end
@@ -169,7 +164,7 @@ class HostnameIf < PuppetX::BSD::PuppetInterface
       end
     end
 
-    options_string = @options.join(' ') if has_options?
+    options_string = @options.join(' ') if options?
 
     if @config.keys.include? :desc
       description_string = "description \"#{@config[:desc]}\""
@@ -179,7 +174,7 @@ class HostnameIf < PuppetX::BSD::PuppetInterface
     #
     # If we have received interface options, append it to the content of
     # the first line.
-    if has_options?
+    if options?
       tmp = line_list.shift
       line_list.unshift([tmp, options_string].join(' '))
     end
@@ -191,7 +186,7 @@ class HostnameIf < PuppetX::BSD::PuppetInterface
     # interface options, we append the description to the end of the first
     # line.
     if @config.keys.include? :desc
-      if has_options?
+      if options?
         tmp = line_list.shift
         line_list.unshift([tmp, description_string].join(' '))
       else

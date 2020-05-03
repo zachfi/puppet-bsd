@@ -1,11 +1,10 @@
 ---
-dist: xenial
+dist: bionic
 language: ruby
 cache: bundler
 before_install:
-  - 'rm -f Gemfile.lock'
-  - 'gem update --system'
-  - 'gem install bundler'
+  - yes | gem update --system
+  - bundle --version
 script:
   - 'bundle exec rake $CHECK'
 matrix:
@@ -29,9 +28,10 @@ branches:
   - /^v\d/
 notifications:
   email: false
+  webhooks: https://voxpupu.li/incoming/travis
   irc:
-    on_success: false
-    on_failure: false
+    on_success: always
+    on_failure: always
     channels:
       - "chat.freenode.org#voxpupuli-notifications"
 deploy:
