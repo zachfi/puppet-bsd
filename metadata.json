@@ -1,6 +1,6 @@
 {
   "name": "zleslie-bsd",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "author": "zleslie",
   "summary": "BSD management with Puppet",
   "license": "Apache-2.0",
@@ -31,10 +31,25 @@
   ],
   "description": "A module to manage parts of BSD",
   "dependencies": [
-    { "name": "puppetlabs/concat", "version_requirement": ">= 1.2.5" },
-    { "name": "herculesteam-augeasproviders_core", "version_requirement": ">= 2.1.0" },
-    { "name": "herculesteam-augeasproviders_shellvar", "version_requirement": ">= 2.2.0" },
-    { "name": "herculesteam-augeasproviders_sysctl", "version_requirement": ">= 2.0.2" },
-    { "name": "puppetlabs/stdlib","version_requirement":">=4.25.1"}
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.2.5"
+    },
+    {
+      "name": "herculesteam-augeasproviders_core",
+      "version_requirement": ">= 2.1.0"
+    },
+    {
+      "name": "herculesteam-augeasproviders_shellvar",
+      "version_requirement": ">= 2.2.0"
+    },
+    {
+      "name": "herculesteam-augeasproviders_sysctl",
+      "version_requirement": ">= 2.0.2"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.25.1"
+    }
   ]
 }
