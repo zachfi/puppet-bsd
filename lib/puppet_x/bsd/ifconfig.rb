@@ -94,6 +94,14 @@ module PuppetX
           netmask = masklist.join('.')
           d = { inet: address + '/' + netmask }
           yield d
+        when %r{^status:\s+}
+          status = %r{status:\s+(\w+)}.match(tokenstring)[1]
+          d = { status: status }
+          yield d
+        when %r{^groups:\s+}
+          groups = %r{groups:\s+(.*)}.match(tokenstring)[1]
+          d = { groups: groups.split() }
+          yield d
         end
       end
     end
