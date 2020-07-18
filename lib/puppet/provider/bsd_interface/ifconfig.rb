@@ -32,7 +32,7 @@ Puppet::Type.type(:bsd_interface).provide(:ifconfig) do
           name: k.to_s,
           flags: v[:flags],
           mtu: v[:mtu].to_i,
-          groups: v[:groups].split()
+          groups: v[:groups]
         }
 
         if_properties[:destroyable] = if !destroyable_interfaces.select { |i| k =~ %r{^#{i}} }.empty?

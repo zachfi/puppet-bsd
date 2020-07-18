@@ -100,7 +100,7 @@ module PuppetX
           yield d
         when %r{^groups:\s+}
           groups = %r{groups:\s+(.*)}.match(tokenstring)[1]
-          d = { groups: groups.split() }
+          d = { groups: groups.split }
           yield d
         end
       end

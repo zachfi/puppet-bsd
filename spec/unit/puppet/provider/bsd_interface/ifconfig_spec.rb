@@ -29,7 +29,7 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
     end
 
     it 'returns some instances' do
-      expect(described_class.instances.size).to eq(15)
+      expect(described_class.instances.size).to eq(16)
     end
 
     it 'returns an array of interfaces' do
@@ -38,12 +38,12 @@ describe Puppet::Type.type(:bsd_interface).provider(:ifconfig) do
 
     it 'returns the resource dc=bar,dc=com' do
       expect(described_class.instances[1].instance_variable_get('@property_hash')).to eq(
-        ensure: :present, provider: :bsd_interface, name: 'em0', flags: %w[UP BROADCAST RUNNING SIMPLEX MULTICAST], mtu: 1500, destroyable: :false, state: :up
+        ensure: :present, provider: :bsd_interface, name: 'em0', flags: %w[UP BROADCAST RUNNING SIMPLEX MULTICAST], mtu: 1500, destroyable: :false, state: :up, groups: ['egress']
       )
     end
 
     it 'returns all interfaces names' do
-      expect(described_class.instances.map(&:name).sort).to eq(%w[bridge0 bridge1 em0 em1 em2 em3 em4 em5 em6 em7 lo0 pflog0 vether0 vether1 vlan88])
+      expect(described_class.instances.map(&:name).sort).to eq(%w[bridge0 bridge1 em0 em1 em2 em3 em4 em5 em6 em7 enc0 lo0 pflog0 vether0 vether1 vlan88])
     end
   end
 
