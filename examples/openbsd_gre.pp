@@ -1,4 +1,3 @@
-
 bsd::network::interface { 'gre0':
   description => 'Tunnel interface',
   values      => [

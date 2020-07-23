@@ -29,4 +29,3 @@ class Bridge < RcConf
     bridge_vlaues.join(' ')
   end
 end
-

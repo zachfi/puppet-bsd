@@ -82,7 +82,6 @@ describe 'bsd::network::interface::bridge' do
           end
         end
       end
-
     end
   end
 end

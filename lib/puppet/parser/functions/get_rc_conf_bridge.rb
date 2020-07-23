@@ -12,4 +12,3 @@ module Puppet::Parser::Functions
     return Bridge.new(c).bridge_values
   end
 end
-
