@@ -22,18 +22,35 @@ define bsd::network::interface::bridge (
     interface => $interface,
   }
 
-  $bridge_ifconfig = get_hostname_if_bridge($config)
+  case $facts['kernel'] {
+    'FreeBSD': {
+      $bridge_options = get_rc_conf_bridge($config)
 
-  if $raw_values {
-    $bridge_values = concat([$bridge_ifconfig], $raw_values)
-  } else {
-    $bridge_values = [$bridge_ifconfig]
-  }
+      bsd::network::interface { $if_name:
+        ensure      => $ensure,
+        description => $description,
+        options     => $bridge_options,
+        parents     => flatten([$interface]),
+      }
+    }
+    'OpenBSD': {
+      $bridge_ifconfig = get_hostname_if_bridge($config)
 
-  bsd::network::interface { $if_name:
-    ensure      => $ensure,
-    description => $description,
-    raw_values  => $bridge_values,
-    parents     => $interface,
+      if $raw_values {
+        $bridge_values = concat([$bridge_ifconfig], $raw_values)
+      } else {
+        $bridge_values = [$bridge_ifconfig]
+      }
+
+      bsd::network::interface { $if_name:
+        ensure      => $ensure,
+        description => $description,
+        raw_values  => $bridge_values,
+        parents     => $interface,
+      }
+    }
+    default: {
+      fail('unhandled BSD for bridge interface, please help add support')
+    }
   }
 }
