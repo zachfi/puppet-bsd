@@ -8,7 +8,6 @@ define bsd::network::interface::bridge (
   $description = undef,
   $raw_values  = undef,
 ) {
-
   $if_name = $name
   validate_re($if_name, ['bridge'])
 

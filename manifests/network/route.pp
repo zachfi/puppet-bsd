@@ -2,7 +2,6 @@ define bsd::network::route (
   $value,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
-
   case $facts['kernel'] {
     'FreeBSD': {
       case $ensure {

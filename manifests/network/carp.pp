@@ -6,7 +6,6 @@ class bsd::network::carp (
   $allowed = true,
   $preempt = false,
 ) {
-
   if $allowed == true {
     sysctl { 'net.inet.carp.allow':
       ensure => present,

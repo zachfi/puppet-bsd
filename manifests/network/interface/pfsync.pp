@@ -11,7 +11,6 @@ define bsd::network::interface::pfsync (
   $description = undef,
   $raw_values  = undef,
 ) {
-
   $if_name = $name
   validate_re($if_name, ['pfsync'])
 

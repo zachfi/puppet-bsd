@@ -13,7 +13,6 @@ define bsd::network::interface::carp (
   $pass        = undef,
   $raw_values  = undef,
 ) {
-
   include bsd::network::carp
 
   $if_name = $name

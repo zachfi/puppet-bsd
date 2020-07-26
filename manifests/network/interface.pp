@@ -28,7 +28,6 @@ define bsd::network::interface (
   Optional[Array] $parents                      = undef,
   Optional[Integer] $mtu                        = undef,
 ) {
-
   $if_name        = $name
   $if_type        = split($if_name, '\d+')
 

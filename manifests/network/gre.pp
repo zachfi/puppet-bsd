@@ -8,7 +8,6 @@ class bsd::network::gre (
   $wccp     = false,
   $mobileip = false,
 ) {
-
   if $allowed == true {
     sysctl { 'net.inet.gre.allow':
       ensure => present,
