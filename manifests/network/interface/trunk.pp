@@ -10,7 +10,6 @@ define bsd::network::interface::trunk (
   $description             = undef,
   $raw_values              = undef,
 ) {
-
   $if_name = $name
   case $facts['kernel'] {
     'FreeBSD': {
@@ -66,5 +65,4 @@ define bsd::network::interface::trunk (
       fail('unhandled BSD, please help add support')
     }
   }
-
 }
