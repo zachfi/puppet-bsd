@@ -11,7 +11,6 @@ define bsd::network::interface::vlan (
   Optional[String] $description = undef,
   Optional[Array] $raw_values   = undef,
 ) {
-
   $if_name = $name
   validate_re($if_name, ['vlan'])
 

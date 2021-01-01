@@ -21,7 +21,6 @@ class bsd::network (
   Boolean $v4forwarding                = false,
   Boolean $v6forwarding                = false,
 ) {
-
   # Options common to both FreeBSD and OpenBSD
   if $v4forwarding {
     sysctl { 'net.inet.ip.forwarding':

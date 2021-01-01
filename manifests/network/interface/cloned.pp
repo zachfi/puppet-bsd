@@ -2,7 +2,6 @@
 define bsd::network::interface::cloned (
   $ensure,
 ) {
-
   case $facts['kernel'] {
     'FreeBSD': {
       case $ensure {
@@ -28,12 +27,9 @@ define bsd::network::interface::cloned (
           notify       => Bsd_interface[$name],
         }
       }
-
     }
     default: {
       notice("No cloned interface handling implemented on ${facts['kernel']}")
-
     }
   }
-
 }
